@@ -1,2 +1,2 @@
 # ZIT-Campus-Spielwiese
-Lernplattform der ZIT mit Lernspielen
+Spass beim Lernen
