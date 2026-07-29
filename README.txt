@@ -1,13 +1,14 @@
-ZIT Campus Spielwiese – Version 0.3
+ZIT Campus Spielwiese – Version 0.4
 
-Die Lernplattform wird direkt aus Skool geöffnet und benötigt keinen eigenen Login.
+Start:
+1. index.html öffnen.
+2. Anatomie-Memory über „Spiel starten“ aufrufen.
 
-Start: index.html
-Admin-Vorlage: admin.html
-Anatomie-Memory: games/anatomie-memory/index.html
+Neu in Version 0.4:
+- Lernkarte nach jedem gefundenen Paar
+- Anzeige des lateinischen und deutschen Namens
+- lokale persönliche Bestzeit
+- Fortschritt bleibt ohne Benutzerkonto im jeweiligen Browser gespeichert
 
-GitHub-Update:
-1. Inhalt dieses Ordners in das lokale Repository kopieren.
-2. In GitHub Desktop die Änderungen prüfen.
-3. Commit-Nachricht: „Version 0.3 – Skool-Einstieg und mobile Verbesserungen“
-4. Commit to main und anschließend Push origin.
+Hinweis:
+Die Anwendung benötigt keinen eigenen Login. Studierende und Dozenten gelangen direkt über Skool zur Spielwiese.
