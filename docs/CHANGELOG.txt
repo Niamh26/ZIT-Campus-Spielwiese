@@ -9,3 +9,12 @@ Version 0.4
 
 Version 0.3
 - Skool-Einstieg und mobile Verbesserungen.
+
+
+Version 0.5 – Anatomie-Memory mit Schmetterlingssystem
+- Begrüßungsseite und ruhiger Spielstart
+- Schmetterlinge statt Sterne
+- Lernmomente mit Beschreibung und Merksatz
+- Fortschrittsbalken und wertschätzende Hinweise
+- lokaler Schmetterlingsgarten
+- korrigierte Bestleistungsanzeige

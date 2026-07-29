@@ -12,3 +12,5 @@ Neu in Version 0.4:
 
 Hinweis:
 Die Anwendung benötigt keinen eigenen Login. Studierende und Dozenten gelangen direkt über Skool zur Spielwiese.
+
+Version 0.5: Das Anatomie-Memory nutzt jetzt das Schmetterlings-Belohnungssystem und speichert den persönlichen Schmetterlingsgarten lokal im Browser.
