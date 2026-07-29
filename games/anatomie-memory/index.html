@@ -77,9 +77,10 @@ filter:drop-shadow(0 4px 7px rgba(90,120,50,.12));
 .study-card img{width:100%;height:225px;object-fit:contain;display:block;background:white}
 .study-info{padding:12px 14px}.study-info h3{margin:0 0 5px;font-size:1rem}.study-info p{margin:0;color:var(--muted)}
 .hidden-name{filter:blur(7px);user-select:none}.study-card button{margin-top:10px;width:100%}
-.finish{display:none;background:linear-gradient(135deg,#f2fbe9,#fff9e9);border:1px solid #b9d994;border-radius:15px;padding:17px;text-align:center;margin-bottom:15px}
-.finish.show{display:block}.finish h2{margin:0 0 5px}
-@media(max-width:700px){.header-inner{padding-top:72px}.dashboard{grid-template-columns:repeat(2,1fr)}.board{grid-template-columns:repeat(2,minmax(0,1fr))}.card{height:155px}}
+.finish{display:none;background:linear-gradient(135deg,#f2fbe9,#fff9e9);border:1px solid #b9d994;border-radius:15px;padding:22px;text-align:center;margin-bottom:15px}
+.finish.show{display:block}.finish h2{margin:0 0 8px}.finish-actions{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-top:16px}.secondary{border:1px solid var(--line);background:#fff;color:var(--green);padding:10px 15px;border-radius:10px;font-weight:800;text-decoration:none;cursor:pointer}
+@media(max-width:700px){.header-inner{padding-top:76px}.controls{width:100%}.controls button,.controls select{flex:1 1 145px}.dashboard{grid-template-columns:repeat(2,1fr)}.board{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.card{height:145px}.face{padding:7px}.text-card b{font-size:.83rem}.text-card small{font-size:.72rem}}
+@media(max-width:390px){.card{height:132px}.dashboard{gap:8px}.stat{padding:10px 6px}}
 
 .card:not(.matched):hover .card-inner{transform:translateY(-3px)}
 .card.flipped:hover .card-inner,.card.matched:hover .card-inner{transform:rotateY(180deg) translateY(-3px)}
@@ -146,7 +147,7 @@ filter:drop-shadow(0 4px 7px rgba(90,120,50,.12));
   <div class="stat"><strong id="time">00:00</strong><span>Zeit</span></div>
   <div class="stat"><strong id="stars">★★★</strong><span>Bewertung</span></div>
 </div>
-<div id="finish" class="finish"><h2>Geschafft!</h2><div id="finishText"></div></div>
+<div id="finish" class="finish" role="status" aria-live="polite"><h2>Geschafft! 🎉</h2><div id="finishText"></div><div class="finish-actions"><button class="primary" id="playAgain" type="button">Noch einmal spielen</button><a class="secondary" href="../../index.html">Zur Spielwiese</a><button class="secondary" id="backSkoolGame" type="button">Zurück zu Skool</button></div></div>
 </main>
 
 <script>
@@ -236,6 +237,8 @@ function reset(){
 }
 $$(".mode").forEach(b=>b.onclick=()=>{$$(".mode").forEach(x=>x.classList.remove("active"));b.classList.add("active");mode=b.dataset.mode;reset()});
 $("#restart").onclick=reset;$("#difficulty").onchange=reset;
+$("#playAgain").onclick=reset;
+$("#backSkoolGame").onclick=()=>{ if(document.referrer){history.back()}else{location.href="../../index.html"} };
 reset();
 </script>
 </body>

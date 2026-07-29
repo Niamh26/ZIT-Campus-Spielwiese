@@ -1,20 +1,13 @@
-ZIT CAMPUS SPIELWIESE – FESTES PROJEKT
+ZIT Campus Spielwiese – Version 0.3
 
-START
-- index.html: öffentliche Spielwiese
-- admin.html: deine Verwaltung
-- games/anatomie-memory/index.html: Anatomie-Memory
+Die Lernplattform wird direkt aus Skool geöffnet und benötigt keinen eigenen Login.
 
-NEU IM MEMORY
-- Zurück-Button oben links in Orange
-- mehr Abstand zum Titel
-- Statistik unter dem Spielfeld
+Start: index.html
+Admin-Vorlage: admin.html
+Anatomie-Memory: games/anatomie-memory/index.html
 
-BEARBEITEN
-1. admin.html öffnen.
-2. Startseite oder Spiele bearbeiten.
-3. „Neue index.html herunterladen“ klicken.
-4. Die alte index.html durch die neue ersetzen.
-
-IONOS
-Später wird der gesamte Inhalt dieses Ordners gemeinsam hochgeladen.
+GitHub-Update:
+1. Inhalt dieses Ordners in das lokale Repository kopieren.
+2. In GitHub Desktop die Änderungen prüfen.
+3. Commit-Nachricht: „Version 0.3 – Skool-Einstieg und mobile Verbesserungen“
+4. Commit to main und anschließend Push origin.

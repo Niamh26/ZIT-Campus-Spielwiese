@@ -1,15 +1,12 @@
-Version 1.0
-- feste Projektstruktur eingeführt
-- Verwaltungsoberfläche mit Bereichen Startseite, Spiele und Verwaltung
-- Anatomie-Memory integriert
-- Zurück-Button orange und mit mehr Abstand
-- Spielstatistik ans Ende des Spielfelds verschoben
+ZIT Campus Spielwiese – Änderungsprotokoll
 
-Version 1.2 – Feinschliff Startseite
-- Kopfbereich kompakter gestaltet
-- Logo leicht verkleinert
-- Inhaltsbereich verbreitert
-- Spielkarten auf gleiche Höhe gebracht
-- Flexibles 2-/3-spaltiges Raster ergänzt
-- „Spiel starten“ als orangefarbener Button gestaltet
-- Hover-Effekte der Karten und Buttons verfeinert
+Version 0.3
+- Eigener Login entfällt; Einstieg erfolgt direkt über Skool.
+- Schaltfläche „Zurück zu Skool“ auf der Startseite ergänzt.
+- Bereiche in Vorbereitung sind optisch und semantisch deaktiviert.
+- Mobile Darstellung des Anatomie-Memory verbessert.
+- Spielabschluss um „Noch einmal spielen“, „Zur Spielwiese“ und „Zurück zu Skool“ erweitert.
+- Kleine Verbesserungen bei Barrierefreiheit und Bedienung.
+
+Version 0.2
+- Erste vollständige Campus-Spielwiese mit Anatomie-Memory.
