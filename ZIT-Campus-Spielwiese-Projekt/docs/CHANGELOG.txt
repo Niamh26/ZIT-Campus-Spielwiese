@@ -1,0 +1,12 @@
+ZIT Campus Spielwiese – Änderungsprotokoll
+
+Version 0.3
+- Eigener Login entfällt; Einstieg erfolgt direkt über Skool.
+- Schaltfläche „Zurück zu Skool“ auf der Startseite ergänzt.
+- Bereiche in Vorbereitung sind optisch und semantisch deaktiviert.
+- Mobile Darstellung des Anatomie-Memory verbessert.
+- Spielabschluss um „Noch einmal spielen“, „Zur Spielwiese“ und „Zurück zu Skool“ erweitert.
+- Kleine Verbesserungen bei Barrierefreiheit und Bedienung.
+
+Version 0.2
+- Erste vollständige Campus-Spielwiese mit Anatomie-Memory.
