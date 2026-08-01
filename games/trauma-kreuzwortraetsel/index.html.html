@@ -1,0 +1,268 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Interaktives Kreuzworträtsel zu Trauma und Nervensystem im ZIT Campus.">
+  <title>Trauma-Kreuzworträtsel | ZIT Campus</title>
+  <style>
+:root{--green:#2f7f16;--green-dark:#255f13;--light:#f5faef;--orange:#f28c00;--ink:#19302b;--muted:#61706a;--line:#d7e5cf;--bad:#c84f49;--good:#2f7f16}
+*{box-sizing:border-box}
+body{margin:0;background:linear-gradient(180deg,#fff,#f5faef);color:var(--ink);font-family:Inter,system-ui,-apple-system,"Segoe UI",Arial,sans-serif}
+button,a,input{font:inherit}
+.app{width:min(1180px,calc(100% - 28px));margin:auto;padding:28px 0 50px}
+.hero{margin-bottom:22px}
+.back-link{color:var(--green-dark);text-decoration:none;font-weight:800}
+.back-link:hover{text-decoration:underline}
+.brand{margin-top:24px;color:var(--green);font-weight:900}
+h1{font-size:clamp(2rem,5vw,3.5rem);line-height:1.05;margin:8px 0}
+.hero p{color:var(--muted);font-size:1.08rem}
+.toolbar,.board-wrap,.clues,.notice{background:#fff;border:1px solid var(--line);border-radius:22px}
+.toolbar{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:16px 20px;margin-bottom:18px}
+.actions{display:flex;gap:10px;flex-wrap:wrap}
+button{border:0;border-radius:999px;padding:10px 16px;background:var(--green-dark);color:white;font-weight:800;cursor:pointer}
+button:hover{background:#1e5110}
+button.secondary{background:#eef3eb;color:var(--green-dark)}
+.layout{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(280px,.75fr);gap:18px;align-items:start}
+.board-wrap{padding:18px;overflow:auto}
+.crossword{display:grid;gap:2px;width:max-content;margin:auto;background:#315126;padding:3px;border-radius:10px}
+.cell{position:relative;width:38px;height:38px;background:#fff}
+.cell.block{background:#315126}
+.cell input{width:100%;height:100%;border:0;text-align:center;text-transform:uppercase;font-weight:900;font-size:1.1rem;color:var(--ink);background:transparent}
+.cell input:focus{outline:3px solid var(--orange);outline-offset:-3px;background:#fff7e9}
+.cell .num{position:absolute;top:2px;left:3px;font-size:.57rem;font-weight:900;color:#46603f;pointer-events:none}
+.cell.correct{background:#e5f4dd}
+.cell.incorrect{background:#fde5e3}
+.clues{padding:22px}
+.clues h2{font-size:1.2rem;color:var(--green);margin:0 0 12px}
+.clues section+section{margin-top:24px}
+.clues ol{margin:0;padding-left:28px}
+.clues li{padding:6px 4px;line-height:1.45;color:var(--muted)}
+.clues li.active{background:#fff3d9;border-radius:8px;color:var(--ink)}
+.message{min-height:1.5em;text-align:center;font-weight:800;color:var(--green-dark)}
+.notice{margin-top:18px;padding:17px 20px;color:var(--muted);line-height:1.5}
+@media(max-width:850px){.layout{grid-template-columns:1fr}.toolbar{align-items:flex-start;flex-direction:column}.clues{display:grid;grid-template-columns:1fr 1fr;gap:18px}.clues section+section{margin-top:0}}
+@media(max-width:560px){.app{width:min(100% - 16px,1180px);padding-top:16px}.cell{width:31px;height:31px}.cell input{font-size:.95rem}.clues{grid-template-columns:1fr}.clues section+section{margin-top:20px}}
+
+</style>
+</head>
+<body>
+  <main class="app">
+    <header class="hero">
+      <a class="back-link" href="../../index.html">← Zur Spielwiese</a>
+      <div class="brand">🌿 ZIT Campus</div>
+      <h1>Trauma-Kreuzworträtsel</h1>
+      <p>Begriffe aus dem Ausbildungsskript spielerisch wiederholen.</p>
+    </header>
+
+    <section class="toolbar" aria-label="Spielsteuerung">
+      <div><strong id="progressText">0 von 20 Begriffen gelöst</strong></div>
+      <div class="actions">
+        <button id="checkBtn">Prüfen</button>
+        <button id="hintBtn">Tipp</button>
+        <button id="resetBtn" class="secondary">Neu starten</button>
+      </div>
+    </section>
+
+    <section class="layout">
+      <div class="board-wrap">
+        <div id="grid" class="crossword" role="grid" aria-label="Kreuzworträtsel"></div>
+        <p id="message" class="message" aria-live="polite"></p>
+      </div>
+
+      <aside class="clues">
+        <section>
+          <h2>Waagerecht</h2>
+          <ol id="acrossClues"></ol>
+        </section>
+        <section>
+          <h2>Senkrecht</h2>
+          <ol id="downClues"></ol>
+        </section>
+      </aside>
+    </section>
+
+    <aside class="notice">
+      <strong>Lernhinweis:</strong> Die Hinweise orientieren sich am hochgeladenen
+      Ausbildungsskript. Umlaute werden im Rätsel als AE, OE und UE geschrieben.
+    </aside>
+  </main>
+
+  <script id="crossword-data" type="application/json">{&quot;rows&quot;: 27, &quot;cols&quot;: 26, &quot;entries&quot;: [{&quot;answer&quot;: &quot;TOLERANZFENSTER&quot;, &quot;clue&quot;: &quot;Bandbreite, innerhalb derer das Nervensystem mit Stress umgehen und zwischen Erregung und Ruhe schwingen kann.&quot;, &quot;row&quot;: 12, &quot;col&quot;: 5, &quot;direction&quot;: &quot;across&quot;, &quot;number&quot;: 10}, {&quot;answer&quot;: &quot;INTEROZEPTION&quot;, &quot;clue&quot;: &quot;Innenwahrnehmung, die Informationen aus dem Körper bereitstellt und auswertet.&quot;, &quot;row&quot;: 11, &quot;col&quot;: 11, &quot;direction&quot;: &quot;down&quot;, &quot;number&quot;: 9}, {&quot;answer&quot;: &quot;HYPOTHALAMUS&quot;, &quot;clue&quot;: &quot;Liefert im beschriebenen Ablauf die notwendigen Hormone.&quot;, &quot;row&quot;: 16, &quot;col&quot;: 8, &quot;direction&quot;: &quot;across&quot;, &quot;number&quot;: 11}, {&quot;answer&quot;: &quot;DISSOZIATION&quot;, &quot;clue&quot;: &quot;Abspaltung einzelner Persönlichkeitsanteile im Verlauf traumatischer Erfahrung.&quot;, &quot;row&quot;: 9, &quot;col&quot;: 16, &quot;direction&quot;: &quot;down&quot;, &quot;number&quot;: 7}, {&quot;answer&quot;: &quot;NEUROZEPTION&quot;, &quot;clue&quot;: &quot;Unbewusste Einschätzung, ob Menschen oder Situationen sicher, gefährlich oder lebensbedrohlich sind.&quot;, &quot;row&quot;: 20, &quot;col&quot;: 3, &quot;direction&quot;: &quot;across&quot;, &quot;number&quot;: 15}, {&quot;answer&quot;: &quot;SYMPATHIKUS&quot;, &quot;clue&quot;: &quot;Teil des autonomen Nervensystems, der bei Mobilisierung Kampf oder Flucht unterstützt.&quot;, &quot;row&quot;: 7, &quot;col&quot;: 5, &quot;direction&quot;: &quot;down&quot;, &quot;number&quot;: 5}, {&quot;answer&quot;: &quot;HOMOEOSTASE&quot;, &quot;clue&quot;: &quot;Physiologisches und psychisches Gleichgewicht des Organismus.&quot;, &quot;row&quot;: 22, &quot;col&quot;: 10, &quot;direction&quot;: &quot;across&quot;, &quot;number&quot;: 16}, {&quot;answer&quot;: &quot;PREDICTION&quot;, &quot;clue&quot;: &quot;Erwartungshaltung, die das Gehirn bei einem eingehenden Sinnesreiz aufbaut.&quot;, &quot;row&quot;: 11, &quot;col&quot;: 3, &quot;direction&quot;: &quot;down&quot;, &quot;number&quot;: 8}, {&quot;answer&quot;: &quot;EMBODIMENT&quot;, &quot;clue&quot;: &quot;Verbindung zwischen Erleben, Emotion und Körper; im Skript auch als Entwicklungsprozess beschrieben.&quot;, &quot;row&quot;: 17, &quot;col&quot;: 7, &quot;direction&quot;: &quot;down&quot;, &quot;number&quot;: 13}, {&quot;answer&quot;: &quot;NEOKORTEX&quot;, &quot;clue&quot;: &quot;Jüngerer Gehirnbereich für bewusste, kognitive Informationsverarbeitung.&quot;, &quot;row&quot;: 5, &quot;col&quot;: 18, &quot;direction&quot;: &quot;down&quot;, &quot;number&quot;: 3}, {&quot;answer&quot;: &quot;FELTSENSE&quot;, &quot;clue&quot;: &quot;Noch nicht vollständig versprachlichtes, körperlich spürbares Ganzes einer Situation.&quot;, &quot;row&quot;: 6, &quot;col&quot;: 10, &quot;direction&quot;: &quot;across&quot;, &quot;number&quot;: 4}, {&quot;answer&quot;: &quot;RESILIENZ&quot;, &quot;clue&quot;: &quot;Begriff im Skript für psychische Widerstandsfähigkeit und Anpassungsfähigkeit.&quot;, &quot;row&quot;: 25, &quot;col&quot;: 0, &quot;direction&quot;: &quot;across&quot;, &quot;number&quot;: 19}, {&quot;answer&quot;: &quot;FOCUSING&quot;, &quot;clue&quot;: &quot;Von Eugene Gendlin beschriebener Prozess des Hin- und Hergehens zwischen Erleben und Versprachlichung oder Symbolisierung.&quot;, &quot;row&quot;: 19, &quot;col&quot;: 15, &quot;direction&quot;: &quot;across&quot;, &quot;number&quot;: 14}, {&quot;answer&quot;: &quot;AMYGDALA&quot;, &quot;clue&quot;: &quot;Hirnstruktur, an die Informationen zur emotionalen Einschätzung weitergeleitet werden.&quot;, &quot;row&quot;: 16, &quot;col&quot;: 22, &quot;direction&quot;: &quot;down&quot;, &quot;number&quot;: 12}, {&quot;answer&quot;: &quot;TRACKING&quot;, &quot;clue&quot;: &quot;Körperorientiertes Beobachten und Verfolgen innerer Reaktionen.&quot;, &quot;row&quot;: 0, &quot;col&quot;: 16, &quot;direction&quot;: &quot;down&quot;, &quot;number&quot;: 1}, {&quot;answer&quot;: &quot;PENDELN&quot;, &quot;clue&quot;: &quot;Grundtechnik, bei der zwischen unterschiedlichen Empfindungs- oder Erregungszuständen gewechselt wird.&quot;, &quot;row&quot;: 8, &quot;col&quot;: 8, &quot;direction&quot;: &quot;down&quot;, &quot;number&quot;: 6}, {&quot;answer&quot;: &quot;INSULA&quot;, &quot;clue&quot;: &quot;Hirnregion, in der körperliche Empfindungen ankommen und bewusstes Gefühlerleben entsteht.&quot;, &quot;row&quot;: 2, &quot;col&quot;: 12, &quot;direction&quot;: &quot;down&quot;, &quot;number&quot;: 2}, {&quot;answer&quot;: &quot;TRAUMA&quot;, &quot;clue&quot;: &quot;Entsteht laut Skript nicht allein durch das Ereignis, sondern wenn die Bewältigungsmechanismen des Körpers überfordert werden.&quot;, &quot;row&quot;: 23, &quot;col&quot;: 3, &quot;direction&quot;: &quot;across&quot;, &quot;number&quot;: 17}, {&quot;answer&quot;: &quot;VAGUS&quot;, &quot;clue&quot;: &quot;Nerv, dessen Fasern überwiegend Informationen aus dem Körper zum Gehirn liefern.&quot;, &quot;row&quot;: 23, &quot;col&quot;: 21, &quot;direction&quot;: &quot;across&quot;, &quot;number&quot;: 18}, {&quot;answer&quot;: &quot;PAG&quot;, &quot;clue&quot;: &quot;Periaquäduktales Grau; beteiligt an Schmerzhemmung und Abwehrverhalten.&quot;, &quot;row&quot;: 8, &quot;col&quot;: 8, &quot;direction&quot;: &quot;across&quot;, &quot;number&quot;: 6}]}</script>
+  <script>
+const data = JSON.parse(document.getElementById("crossword-data").textContent);
+const gridEl = document.getElementById("grid");
+const acrossEl = document.getElementById("acrossClues");
+const downEl = document.getElementById("downClues");
+const messageEl = document.getElementById("message");
+const progressEl = document.getElementById("progressText");
+
+const cells = new Map();
+const entries = data.entries.map((e, idx) => ({...e, id: idx, solved: false}));
+
+function key(r,c){ return `${r},${c}`; }
+
+const cellInfo = new Map();
+for(const entry of entries){
+  for(let i=0;i<entry.answer.length;i++){
+    const r = entry.row + (entry.direction === "down" ? i : 0);
+    const c = entry.col + (entry.direction === "across" ? i : 0);
+    const k = key(r,c);
+    if(!cellInfo.has(k)) cellInfo.set(k,{letter:entry.answer[i],entries:[]});
+    cellInfo.get(k).entries.push(entry.id);
+  }
+}
+
+gridEl.style.gridTemplateColumns = `repeat(${data.cols}, auto)`;
+
+for(let r=0;r<data.rows;r++){
+  for(let c=0;c<data.cols;c++){
+    const k=key(r,c);
+    const wrapper=document.createElement("div");
+    wrapper.className="cell";
+    wrapper.setAttribute("role","gridcell");
+    const info=cellInfo.get(k);
+    if(!info){
+      wrapper.classList.add("block");
+    }else{
+      const start=entries.find(e=>e.row===r && e.col===c);
+      if(start){
+        const n=document.createElement("span");
+        n.className="num";
+        n.textContent=start.number;
+        wrapper.appendChild(n);
+      }
+      const input=document.createElement("input");
+      input.maxLength=1;
+      input.autocomplete="off";
+      input.inputMode="text";
+      input.setAttribute("aria-label",`Feld Zeile ${r+1}, Spalte ${c+1}`);
+      input.addEventListener("input",e=>{
+        e.target.value=e.target.value.toUpperCase().replace(/[^A-Z]/g,"");
+        wrapper.classList.remove("correct","incorrect");
+        moveNext(r,c,info.entries[0]);
+        updateProgress();
+      });
+      input.addEventListener("focus",()=>highlightEntries(info.entries));
+      input.addEventListener("keydown",e=>handleKey(e,r,c,info.entries[0]));
+      wrapper.appendChild(input);
+      cells.set(k,input);
+    }
+    gridEl.appendChild(wrapper);
+  }
+}
+
+function renderClues(direction, target){
+  entries.filter(e=>e.direction===direction).sort((a,b)=>a.number-b.number).forEach(e=>{
+    const li=document.createElement("li");
+    li.value=e.number;
+    li.dataset.entry=e.id;
+    li.textContent=e.clue;
+    li.addEventListener("click",()=>{
+      cells.get(key(e.row,e.col)).focus();
+      highlightEntries([e.id]);
+    });
+    target.appendChild(li);
+  });
+}
+renderClues("across",acrossEl);
+renderClues("down",downEl);
+
+function highlightEntries(ids){
+  document.querySelectorAll(".clues li").forEach(li=>li.classList.toggle("active",ids.includes(Number(li.dataset.entry))));
+}
+
+function moveNext(r,c,entryId){
+  const e=entries[entryId];
+  const index=e.direction==="across" ? c-e.col : r-e.row;
+  const next=index+1;
+  if(next<e.answer.length){
+    const nr=e.row+(e.direction==="down"?next:0);
+    const nc=e.col+(e.direction==="across"?next:0);
+    cells.get(key(nr,nc))?.focus();
+  }
+}
+
+function handleKey(event,r,c,entryId){
+  const e=entries[entryId];
+  const index=e.direction==="across" ? c-e.col : r-e.row;
+  let next=index;
+  if(event.key==="ArrowRight") next=index+1;
+  else if(event.key==="ArrowLeft") next=index-1;
+  else if(event.key==="ArrowDown" && e.direction==="down") next=index+1;
+  else if(event.key==="ArrowUp" && e.direction==="down") next=index-1;
+  else if(event.key==="Backspace" && !event.target.value) next=index-1;
+  else return;
+  if(next>=0 && next<e.answer.length){
+    event.preventDefault();
+    const nr=e.row+(e.direction==="down"?next:0);
+    const nc=e.col+(e.direction==="across"?next:0);
+    cells.get(key(nr,nc))?.focus();
+  }
+}
+
+function entryValue(e){
+  let value="";
+  for(let i=0;i<e.answer.length;i++){
+    const r=e.row+(e.direction==="down"?i:0);
+    const c=e.col+(e.direction==="across"?i:0);
+    value += cells.get(key(r,c))?.value || "";
+  }
+  return value;
+}
+
+function updateProgress(){
+  let solved=0;
+  for(const e of entries){
+    e.solved=entryValue(e)===e.answer;
+    if(e.solved) solved++;
+  }
+  progressEl.textContent=`${solved} von ${entries.length} Begriffen gelöst`;
+  if(solved===entries.length){
+    messageEl.textContent="Geschafft! Du hast das Kreuzworträtsel vollständig gelöst. 🌿";
+  }
+}
+
+document.getElementById("checkBtn").addEventListener("click",()=>{
+  let wrong=0;
+  for(const [k,input] of cells){
+    const wrapper=input.parentElement;
+    wrapper.classList.remove("correct","incorrect");
+    if(!input.value) continue;
+    if(input.value===cellInfo.get(k).letter) wrapper.classList.add("correct");
+    else {wrapper.classList.add("incorrect");wrong++;}
+  }
+  updateProgress();
+  messageEl.textContent=wrong ? `${wrong} Buchstabe${wrong===1?" ist":"n sind"} noch nicht richtig.` : "Alle bisher eingetragenen Buchstaben sind richtig.";
+});
+
+document.getElementById("hintBtn").addEventListener("click",()=>{
+  const open=entries.filter(e=>entryValue(e)!==e.answer);
+  if(!open.length){messageEl.textContent="Alles ist bereits gelöst.";return;}
+  const e=open[Math.floor(Math.random()*open.length)];
+  const missing=[];
+  for(let i=0;i<e.answer.length;i++){
+    const r=e.row+(e.direction==="down"?i:0);
+    const c=e.col+(e.direction==="across"?i:0);
+    const input=cells.get(key(r,c));
+    if(input.value!==e.answer[i]) missing.push({input,letter:e.answer[i]});
+  }
+  const hint=missing[Math.floor(Math.random()*missing.length)];
+  hint.input.value=hint.letter;
+  hint.input.parentElement.classList.add("correct");
+  messageEl.textContent=`Tipp für ${e.number}: Ein Buchstabe wurde ergänzt.`;
+  updateProgress();
+});
+
+document.getElementById("resetBtn").addEventListener("click",()=>{
+  if(!confirm("Möchtest du alle Einträge löschen?")) return;
+  for(const input of cells.values()){input.value="";input.parentElement.classList.remove("correct","incorrect");}
+  messageEl.textContent="";
+  updateProgress();
+});
+
+updateProgress();
+
+</script>
+</body>
+</html>
