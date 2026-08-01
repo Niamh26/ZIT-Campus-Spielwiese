@@ -188,3 +188,18 @@ h2 {
   .quiz-card { border-radius: 18px; }
   .top-row { font-size: .84rem; }
 }
+
+
+.back-link{
+display:inline-block;
+background:#f28c00;
+color:#fff;
+padding:14px 24px;
+border-radius:999px;
+text-decoration:none;
+font-weight:700;
+box-shadow:0 8px 18px rgba(242,140,0,.25);
+transition:.2s;
+margin-bottom:18px;
+}
+.back-link:hover{transform:translateY(-2px);box-shadow:0 12px 24px rgba(242,140,0,.35);color:#fff}
