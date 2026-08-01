@@ -1,0 +1,477 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="ZIT Campus Spielwiese mit interaktiven Lernspielen.">
+  <title>ZIT Campus Spielwiese</title>
+
+  <style>
+    :root {
+      --green: #2f7f16;
+      --green-dark: #255f13;
+      --light: #f5faef;
+      --orange: #f28c00;
+      --orange-dark: #dc7e00;
+      --ink: #19302b;
+      --muted: #61706a;
+      --line: #d7e5cf;
+      --surface: #ffffff;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: #ffffff;
+      color: var(--ink);
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+    }
+
+    a,
+    button {
+      font: inherit;
+    }
+
+    .header {
+      border-bottom: 1px solid #e8eee4;
+      background: #ffffff;
+    }
+
+    .header-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 18px 22px;
+      display: flex;
+      align-items: center;
+      gap: 22px;
+    }
+
+    .logo-mark {
+      width: 82px;
+      height: 82px;
+      flex: 0 0 auto;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background: var(--light);
+      border: 1px solid var(--line);
+      font-size: 2.7rem;
+      box-shadow: 0 8px 24px rgba(47, 127, 22, 0.08);
+    }
+
+    .brand-text {
+      min-width: 0;
+    }
+
+    h1 {
+      margin: 0;
+      color: var(--green);
+      font-size: clamp(2rem, 5vw, 4.1rem);
+      line-height: 1.05;
+      letter-spacing: -0.04em;
+    }
+
+    .subtitle {
+      margin-top: 7px;
+      color: var(--muted);
+      font-size: 1.15rem;
+    }
+
+    main {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 48px 22px 50px;
+    }
+
+    .intro {
+      display: grid;
+      grid-template-columns: 1.3fr 0.9fr;
+      gap: 50px;
+      align-items: end;
+      margin-bottom: 28px;
+    }
+
+    .eyebrow {
+      margin-bottom: 12px;
+      color: var(--orange);
+      font-size: 0.83rem;
+      font-weight: 800;
+      letter-spacing: 0.13em;
+    }
+
+    h2 {
+      margin: 0;
+      font-size: clamp(1.8rem, 4vw, 2.7rem);
+      line-height: 1.15;
+    }
+
+    .intro p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 1.15rem;
+      line-height: 1.7;
+    }
+
+    .games {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      grid-auto-rows: 1fr;
+      gap: 22px;
+    }
+
+    .game {
+      min-height: 285px;
+      height: 100%;
+      display: grid;
+      grid-template-columns: 70px 1fr;
+      gap: 22px;
+      padding: 30px;
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      background: var(--surface);
+      transition:
+        transform 0.22s ease,
+        box-shadow 0.22s ease,
+        border-color 0.22s ease;
+    }
+
+    .game.available {
+      cursor: pointer;
+    }
+
+    .game.planned {
+      background: #fbfcfa;
+      opacity: 0.82;
+    }
+
+    .game.planned .icon {
+      filter: grayscale(0.25);
+    }
+
+    .game.planned h3,
+    .game.planned p {
+      color: #65716b;
+    }
+
+    .game.planned .badge {
+      background: #eef1ee;
+      color: #647068;
+    }
+
+    .game.available:hover {
+      transform: translateY(-5px);
+      border-color: #bfd8b2;
+      box-shadow: 0 18px 42px rgba(51, 95, 27, 0.13);
+    }
+
+    .icon {
+      width: 70px;
+      height: 70px;
+      display: grid;
+      place-items: center;
+      border-radius: 22px;
+      background: var(--light);
+      font-size: 2rem;
+    }
+
+    .game-content {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 7px 12px;
+      border-radius: 999px;
+      background: #f1f4f0;
+      color: #5f6e66;
+      font-size: 0.85rem;
+      font-weight: 700;
+    }
+
+    .available .badge {
+      background: #eaf7df;
+      color: #2f7616;
+    }
+
+    .game h3 {
+      margin: 24px 0 12px;
+      color: var(--green);
+      font-size: 1.5rem;
+    }
+
+    .game p {
+      flex: 1;
+      margin: 0;
+      color: var(--muted);
+      font-size: 1.05rem;
+      line-height: 1.65;
+    }
+
+    .start {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 28px;
+      padding: 12px 18px;
+      border-radius: 12px;
+      background: var(--orange);
+      color: #ffffff;
+      font-weight: 800;
+      text-decoration: none;
+      box-shadow: 0 7px 18px rgba(242, 140, 0, 0.18);
+      transition:
+        transform 0.18s ease,
+        box-shadow 0.18s ease,
+        background 0.18s ease;
+    }
+
+    .start:hover {
+      transform: translateY(-2px);
+      background: var(--orange-dark);
+      box-shadow: 0 10px 24px rgba(242, 140, 0, 0.26);
+    }
+
+    .start:focus-visible,
+    .skool:focus-visible {
+      outline: 3px solid rgba(47, 127, 22, 0.25);
+      outline-offset: 3px;
+    }
+
+    .footer {
+      margin-top: 44px;
+      text-align: center;
+    }
+
+    .skool {
+      display: inline-block;
+      padding: 13px 21px;
+      border-radius: 12px;
+      background: var(--green);
+      color: #ffffff;
+      font-weight: 750;
+      text-decoration: none;
+    }
+
+    .skool:hover {
+      background: var(--green-dark);
+    }
+
+    @media (max-width: 760px) {
+      .header-inner {
+        flex-direction: column;
+        gap: 10px;
+        padding-top: 16px;
+        padding-bottom: 18px;
+        text-align: center;
+      }
+
+      .logo-mark {
+        width: 70px;
+        height: 70px;
+        font-size: 2.2rem;
+      }
+
+      main {
+        padding-top: 34px;
+      }
+
+      .intro {
+        grid-template-columns: 1fr;
+        gap: 18px;
+      }
+
+      .games {
+        grid-template-columns: 1fr;
+      }
+
+      .game {
+        min-height: 250px;
+        grid-template-columns: 58px 1fr;
+        padding: 24px;
+      }
+
+      .icon {
+        width: 58px;
+        height: 58px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header class="header">
+    <div class="header-inner">
+      <div class="logo-mark" aria-hidden="true">🌿</div>
+
+      <div class="brand-text">
+        <h1 id="siteTitle">ZIT Campus Spielwiese</h1>
+        <div class="subtitle" id="siteSubtitle">Lernen. Entdecken. Verbinden.</div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="intro">
+      <div>
+        <div class="eyebrow" id="sectionLabel">LERNSPIELE</div>
+        <h2 id="sectionTitle">Was möchtest du heute entdecken?</h2>
+      </div>
+
+      <p id="introText">
+        Wähle ein Spiel aus. Weitere Lernbereiche kommen Schritt für Schritt hinzu.
+      </p>
+    </section>
+
+    <section class="games" id="games" aria-label="Lernspiele"></section>
+
+    <div class="footer">
+      <a
+        class="skool"
+        id="skoolLink"
+        href="https://www.skool.com/craniosacrale-traumatherapie-9037/about"
+        target="_blank"
+        rel="noopener"
+      >
+        Zur ZIT Campus Community
+      </a>
+    </div>
+  </main>
+
+  <script id="zit-content" type="application/json">
+    {
+      "site": {
+        "title": "ZIT Campus Spielwiese",
+        "subtitle": "Lernen. Entdecken. Verbinden.",
+        "sectionLabel": "LERNSPIELE",
+        "sectionTitle": "Was möchtest du heute entdecken?",
+        "intro": "Wähle ein Spiel aus. Weitere Lernbereiche kommen Schritt für Schritt hinzu.",
+        "skoolText": "Zur ZIT Campus Community",
+        "skoolUrl": "https://www.skool.com/craniosacrale-traumatherapie-9037/about"
+      },
+      "games": [
+        {
+          "id": "anatomie-memory",
+          "icon": "🧠",
+          "title": "Anatomie-Memory",
+          "description": "Anatomische Strukturen spielerisch erkennen und festigen.",
+          "status": "available",
+          "statusText": "Spielbereit",
+          "buttonText": "Spiel starten",
+          "url": "games/anatomie-memory/index.html",
+          "visible": true
+        },
+        {
+          "id": "craniosacral-quiz",
+          "icon": "🌿",
+          "title": "Craniosacral-Quiz",
+          "description": "Teste dein Wissen mit 10 interaktiven Fragen.",
+          "status": "available",
+          "statusText": "Spielbereit",
+          "buttonText": "Quiz starten",
+          "url": "games/craniosacral-quiz/index.html",
+          "visible": true
+        },
+        {
+          "id": "trauma-kreuzwortraetsel",
+          "icon": "🧩",
+          "title": "Trauma-Kreuzworträtsel",
+          "description": "Zentrale Begriffe aus Trauma und Nervensystem spielerisch wiederholen.",
+          "status": "available",
+          "statusText": "Spielbereit",
+          "buttonText": "Rätsel starten",
+          "url": "games/trauma-kreuzwortraetsel/index.html",
+          "visible": true
+        },
+        {
+          "id": "trauma-nervensystem",
+          "icon": "💚",
+          "title": "Trauma & Nervensystem",
+          "description": "Weitere Lernspiele zu Regulation, Sicherheit und Nervensystem folgen.",
+          "status": "planned",
+          "statusText": "In Vorbereitung",
+          "buttonText": "",
+          "url": "",
+          "visible": true
+        },
+        {
+          "id": "weitere-quizze",
+          "icon": "❓",
+          "title": "Weitere Quizze",
+          "description": "Weitere Wissensfragen und Lernspiele folgen.",
+          "status": "planned",
+          "statusText": "In Vorbereitung",
+          "buttonText": "",
+          "url": "",
+          "visible": true
+        }
+      ]
+    }
+  </script>
+
+  <script>
+    const contentElement = document.getElementById("zit-content");
+    const content = JSON.parse(contentElement.textContent);
+
+    document.title = content.site.title;
+    document.getElementById("siteTitle").textContent = content.site.title;
+    document.getElementById("siteSubtitle").textContent = content.site.subtitle;
+    document.getElementById("sectionLabel").textContent = content.site.sectionLabel;
+    document.getElementById("sectionTitle").textContent = content.site.sectionTitle;
+    document.getElementById("introText").textContent = content.site.intro;
+
+    const skoolLink = document.getElementById("skoolLink");
+    skoolLink.textContent = content.site.skoolText;
+    skoolLink.href = content.site.skoolUrl;
+
+    const gamesContainer = document.getElementById("games");
+
+    for (const game of content.games.filter((item) => item.visible)) {
+      const article = document.createElement("article");
+      article.className =
+        "game " + (game.status === "available" ? "available" : "planned");
+
+      const icon = document.createElement("div");
+      icon.className = "icon";
+      icon.textContent = game.icon || "🎮";
+      icon.setAttribute("aria-hidden", "true");
+
+      const body = document.createElement("div");
+      body.className = "game-content";
+
+      const badge = document.createElement("span");
+      badge.className = "badge";
+      badge.textContent = game.statusText || "";
+
+      const heading = document.createElement("h3");
+      heading.textContent = game.title || "";
+
+      const description = document.createElement("p");
+      description.textContent = game.description || "";
+
+      body.append(badge, heading, description);
+
+      if (game.status === "available" && game.url) {
+        const link = document.createElement("a");
+        link.className = "start";
+        link.href = game.url;
+        link.textContent = (game.buttonText || "Öffnen") + " →";
+        body.appendChild(link);
+
+        article.addEventListener("click", (event) => {
+          if (!event.target.closest("a")) {
+            window.location.href = game.url;
+          }
+        });
+      }
+
+      article.append(icon, body);
+      gamesContainer.appendChild(article);
+    }
+  </script>
+</body>
+</html>
