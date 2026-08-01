@@ -108,7 +108,7 @@
 
     .games {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
       gap: 22px;
     }
 
@@ -206,22 +206,12 @@
       text-decoration: none;
     }
 
-    .skool:hover { background: var(--green-dark); }
-
     @media (max-width: 760px) {
       .header-inner {
         flex-direction: column;
         gap: 10px;
         text-align: center;
       }
-
-      .logo-mark {
-        width: 70px;
-        height: 70px;
-        font-size: 2.2rem;
-      }
-
-      main { padding-top: 34px; }
 
       .intro {
         grid-template-columns: 1fr;
@@ -261,11 +251,10 @@
         <div class="eyebrow">LERNSPIELE</div>
         <h2>Was möchtest du heute entdecken?</h2>
       </div>
-      <p>Wähle ein Spiel aus. Weitere Lernbereiche kommen Schritt für Schritt hinzu.</p>
+      <p>Wähle ein Spiel aus und lass deine Schmetterlingswiese wachsen.</p>
     </section>
 
     <section class="games" aria-label="Lernspiele">
-
       <article class="game">
         <div class="icon" aria-hidden="true">🧠</div>
         <div class="game-content">
@@ -296,6 +285,15 @@
         </div>
       </article>
 
+      <article class="game">
+        <div class="icon" aria-hidden="true">🦋</div>
+        <div class="game-content">
+          <span class="badge">Dein Fortschritt</span>
+          <h3>Schmetterlingswiese</h3>
+          <p>Sieh deine Punkte, erreichten Spielabschlüsse und farbigen Schmetterlinge.</p>
+          <a class="start" href="games/schmetterlingswiese/index.html">Wiese ansehen →</a>
+        </div>
+      </article>
     </section>
 
     <div class="footer">
