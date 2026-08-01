@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Interaktives Schiebespiel zum Trauma-Kreislauf im ZIT Campus.">
+  <title>Trauma-Kreislauf ordnen | ZIT Campus</title>
+  <link rel="stylesheet" href="style.css">
+
+<style>
+/* Einheitlicher Kopfbereich nach dem Vorbild des Anatomie-Memorys */
+.zit-return-home{
+  position:absolute;top:16px;left:20px;z-index:1000;
+  display:inline-flex;align-items:center;justify-content:center;
+  min-height:56px;padding:0 24px;border:2px solid #fff;border-radius:999px;
+  background:#f28c00;color:#fff;text-decoration:none;font-weight:800;
+  box-shadow:0 9px 24px rgba(64,91,51,.22),0 7px 18px rgba(242,140,0,.24);
+  transition:transform .18s ease,box-shadow .18s ease,background .18s ease;
+}
+.zit-return-home:hover{background:#dc7e00;transform:translateY(-2px);box-shadow:0 12px 28px rgba(64,91,51,.25),0 10px 22px rgba(242,140,0,.3)}
+.zit-game-header{
+  width:100%;background:rgba(255,255,255,.95);border-bottom:1px solid #d7e5cf;
+  backdrop-filter:blur(8px);
+}
+.zit-game-header-inner{
+  max-width:1250px;margin:0 auto;padding:92px 20px 20px;
+  display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap;
+}
+.zit-game-brand h1{margin:0;color:#223526;font-size:clamp(1.55rem,3.2vw,2.65rem);line-height:1.08;letter-spacing:-.02em}
+.zit-game-brand p{margin:6px 0 0;color:#6a7566;font-size:clamp(.98rem,1.6vw,1.12rem);line-height:1.45}
+.zit-game-mark{display:inline-flex;align-items:center;gap:8px;margin-bottom:5px;color:#2f7f16;font-weight:900;font-size:.92rem}
+.zit-content-wrap{width:min(1180px,calc(100% - 24px));margin:0 auto;padding:26px 0 48px}
+@media(max-width:650px){
+ .zit-return-home{top:12px;left:12px;min-height:50px;padding:0 18px}
+ .zit-game-header-inner{padding:82px 14px 17px}
+ .zit-content-wrap{width:min(100% - 14px,1180px);padding-top:20px}
+}
+</style>
+
+</head>
+<body>
+  <a class="zit-return-home" href="../../index.html" aria-label="Zurück zur ZIT Campus Spielwiese">← Zur Spielwiese</a>
+  <header class="zit-game-header">
+    <div class="zit-game-header-inner">
+      <div class="zit-game-brand">
+        <div class="zit-game-mark">🌿 ZIT Campus</div>
+        <h1>Trauma-Kreislauf ordnen</h1>
+        <p>Bringe die Bildkarten in die richtige Reihenfolge. Ziehe sie auf die nummerierten Plätze – oder tippe zuerst eine Karte und dann einen Platz an.</p>
+      </div>
+    </div>
+  </header>
+  <main class="app zit-content-wrap">
+
+    <section class="toolbar" aria-label="Spielsteuerung">
+      <div>
+        <strong id="progressText">0 von 11 Stationen richtig</strong>
+        <span id="selectionText">Noch keine Karte ausgewählt</span>
+      </div>
+      <div class="toolbar-actions">
+        <button id="checkBtn" type="button">Prüfen</button>
+        <button id="hintBtn" type="button">Tipp</button>
+        <button id="referenceBtn" type="button" class="secondary">Übersicht zeigen</button>
+        <button id="resetBtn" type="button" class="secondary">Neu starten</button>
+      </div>
+    </section>
+
+    <section class="game-layout">
+      <article class="cycle-panel">
+        <div class="panel-heading">
+          <div>
+            <span class="eyebrow">DER KREISLAUF</span>
+            <h2>Lege die Stationen im Uhrzeigersinn ab</h2>
+          </div>
+          <p>Beginn oben bei Station 1.</p>
+        </div>
+
+        <div id="cycleBoard" class="cycle-board" aria-label="Plätze des Trauma-Kreislaufs">
+          <div class="cycle-center">
+            <span>Trauma-</span>
+            <strong>Kreislauf</strong>
+            <small>im Uhrzeigersinn</small>
+          </div>
+          <div id="slotsLayer" class="slots-layer"></div>
+        </div>
+
+        <p id="message" class="message" aria-live="polite"></p>
+      </article>
+
+      <aside class="cards-panel">
+        <div class="panel-heading compact">
+          <div>
+            <span class="eyebrow">BILDKARTEN</span>
+            <h2>Ungeordnet</h2>
+          </div>
+        </div>
+        <div id="cardsTray" class="cards-tray"></div>
+      </aside>
+    </section>
+
+    <aside class="learning-note">
+      <strong>Nach dem Lösen:</strong> Klicke auf eine eingesetzte Station, um Titel und Erklärung zu öffnen.
+      Die Texte kannst du später selbst in <code>data.js</code> bearbeiten.
+    </aside>
+  </main>
+
+  <dialog id="referenceDialog" class="reference-dialog">
+    <button id="closeReference" class="dialog-close" type="button" aria-label="Schließen">×</button>
+    <h2>Übersicht des Trauma-Kreislaufs</h2>
+    <img src="images/uebersicht.jpg" alt="Übersicht des vollständigen Trauma-Kreislaufs">
+  </dialog>
+
+  <dialog id="infoDialog" class="info-dialog">
+    <button id="closeInfo" class="dialog-close" type="button" aria-label="Schließen">×</button>
+    <img id="infoImage" alt="">
+    <div>
+      <span id="infoNumber" class="eyebrow"></span>
+      <h2 id="infoTitle"></h2>
+      <p id="infoText"></p>
+    </div>
+  </dialog>
+
+  <script src="data.js"></script>
+  <script src="../../shared/zit-points.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
