@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Interaktives Schiebespiel zum Trauma-Kreislauf im ZIT Campus.">
+  <title>Trauma-Kreislauf ordnen | ZIT Campus</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="app">
+    <header class="hero">
+      <a class="back-link" href="../../index.html">← Zur Spielwiese</a>
+      <div class="brand">🌿 ZIT Campus</div>
+      <h1>Trauma-Kreislauf ordnen</h1>
+      <p>Bringe die Bildkarten in die richtige Reihenfolge. Ziehe sie auf die nummerierten Plätze – oder tippe zuerst eine Karte und dann einen Platz an.</p>
+    </header>
+
+    <section class="toolbar" aria-label="Spielsteuerung">
+      <div>
+        <strong id="progressText">0 von 11 Stationen richtig</strong>
+        <span id="selectionText">Noch keine Karte ausgewählt</span>
+      </div>
+      <div class="toolbar-actions">
+        <button id="checkBtn" type="button">Prüfen</button>
+        <button id="hintBtn" type="button">Tipp</button>
+        <button id="referenceBtn" type="button" class="secondary">Übersicht zeigen</button>
+        <button id="resetBtn" type="button" class="secondary">Neu starten</button>
+      </div>
+    </section>
+
+    <section class="game-layout">
+      <article class="cycle-panel">
+        <div class="panel-heading">
+          <div>
+            <span class="eyebrow">DER KREISLAUF</span>
+            <h2>Lege die Stationen im Uhrzeigersinn ab</h2>
+          </div>
+          <p>Beginn oben bei Station 1.</p>
+        </div>
+
+        <div id="cycleBoard" class="cycle-board" aria-label="Plätze des Trauma-Kreislaufs">
+          <div class="cycle-center">
+            <span>Trauma-</span>
+            <strong>Kreislauf</strong>
+            <small>im Uhrzeigersinn</small>
+          </div>
+          <div id="slotsLayer" class="slots-layer"></div>
+        </div>
+
+        <p id="message" class="message" aria-live="polite"></p>
+      </article>
+
+      <aside class="cards-panel">
+        <div class="panel-heading compact">
+          <div>
+            <span class="eyebrow">BILDKARTEN</span>
+            <h2>Ungeordnet</h2>
+          </div>
+        </div>
+        <div id="cardsTray" class="cards-tray"></div>
+      </aside>
+    </section>
+
+    <aside class="learning-note">
+      <strong>Nach dem Lösen:</strong> Klicke auf eine eingesetzte Station, um Titel und Erklärung zu öffnen.
+      Die Texte kannst du später selbst in <code>data.js</code> bearbeiten.
+    </aside>
+  </main>
+
+  <dialog id="referenceDialog" class="reference-dialog">
+    <button id="closeReference" class="dialog-close" type="button" aria-label="Schließen">×</button>
+    <h2>Übersicht des Trauma-Kreislaufs</h2>
+    <img src="images/uebersicht.png" alt="Übersicht des vollständigen Trauma-Kreislaufs">
+  </dialog>
+
+  <dialog id="infoDialog" class="info-dialog">
+    <button id="closeInfo" class="dialog-close" type="button" aria-label="Schließen">×</button>
+    <img id="infoImage" alt="">
+    <div>
+      <span id="infoNumber" class="eyebrow"></span>
+      <h2 id="infoTitle"></h2>
+      <p id="infoText"></p>
+    </div>
+  </dialog>
+
+  <script src="data.js"></script>
+  <script src="../../shared/zit-points.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
