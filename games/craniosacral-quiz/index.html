@@ -6,15 +6,52 @@
   <meta name="description" content="Interaktives Lernquiz zur Craniosacraltherapie im ZIT Campus." />
   <title>Craniosacral-Quiz | ZIT Campus</title>
   <link rel="stylesheet" href="style.css" />
+
+<style>
+/* Einheitlicher Kopfbereich nach dem Vorbild des Anatomie-Memorys */
+.zit-return-home{
+  position:absolute;top:16px;left:20px;z-index:1000;
+  display:inline-flex;align-items:center;justify-content:center;
+  min-height:56px;padding:0 24px;border:2px solid #fff;border-radius:999px;
+  background:#f28c00;color:#fff;text-decoration:none;font-weight:800;
+  box-shadow:0 9px 24px rgba(64,91,51,.22),0 7px 18px rgba(242,140,0,.24);
+  transition:transform .18s ease,box-shadow .18s ease,background .18s ease;
+}
+.zit-return-home:hover{background:#dc7e00;transform:translateY(-2px);box-shadow:0 12px 28px rgba(64,91,51,.25),0 10px 22px rgba(242,140,0,.3)}
+.zit-game-header{
+  width:100%;background:rgba(255,255,255,.95);border-bottom:1px solid #d7e5cf;
+  backdrop-filter:blur(8px);
+}
+.zit-game-header-inner{
+  max-width:1250px;margin:0 auto;padding:92px 20px 20px;
+  display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap;
+}
+.zit-game-brand h1{margin:0;color:#223526;font-size:clamp(1.55rem,3.2vw,2.65rem);line-height:1.08;letter-spacing:-.02em}
+.zit-game-brand p{margin:6px 0 0;color:#6a7566;font-size:clamp(.98rem,1.6vw,1.12rem);line-height:1.45}
+.zit-game-mark{display:inline-flex;align-items:center;gap:8px;margin-bottom:5px;color:#2f7f16;font-weight:900;font-size:.92rem}
+.zit-content-wrap{width:min(1180px,calc(100% - 24px));margin:0 auto;padding:26px 0 48px}
+@media(max-width:650px){
+ .zit-return-home{top:12px;left:12px;min-height:50px;padding:0 18px}
+ .zit-game-header-inner{padding:82px 14px 17px}
+ .zit-content-wrap{width:min(100% - 14px,1180px);padding-top:20px}
+}
+</style>
+
 </head>
 <body>
-  <main class="app">
-    <header class="hero">
-      <a class="back-link" href="../../index.html" aria-label="Zurück zur Spielwiese">← Zur Spielwiese</a>
-      <div class="brand">🌿 ZIT Campus</div>
-      <h1>Craniosacral-Quiz</h1>
-      <p>Teste dein Wissen – ruhig, klar und Schritt für Schritt.</p>
-    </header>
+  <a class="zit-return-home" href="../../index.html" aria-label="Zurück zur ZIT Campus Spielwiese">← Zur Spielwiese</a>
+
+  <header class="zit-game-header">
+    <div class="zit-game-header-inner">
+      <div class="zit-game-brand">
+        <div class="zit-game-mark">🌿 ZIT Campus</div>
+        <h1>Craniosacral-Quiz</h1>
+        <p>Teste dein Wissen – ruhig, klar und Schritt für Schritt.</p>
+      </div>
+    </div>
+  </header>
+
+  <main class="app zit-content-wrap">
 
     <section class="quiz-card" aria-live="polite">
       <div class="top-row">
