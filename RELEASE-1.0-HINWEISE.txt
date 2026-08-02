@@ -1,0 +1,22 @@
+ZIT Campus Spielwiese – bereinigtes Release
+Stand: 02.08.2026
+
+Enthaltene Korrekturen:
+- Kachel „10-Step-Domino“ auf der Haupt-Spielwiese ergänzt.
+- Link zum Trauma-Kreislauf auf den vorhandenen Ordner „games/traumakreislauf/“ korrigiert.
+- Rücklink im Trauma-Kreislauf zur Haupt-Spielwiese korrigiert.
+- 10-Step-Domino enthält Schritt 7 „Schulterblätter lösen“.
+- Schmetterlingswiese führt das 10-Step-Domino mit bis zu 20 Punkten auf.
+- Alle lokalen HTML-, CSS-, JavaScript- und Bildpfade wurden auf vorhandene Dateien geprüft.
+
+Installation:
+1. ZIP entpacken.
+2. Den INHALT des entpackten Ordners in das bestehende Repository
+   „ZIT-Campus-Spielwiese“ kopieren.
+3. Vorhandene Dateien bei Nachfrage ersetzen.
+4. Den vorhandenen .git-Ordner im Repository nicht löschen.
+5. In GitHub Desktop committen und anschließend „Push origin“ wählen.
+
+Wichtig:
+Die ZIP enthält bewusst keinen .git-Ordner. Dadurch bleibt die bestehende
+GitHub-Verknüpfung auf deinem Computer erhalten.
