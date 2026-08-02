@@ -22,6 +22,12 @@ const GAME_CATALOG = [
     title: "Der Traumakreislauf",
     icon: "🔄",
     maxPoints: 20
+  },
+  {
+    id: "10-step-domino",
+    title: "10-Step-Domino",
+    icon: "🁣",
+    maxPoints: 20
   }
 ];
 
