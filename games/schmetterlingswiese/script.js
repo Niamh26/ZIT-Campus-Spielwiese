@@ -16,6 +16,12 @@ const GAME_CATALOG = [
     title: "Trauma-Kreuzworträtsel",
     icon: "🧩",
     maxPoints: 20
+  },
+  {
+    id: "traumakreislauf",
+    title: "Der Traumakreislauf",
+    icon: "🔄",
+    maxPoints: 20
   }
 ];
 
