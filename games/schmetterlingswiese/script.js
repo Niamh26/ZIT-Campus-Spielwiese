@@ -24,6 +24,12 @@ const GAME_CATALOG = [
     maxPoints: 20
   },
   {
+    id: "faszien-labyrinth",
+    title: "Faszien-Labyrinth",
+    icon: "🐇",
+    maxPoints: 10
+  },
+  {
     id: "10-step-domino",
     title: "10-Step-Domino",
     icon: "🁣",
