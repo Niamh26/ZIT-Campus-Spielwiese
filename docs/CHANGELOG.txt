@@ -18,3 +18,6 @@ Version 0.5 – Anatomie-Memory mit Schmetterlingssystem
 - Fortschrittsbalken und wertschätzende Hinweise
 - lokaler Schmetterlingsgarten
 - korrigierte Bestleistungsanzeige
+
+Version 0.4.1 – Korrektur 10-Step-Domino
+- Bild 7 ersetzt: „Thorakaler Eingang“ statt doppeltem „Zwerchfellrelease“.
