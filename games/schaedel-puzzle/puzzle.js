@@ -1,7 +1,6 @@
 window.__skullPuzzleBooted=true;
 import * as THREE from './vendor/three/three.module.js';
 import { OrbitControls } from './vendor/three/addons/controls/OrbitControls.js';
-import { TransformControls } from './vendor/three/addons/controls/TransformControls.js';
 import { STLLoader } from './vendor/three/addons/loaders/STLLoader.js';
 import { BONES } from './bones.js';
 
@@ -16,10 +15,11 @@ const renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:true}); rend
 scene.add(new THREE.HemisphereLight(0xffffff,0x587064,2.4)); const key=new THREE.DirectionalLight(0xffffff,3); key.position.set(-100,-120,160); scene.add(key); const fill=new THREE.DirectionalLight(0xffffff,1.6); fill.position.set(120,80,80); scene.add(fill);
 const root=new THREE.Group(); scene.add(root);
 const orbit=new OrbitControls(camera,canvas); orbit.enableDamping=true; orbit.target.set(0,0,5); orbit.minDistance=85; orbit.maxDistance=420;
-const transform=new TransformControls(camera,canvas); transform.setSize(.75); scene.add(transform.getHelper()); transform.addEventListener('dragging-changed',e=>orbit.enabled=!e.value); transform.addEventListener('objectChange',()=>{ if(selected) updateSelectionUI(); });
 
 const raycaster=new THREE.Raycaster(), pointer=new THREE.Vector2(); const loader=new STLLoader();
 const pieces=[]; let selected=null, started=false, completed=0, hintGhost=null;
+let mode='translate', draggingPiece=false, dragMoved=false, dragStartX=0, dragStartY=0;
+const dragPlane=new THREE.Plane(), dragHit=new THREE.Vector3(), dragOffset=new THREE.Vector3();
 const localUrl=b=>`./models/${b.fma}.stl`;
 
 function loadStl(url,timeoutMs=25000){return new Promise((resolve,reject)=>{let done=false;const timer=setTimeout(()=>{if(done)return;done=true;reject(new Error('Zeitüberschreitung: '+url));},timeoutMs);loader.load(url,g=>{if(done)return;done=true;clearTimeout(timer);resolve(g);},undefined,e=>{if(done)return;done=true;clearTimeout(timer);reject(e||new Error('Ladefehler: '+url));});});}
@@ -48,17 +48,17 @@ async function init(){
   }
 }
 function buildList(){boneList.innerHTML=''; pieces.forEach((p,i)=>{const b=p.userData.bone, el=document.createElement('div'); el.className='bone-item'; el.dataset.i=i; el.innerHTML=`<span class="swatch" style="background:${b.color}"></span><span>${b.de}</span><span class="check">✓</span>`; el.onclick=()=>selectPiece(p); boneList.appendChild(el);}); updateProgress();}
-function selectPiece(p){selected=p; transform.detach(); if(!p) return; const b=p.userData.bone; boneName.textContent=b.de; boneLatin.textContent=b.la; if(started&&!p.userData.placed) transform.attach(p); clearHint();}
-function setMode(mode){transform.setMode(mode); moveBtn.classList.toggle('active',mode==='translate'); rotateBtn.classList.toggle('active',mode==='rotate');}
+function selectPiece(p){selected=p; if(!p) return; const b=p.userData.bone; boneName.textContent=b.de; boneLatin.textContent=b.la; clearHint();}
+function setMode(nextMode){mode=nextMode; moveBtn.classList.toggle('active',mode==='translate'); rotateBtn.classList.toggle('active',mode==='rotate'); showToast(mode==='translate'?'Verschieben: Knochen direkt greifen und ziehen.':'Drehen: Knochen direkt greifen und ziehen.');}
 function scatter(){
   started=true; completed=0; clearHint();
   const radius=105/root.scale.x;
   pieces.forEach((p,i)=>{p.userData.placed=false; const a=i/BONES.length*Math.PI*2, ring=(i%3)*18/root.scale.x; p.position.copy(p.userData.targetPosition).add(new THREE.Vector3(Math.cos(a)*(radius+ring),Math.sin(a)*(radius+ring),((i%5)-2)*23/root.scale.x)); p.rotation.set((i%4)*.35,(i%6)*.42,(i%3)*.27); p.material.opacity=1;});
   startBtn.textContent='Puzzle läuft'; startBtn.disabled=true; selectPiece(pieces[0]); updateProgress(); fitView(1.35); showToast('22 Knochen verteilt – viel Freude beim Puzzeln!');
 }
-function resetAssembled(){started=false; completed=BONES.length; clearHint(); pieces.forEach(p=>{p.position.copy(p.userData.targetPosition); p.quaternion.copy(p.userData.targetQuaternion); p.userData.placed=true;}); transform.detach(); startBtn.disabled=false; startBtn.textContent='Puzzle starten'; updateProgress(); fitView(1.05);}
+function resetAssembled(){started=false; completed=BONES.length; clearHint(); pieces.forEach(p=>{p.position.copy(p.userData.targetPosition); p.quaternion.copy(p.userData.targetQuaternion); p.userData.placed=true;}); startBtn.disabled=false; startBtn.textContent='Puzzle starten'; updateProgress(); fitView(1.05);}
 function checkSnap(force=false){if(!selected||selected.userData.placed||!started)return; const d=selected.position.distanceTo(selected.userData.targetPosition); const qAngle=selected.quaternion.angleTo(selected.userData.targetQuaternion); const posTol=force?18/root.scale.x:10/root.scale.x, rotTol=force?Math.PI:0.65; if(d<posTol&&qAngle<rotTol){place(selected);} else showToast(force?'Noch nicht nah genug an der Zielposition.':'Fast – Position und Ausrichtung noch etwas korrigieren.');}
-function place(p){p.position.copy(p.userData.targetPosition); p.quaternion.copy(p.userData.targetQuaternion); p.userData.placed=true; transform.detach(); completed=pieces.filter(x=>x.userData.placed).length; updateProgress(); showToast(`✓ ${p.userData.bone.de} sitzt richtig.`); const next=pieces.find(x=>!x.userData.placed); if(next) selectPiece(next); else finish();}
+function place(p){p.position.copy(p.userData.targetPosition); p.quaternion.copy(p.userData.targetQuaternion); p.userData.placed=true; completed=pieces.filter(x=>x.userData.placed).length; updateProgress(); showToast(`✓ ${p.userData.bone.de} sitzt richtig.`); const next=pieces.find(x=>!x.userData.placed); if(next) selectPiece(next); else finish();}
 function finish(){startBtn.disabled=false; startBtn.textContent='Noch einmal spielen'; started=false; if(window.ZITPoints){const r=ZITPoints.award('schaedel-puzzle',20,'3D-Schädelpuzzle'); showToast(r.awarded?'Geschafft! +20 Punkte für deine Schmetterlingswiese 🦋':'Geschafft! Der Schädel ist vollständig.');}else showToast('Geschafft! Der Schädel ist vollständig.');}
 function updateProgress(){completed=pieces.filter(p=>p.userData.placed).length; progressText.textContent=`${completed} / ${BONES.length}`; progressBar.style.width=`${completed/BONES.length*100}%`; [...boneList.children].forEach((el,i)=>{const done=pieces[i]?.userData.placed; el.classList.toggle('done',done); el.querySelector('.check').textContent=done?'✓':'';});}
 function updateSelectionUI(){if(selected){boneName.textContent=selected.userData.bone.de; boneLatin.textContent=selected.userData.bone.la;}}
@@ -66,10 +66,54 @@ function showHint(){if(!selected||selected.userData.placed||!started)return; cle
 function clearHint(){if(hintGhost){root.remove(hintGhost); hintGhost.material.dispose(); hintGhost=null;}}
 function showToast(msg){toast.textContent=msg; toast.classList.add('show'); clearTimeout(showToast.t); showToast.t=setTimeout(()=>toast.classList.remove('show'),2600);}
 function fitView(mult=1.1){const box=new THREE.Box3().setFromObject(root), sphere=box.getBoundingSphere(new THREE.Sphere()); orbit.target.copy(sphere.center); const fov=THREE.MathUtils.degToRad(camera.fov); const dist=sphere.radius/Math.sin(fov/2)*mult; camera.position.copy(sphere.center).add(new THREE.Vector3(0,-dist*.9,dist*.22)); orbit.update();}
-function pick(e){if(transform.dragging)return; const r=canvas.getBoundingClientRect(); pointer.x=(e.clientX-r.left)/r.width*2-1; pointer.y=-((e.clientY-r.top)/r.height*2-1); raycaster.setFromCamera(pointer,camera); const hits=raycaster.intersectObjects(pieces,false); if(hits.length) selectPiece(hits[0].object);}
+function setPointer(e){const r=canvas.getBoundingClientRect(); pointer.x=(e.clientX-r.left)/r.width*2-1; pointer.y=-((e.clientY-r.top)/r.height*2-1); raycaster.setFromCamera(pointer,camera);}
+function pointerDown(e){
+  setPointer(e);
+  const hits=raycaster.intersectObjects(pieces,false);
+  if(!hits.length){ draggingPiece=false; orbit.enabled=true; return; }
+  const p=hits[0].object; selectPiece(p);
+  if(!started||p.userData.placed){ draggingPiece=false; orbit.enabled=true; return; }
+  draggingPiece=true; dragMoved=false; dragStartX=e.clientX; dragStartY=e.clientY; orbit.enabled=false;
+  canvas.setPointerCapture?.(e.pointerId);
+  if(mode==='translate'){
+    const worldPos=p.getWorldPosition(new THREE.Vector3());
+    const normal=camera.getWorldDirection(new THREE.Vector3());
+    dragPlane.setFromNormalAndCoplanarPoint(normal,worldPos);
+    if(raycaster.ray.intersectPlane(dragPlane,dragHit)){
+      const localHit=root.worldToLocal(dragHit.clone());
+      dragOffset.copy(p.position).sub(localHit);
+    }
+  }
+  e.preventDefault();
+}
+function pointerMove(e){
+  if(!draggingPiece||!selected||selected.userData.placed)return;
+  const dx=e.clientX-dragStartX, dy=e.clientY-dragStartY;
+  if(Math.abs(dx)+Math.abs(dy)>2) dragMoved=true;
+  if(mode==='translate'){
+    setPointer(e);
+    if(raycaster.ray.intersectPlane(dragPlane,dragHit)){
+      const localHit=root.worldToLocal(dragHit.clone());
+      selected.position.copy(localHit.add(dragOffset));
+    }
+  }else{
+    const right=new THREE.Vector3().setFromMatrixColumn(camera.matrixWorld,0).normalize();
+    const up=new THREE.Vector3().setFromMatrixColumn(camera.matrixWorld,1).normalize();
+    const qx=new THREE.Quaternion().setFromAxisAngle(up,dx*0.008);
+    const qy=new THREE.Quaternion().setFromAxisAngle(right,dy*0.008);
+    selected.quaternion.premultiply(qx).premultiply(qy).normalize();
+    dragStartX=e.clientX; dragStartY=e.clientY;
+  }
+  e.preventDefault();
+}
+function pointerUp(e){
+  if(!draggingPiece)return;
+  draggingPiece=false; orbit.enabled=true; canvas.releasePointerCapture?.(e.pointerId);
+  if(dragMoved) checkSnap(false);
+}
 function resize(){const w=stage.clientWidth,h=stage.clientHeight; renderer.setSize(w,h,false); camera.aspect=w/h; camera.updateProjectionMatrix();}
 function animate(){requestAnimationFrame(animate); orbit.update(); renderer.render(scene,camera);}
-canvas.addEventListener('pointerdown',pick); window.addEventListener('resize',resize); transform.addEventListener('mouseUp',()=>checkSnap(false));
+canvas.addEventListener('pointerdown',pointerDown); canvas.addEventListener('pointermove',pointerMove); canvas.addEventListener('pointerup',pointerUp); canvas.addEventListener('pointercancel',pointerUp); window.addEventListener('resize',resize);
 startBtn.onclick=()=>scatter(); moveBtn.onclick=()=>setMode('translate'); rotateBtn.onclick=()=>setMode('rotate'); hintBtn.onclick=showHint; snapBtn.onclick=()=>checkSnap(true); resetBtn.onclick=resetAssembled;
 window.addEventListener('keydown',e=>{if(e.target.matches('input,textarea'))return; if(e.key.toLowerCase()==='w')setMode('translate'); if(e.key.toLowerCase()==='e')setMode('rotate'); if(e.key.toLowerCase()==='h')showHint();});
 init();

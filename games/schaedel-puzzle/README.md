@@ -9,3 +9,7 @@ Interaktives Puzzle mit 22 anatomisch getrennten Schädelknochen.
 
 ## Modelle
 Die Seite lädt zuerst lokale STL-Dateien aus `models/`. Falls sie dort fehlen, wird als Fallback die offene BodyParts3D-Konvertierung auf GitHub verwendet. Die mitgelieferte GitHub-Action kann die 22 STL-Dateien beim Pages-Deployment automatisch bereitstellen.
+
+
+## Bedienung v5
+Knochen werden direkt mit der Maus gegriffen. Im Modus Verschieben bewegt Ziehen den gewählten Knochen; im Modus Drehen rotiert Ziehen nur diesen Knochen. Ziehen auf freiem Hintergrund dreht weiterhin die Ansicht.
