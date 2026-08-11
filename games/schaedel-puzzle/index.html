@@ -44,7 +44,7 @@
   setTimeout(function(){
     if(window.__skullPuzzleBooted) return;
     var box=document.getElementById('loading');
-    if(box) box.innerHTML='<div class="error"><strong>Das 3D-Modul konnte noch nicht gestartet werden.</strong><br>Bitte die Seite einmal neu laden. Falls diese Meldung bleibt, fehlen die 3D-Bibliothek oder Modelldateien auf dem Server.</div>';
+    if(box) box.innerHTML='<div class="error"><strong>Das 3D-Modul konnte noch nicht gestartet werden.</strong><br>Bitte die Seite einmal neu laden. Falls diese Meldung bleibt, prüfe games/schaedel-puzzle/vendor/three/three.core.js sowie die 22 Modelldateien. Führe SCHAEDELPUZZLE-INSTALLIEREN.bat erneut aus.</div>';
   },15000);
 </script>
 <script type="module" src="./puzzle.js"></script>

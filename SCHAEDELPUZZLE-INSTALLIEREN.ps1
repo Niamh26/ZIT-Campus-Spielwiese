@@ -1,4 +1,4 @@
-$ErrorActionPreference = 'Stop'
+﻿$ErrorActionPreference = 'Stop'
 $ProgressPreference = 'SilentlyContinue'
 
 $root = Split-Path -Parent $MyInvocation.MyCommand.Path
@@ -31,6 +31,7 @@ Write-Host ''
 # Three.js r180, pinned version
 $threeBase = 'https://cdn.jsdelivr.net/npm/three@0.180.0'
 Get-FileChecked "$threeBase/build/three.module.js" (Join-Path $vendorDir 'three.module.js') 500000
+Get-FileChecked "$threeBase/build/three.core.js" (Join-Path $vendorDir 'three.core.js') 900000
 Get-FileChecked "$threeBase/examples/jsm/controls/OrbitControls.js" (Join-Path $controlsDir 'OrbitControls.js') 10000
 Get-FileChecked "$threeBase/examples/jsm/controls/TransformControls.js" (Join-Path $controlsDir 'TransformControls.js') 10000
 Get-FileChecked "$threeBase/examples/jsm/loaders/STLLoader.js" (Join-Path $loadersDir 'STLLoader.js') 5000
@@ -57,6 +58,7 @@ foreach ($id in $ids) {
 }
 $vendorFiles = @(
  (Join-Path $vendorDir 'three.module.js'),
+ (Join-Path $vendorDir 'three.core.js'),
  (Join-Path $controlsDir 'OrbitControls.js'),
  (Join-Path $controlsDir 'TransformControls.js'),
  (Join-Path $loadersDir 'STLLoader.js')
@@ -72,7 +74,7 @@ if ($missing.Count -gt 0) {
 }
 
 Write-Host ''
-Write-Host "FERTIG: $ok von 22 Knochen + Three.js wurden lokal installiert." -ForegroundColor Green
+Write-Host "FERTIG: $ok von 22 Knochen + Three.js (inkl. three.core.js) wurden lokal installiert." -ForegroundColor Green
 Write-Host ''
 Write-Host 'Naechste Schritte:' -ForegroundColor Yellow
 Write-Host '1. GitHub Desktop oeffnen.'
