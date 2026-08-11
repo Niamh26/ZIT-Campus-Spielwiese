@@ -14,10 +14,14 @@ const camera=new THREE.PerspectiveCamera(42,1,.1,2000); camera.position.set(0,-2
 const renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:true}); renderer.setPixelRatio(Math.min(devicePixelRatio,2)); renderer.outputColorSpace=THREE.SRGBColorSpace;
 scene.add(new THREE.HemisphereLight(0xffffff,0x587064,2.4)); const key=new THREE.DirectionalLight(0xffffff,3); key.position.set(-100,-120,160); scene.add(key); const fill=new THREE.DirectionalLight(0xffffff,1.6); fill.position.set(120,80,80); scene.add(fill);
 const root=new THREE.Group(); scene.add(root);
+const guideGroup=new THREE.Group(); root.add(guideGroup); guideGroup.visible=false;
+const gridHelper=new THREE.GridHelper(190,19,0x7f9e91,0xb8c9c0);
+gridHelper.material.transparent=true; gridHelper.material.opacity=.18; gridHelper.material.depthWrite=false;
+gridHelper.rotation.x=Math.PI/2; gridHelper.position.z=-58; root.add(gridHelper); gridHelper.visible=false;
 const orbit=new OrbitControls(camera,canvas); orbit.enableDamping=true; orbit.target.set(0,0,5); orbit.minDistance=85; orbit.maxDistance=420;
 
 const raycaster=new THREE.Raycaster(), pointer=new THREE.Vector2(); const loader=new STLLoader();
-const pieces=[]; let selected=null, started=false, completed=0, hintGhost=null;
+const pieces=[]; const guides=[]; let selected=null, started=false, completed=0, hintGhost=null;
 let mode='translate', draggingPiece=false, dragMoved=false, dragStartX=0, dragStartY=0;
 const dragPlane=new THREE.Plane(), dragHit=new THREE.Vector3(), dragOffset=new THREE.Vector3();
 const localUrl=b=>`./models/${b.fma}.stl`;
@@ -40,6 +44,8 @@ async function init(){
       const box=new THREE.Box3().setFromBufferAttribute(g.attributes.position), c=box.getCenter(new THREE.Vector3()); g.translate(-c.x,-c.y,-c.z);
       const mesh=new THREE.Mesh(g,material(b.color)); mesh.castShadow=true; mesh.receiveShadow=true; mesh.userData.index=i;
       mesh.position.copy(c.sub(skullCenter)); mesh.userData.targetPosition=mesh.position.clone(); mesh.userData.targetQuaternion=new THREE.Quaternion(); mesh.userData.placed=true; mesh.userData.bone=b; root.add(mesh); pieces.push(mesh);
+      const guideMat=new THREE.MeshBasicMaterial({color:0x8fa99e,transparent:true,opacity:.11,wireframe:true,depthWrite:false,side:THREE.DoubleSide});
+      const guide=new THREE.Mesh(g,guideMat); guide.position.copy(mesh.userData.targetPosition); guide.quaternion.copy(mesh.userData.targetQuaternion); guide.renderOrder=-1; guide.userData.piece=mesh; guideGroup.add(guide); guides.push(guide);
     });
     const box=new THREE.Box3().setFromObject(root), size=box.getSize(new THREE.Vector3()); const scale=120/Math.max(size.x,size.y,size.z); root.scale.setScalar(scale);
     buildList(); loading.hidden=true; resize(); selectPiece(pieces[0]); animate();
@@ -48,18 +54,50 @@ async function init(){
   }
 }
 function buildList(){boneList.innerHTML=''; pieces.forEach((p,i)=>{const b=p.userData.bone, el=document.createElement('div'); el.className='bone-item'; el.dataset.i=i; el.innerHTML=`<span class="swatch" style="background:${b.color}"></span><span>${b.de}</span><span class="check">✓</span>`; el.onclick=()=>selectPiece(p); boneList.appendChild(el);}); updateProgress();}
-function selectPiece(p){selected=p; if(!p) return; const b=p.userData.bone; boneName.textContent=b.de; boneLatin.textContent=b.la; clearHint();}
+function selectPiece(p){
+  selected=p; if(!p) return;
+  const b=p.userData.bone; boneName.textContent=b.de; boneLatin.textContent=b.la; clearHint();
+  guides.forEach(g=>{
+    const active=g.userData.piece===p && started && !p.userData.placed;
+    g.material.color.set(active?b.color:0x8fa99e);
+    g.material.opacity=active?.34:.10;
+    g.material.wireframe=!active;
+  });
+}
 function setMode(nextMode){mode=nextMode; moveBtn.classList.toggle('active',mode==='translate'); rotateBtn.classList.toggle('active',mode==='rotate'); showToast(mode==='translate'?'Verschieben: Knochen direkt greifen und ziehen.':'Drehen: Knochen direkt greifen und ziehen.');}
 function scatter(){
-  started=true; completed=0; clearHint();
+  started=true; completed=0; clearHint(); guideGroup.visible=true; gridHelper.visible=true;
   const radius=105/root.scale.x;
   pieces.forEach((p,i)=>{p.userData.placed=false; const a=i/BONES.length*Math.PI*2, ring=(i%3)*18/root.scale.x; p.position.copy(p.userData.targetPosition).add(new THREE.Vector3(Math.cos(a)*(radius+ring),Math.sin(a)*(radius+ring),((i%5)-2)*23/root.scale.x)); p.rotation.set((i%4)*.35,(i%6)*.42,(i%3)*.27); p.material.opacity=1;});
   startBtn.textContent='Puzzle läuft'; startBtn.disabled=true; selectPiece(pieces[0]); updateProgress(); fitView(1.35); showToast('22 Knochen verteilt – viel Freude beim Puzzeln!');
 }
-function resetAssembled(){started=false; completed=BONES.length; clearHint(); pieces.forEach(p=>{p.position.copy(p.userData.targetPosition); p.quaternion.copy(p.userData.targetQuaternion); p.userData.placed=true;}); startBtn.disabled=false; startBtn.textContent='Puzzle starten'; updateProgress(); fitView(1.05);}
-function checkSnap(force=false){if(!selected||selected.userData.placed||!started)return; const d=selected.position.distanceTo(selected.userData.targetPosition); const qAngle=selected.quaternion.angleTo(selected.userData.targetQuaternion); const posTol=force?18/root.scale.x:10/root.scale.x, rotTol=force?Math.PI:0.65; if(d<posTol&&qAngle<rotTol){place(selected);} else showToast(force?'Noch nicht nah genug an der Zielposition.':'Fast – Position und Ausrichtung noch etwas korrigieren.');}
-function place(p){p.position.copy(p.userData.targetPosition); p.quaternion.copy(p.userData.targetQuaternion); p.userData.placed=true; completed=pieces.filter(x=>x.userData.placed).length; updateProgress(); showToast(`✓ ${p.userData.bone.de} sitzt richtig.`); const next=pieces.find(x=>!x.userData.placed); if(next) selectPiece(next); else finish();}
-function finish(){startBtn.disabled=false; startBtn.textContent='Noch einmal spielen'; started=false; if(window.ZITPoints){const r=ZITPoints.award('schaedel-puzzle',20,'3D-Schädelpuzzle'); showToast(r.awarded?'Geschafft! +20 Punkte für deine Schmetterlingswiese 🦋':'Geschafft! Der Schädel ist vollständig.');}else showToast('Geschafft! Der Schädel ist vollständig.');}
+function resetAssembled(){started=false; completed=BONES.length; clearHint(); guideGroup.visible=false; gridHelper.visible=false; pieces.forEach(p=>{p.position.copy(p.userData.targetPosition); p.quaternion.copy(p.userData.targetQuaternion); p.userData.placed=true;}); startBtn.disabled=false; startBtn.textContent='Puzzle starten'; updateProgress(); fitView(1.05);}
+function checkSnap(force=false){
+  if(!selected||selected.userData.placed||!started)return;
+  const d=selected.position.distanceTo(selected.userData.targetPosition);
+  const posTol=(force?27:19)/root.scale.x;
+  if(d<posTol){
+    magneticPlace(selected);
+  }else{
+    showToast(force?'Noch etwas näher an die farbige Zielaussparung schieben.':'Noch nicht in der magnetischen Fangzone.');
+  }
+}
+function magneticPlace(p){
+  if(!p||p.userData.placed)return;
+  const startPos=p.position.clone(), startQ=p.quaternion.clone();
+  const endPos=p.userData.targetPosition.clone(), endQ=p.userData.targetQuaternion.clone();
+  const t0=performance.now(), duration=180;
+  p.userData.placed=true;
+  const guide=guides[p.userData.index]; if(guide) guide.material.opacity=.04;
+  function step(now){
+    const t=Math.min(1,(now-t0)/duration), e=1-Math.pow(1-t,3);
+    p.position.lerpVectors(startPos,endPos,e); p.quaternion.slerpQuaternions(startQ,endQ,e);
+    if(t<1) requestAnimationFrame(step); else place(p,true);
+  }
+  requestAnimationFrame(step);
+}
+function place(p,alreadyLocked=false){p.position.copy(p.userData.targetPosition); p.quaternion.copy(p.userData.targetQuaternion); p.userData.placed=true; completed=pieces.filter(x=>x.userData.placed).length; updateProgress(); showToast(`🧲 ✓ ${p.userData.bone.de} ist eingerastet.`); const next=pieces.find(x=>!x.userData.placed); if(next) selectPiece(next); else finish();}
+function finish(){startBtn.disabled=false; startBtn.textContent='Noch einmal spielen'; started=false; guideGroup.visible=false; gridHelper.visible=false; if(window.ZITPoints){const r=ZITPoints.award('schaedel-puzzle',20,'3D-Schädelpuzzle'); showToast(r.awarded?'Geschafft! +20 Punkte für deine Schmetterlingswiese 🦋':'Geschafft! Der Schädel ist vollständig.');}else showToast('Geschafft! Der Schädel ist vollständig.');}
 function updateProgress(){completed=pieces.filter(p=>p.userData.placed).length; progressText.textContent=`${completed} / ${BONES.length}`; progressBar.style.width=`${completed/BONES.length*100}%`; [...boneList.children].forEach((el,i)=>{const done=pieces[i]?.userData.placed; el.classList.toggle('done',done); el.querySelector('.check').textContent=done?'✓':'';});}
 function updateSelectionUI(){if(selected){boneName.textContent=selected.userData.bone.de; boneLatin.textContent=selected.userData.bone.la;}}
 function showHint(){if(!selected||selected.userData.placed||!started)return; clearHint(); const ghost=new THREE.Mesh(selected.geometry,material(selected.userData.bone.color,.2)); ghost.position.copy(selected.userData.targetPosition); ghost.quaternion.copy(selected.userData.targetQuaternion); root.add(ghost); hintGhost=ghost; showToast('Die transparente Form zeigt die Zielposition.'); setTimeout(clearHint,3500);}
@@ -95,6 +133,9 @@ function pointerMove(e){
     if(raycaster.ray.intersectPlane(dragPlane,dragHit)){
       const localHit=root.worldToLocal(dragHit.clone());
       selected.position.copy(localHit.add(dragOffset));
+      const d=selected.position.distanceTo(selected.userData.targetPosition);
+      const g=guides[selected.userData.index];
+      if(g){const near=d<24/root.scale.x; g.material.opacity=near?.55:.34; g.material.wireframe=!near;}
     }
   }else{
     const right=new THREE.Vector3().setFromMatrixColumn(camera.matrixWorld,0).normalize();
