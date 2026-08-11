@@ -1,2 +1,2 @@
-Hier liegen die 22 STL-Schädelknochen.
-Beim GitHub-Pages-Deployment lädt die mitgelieferte Action die Dateien automatisch aus der BodyParts3D-Quelle in diesen Ordner des Deploy-Artefakts.
+Dieser Ordner wird durch SCHAEDELPUZZLE-INSTALLIEREN.bat mit 22 BodyParts3D/FMA-STL-Dateien befüllt.
+Nach der Installation müssen die STL-Dateien mit dem Repository committed und zu GitHub gepusht werden.

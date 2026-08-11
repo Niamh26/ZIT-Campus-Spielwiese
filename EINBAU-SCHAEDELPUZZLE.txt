@@ -1,17 +1,13 @@
-ZIT CAMPUS – 3D-SCHÄDELPUZZLE
-================================
+3D-SCHÄDELPUZZLE – WINDOWS-VERSION
+=================================
 
-Enthaltene Anpassungen:
-- Kachel auf der Startseite der Spielwiese
-- Rückkehr-Button im gleichen orangefarbenen Design wie die anderen Spiele
-- 22 anatomische Knochen/FMA-Zuordnungen und farbcodierte Darstellung
-- Verschieben, Drehen, Tipp, Prüfen und Snap
-- 20 Punkte für die Schmetterlingswiese beim ersten vollständigen Lösen
-- Eintrag des Schädelpuzzles in der Schmetterlingswiese
-- verständliche Fehlermeldung bei fehlenden 3D-Dateien
+1. Inhalt dieser ZIP in dein lokales Repository kopieren.
+2. SCHAEDELPUZZLE-INSTALLIEREN.bat doppelklicken.
+3. Warten, bis „FERTIG: 22 von 22 Knochen + Three.js“ erscheint.
+4. Danach ALLE neuen Dateien in GitHub Desktop committen und pushen.
 
-WICHTIG ZU DEN 3D-DATEIEN:
-Der Ordner games/schaedel-puzzle/models ist für 22 lokale STL-Dateien vorgesehen.
-Die GitHub-Action .github/workflows/pages-with-skull-models.yml lädt diese beim Pages-Deployment aus der offenen BodyParts3D-Quelle.
+Das Spiel verwendet danach die 22 Knochen und die 3D-Bibliothek lokal aus dem Repository.
+Keine GitHub-Action ist dafür erforderlich.
 
-Quelle/Lizenz siehe games/schaedel-puzzle/ATTRIBUTION.md.
+Schmetterlingswiese: +20 Punkte beim ersten vollständigen Lösen.
+Details: SCHAEDELPUZZLE-WINDOWS-ANLEITUNG.txt

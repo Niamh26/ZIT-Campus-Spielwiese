@@ -20,11 +20,10 @@ const transform=new TransformControls(camera,canvas); transform.setSize(.75); sc
 
 const raycaster=new THREE.Raycaster(), pointer=new THREE.Vector2(); const loader=new STLLoader();
 const pieces=[]; let selected=null, started=false, completed=0, hintGhost=null;
-const REMOTE='https://raw.githubusercontent.com/Kevin-Mattheus-Moerman/BodyParts3D/main/assets/BodyParts3D_data/stl/';
-const localUrl=b=>`./models/${b.fma}.stl`; const remoteUrl=b=>`${REMOTE}${b.fma}.stl`;
+const localUrl=b=>`./models/${b.fma}.stl`;
 
 function loadStl(url,timeoutMs=25000){return new Promise((resolve,reject)=>{let done=false;const timer=setTimeout(()=>{if(done)return;done=true;reject(new Error('Zeitüberschreitung: '+url));},timeoutMs);loader.load(url,g=>{if(done)return;done=true;clearTimeout(timer);resolve(g);},undefined,e=>{if(done)return;done=true;clearTimeout(timer);reject(e||new Error('Ladefehler: '+url));});});}
-async function loadGeometry(b){try{return await loadStl(localUrl(b),12000);}catch(localErr){console.warn('Lokales Modell fehlt, nutze Quellen-Fallback:',b.fma,localErr);return await loadStl(remoteUrl(b),30000);}}
+async function loadGeometry(b){return await loadStl(localUrl(b),20000);}
 function material(color,opacity=1){return new THREE.MeshStandardMaterial({color,roughness:.72,metalness:0,transparent:opacity<1,opacity,side:THREE.DoubleSide});}
 
 async function init(){
