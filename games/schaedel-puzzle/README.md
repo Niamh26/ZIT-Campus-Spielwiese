@@ -1,5 +1,11 @@
-# ZIT 3D-Schädelpuzzle
+# 3D-Schädelpuzzle
 
-Das Spiel lädt 22 getrennte BodyParts3D-STL-Dateien. Es versucht zuerst `./models/*.stl`; falls diese Dateien noch nicht lokal vorhanden sind, nutzt es als Fallback die frei zugänglichen STL-Dateien des BodyParts3D-GitHub-Klons.
+Interaktives Puzzle mit 22 anatomisch getrennten Schädelknochen.
 
-Die mitgelieferte GitHub-Action `.github/workflows/pages-with-skull-models.yml` lädt beim Pages-Build alle 22 STL-Dateien lokal in das veröffentlichte Website-Artefakt. Dadurch laufen die Modelle auf GitHub Pages ohne Abhängigkeit von den Remote-Dateien zur Laufzeit.
+- Verschieben, Drehen, Zielposition prüfen und Tipp-Geisterform
+- 20 Punkte für die Schmetterlingswiese beim ersten vollständigen Lösen
+- Farben in Anlehnung an ein didaktisch farbcodiertes Schädelmodell
+- BodyParts3D/FMA-Zuordnung siehe `ATTRIBUTION.md`
+
+## Modelle
+Die Seite lädt zuerst lokale STL-Dateien aus `models/`. Falls sie dort fehlen, wird als Fallback die offene BodyParts3D-Konvertierung auf GitHub verwendet. Die mitgelieferte GitHub-Action kann die 22 STL-Dateien beim Pages-Deployment automatisch bereitstellen.

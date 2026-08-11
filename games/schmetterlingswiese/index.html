@@ -3,24 +3,29 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Deine persönliche, mitwachsende Schmetterlingswiese im ZIT Campus.">
+  <meta name="description" content="Deine persönliche Schmetterlingswiese im ZIT Campus.">
   <title>Schmetterlingswiese | ZIT Campus</title>
   <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
   <main class="app">
-    <header class="topbar">
-      <a class="back-link" href="../../index.html">← Zur Spielübersicht</a>
-      <div class="brand">🌿 ZIT Campus-Spielwiese</div>
-    </header>
+    <header class="hero">
+      <a class="back-link" href="../../index.html">← Zur Spielwiese</a>
 
-    <section class="meadow-shell">
+      <div class="hero-copy">
+        <div class="brand">🌿 ZIT Campus</div>
+        <h1>Schmetterlingswiese</h1>
+        <p>Deine Punkte lassen die Wiese wachsen und immer mehr Schmetterlinge erscheinen.</p>
+      </div>
+
       <section class="score-card" aria-live="polite">
         <div class="score-icon">★</div>
-        <div class="score-main">
+        <div>
           <span>Deine Punkte</span>
           <strong id="totalPoints">0</strong>
         </div>
+
         <div class="score-progress">
           <p id="nextButterflyText">Der erste Schmetterling erscheint bei 20 Punkten.</p>
           <div class="progress-track" aria-hidden="true">
@@ -30,66 +35,84 @@
         </div>
       </section>
 
-      <section id="meadow" class="meadow" aria-label="Deine animierte Schmetterlingswiese">
-        <div class="sky-haze"></div>
-        <div class="sun" aria-hidden="true"></div>
-        <div class="cloud cloud-one" aria-hidden="true"></div>
-        <div class="cloud cloud-two" aria-hidden="true"></div>
-        <div class="cloud cloud-three" aria-hidden="true"></div>
+      <section id="meadow" class="meadow" aria-label="Animierte Schmetterlingswiese">
+        <div class="sky-glow glow-one"></div>
+        <div class="sky-glow glow-two"></div>
 
-        <div class="distant-trees" aria-hidden="true"></div>
-        <div class="hill hill-far" aria-hidden="true"></div>
-        <div class="hill hill-mid" aria-hidden="true"></div>
-        <div class="hill hill-near" aria-hidden="true"></div>
-        <div class="stream" aria-hidden="true"></div>
+        <div class="cloud cloud-one"></div>
+        <div class="cloud cloud-two"></div>
+        <div class="cloud cloud-three"></div>
 
-        <div id="flowerLayer" class="flower-layer" aria-hidden="true"></div>
+        <div class="sun"></div>
+
+        <div class="hill hill-back"></div>
+        <div class="hill hill-front"></div>
+
+        <div class="grass-layer grass-back"></div>
+        <div class="grass-layer grass-front"></div>
+
+        <div class="flowers" aria-hidden="true">
+          <span class="flower pink f1">✿</span>
+          <span class="flower yellow f2">✿</span>
+          <span class="flower purple f3">✿</span>
+          <span class="flower white f4">✿</span>
+          <span class="flower orange f5">✿</span>
+          <span class="flower blue f6">✿</span>
+          <span class="flower pink f7">✿</span>
+          <span class="flower yellow f8">✿</span>
+          <span class="flower white f9">✿</span>
+          <span class="flower purple f10">✿</span>
+          <span class="flower orange f11">✿</span>
+          <span class="flower blue f12">✿</span>
+        </div>
+
         <div id="butterflyLayer" class="butterfly-layer"></div>
 
-        <div class="wood-sign" aria-hidden="true">
-          <span>Deine</span>
-          <strong>Schmetterlingswiese</strong>
-          <i>🦋</i>
-        </div>
-
         <div id="emptyMessage" class="empty-message">
-          Sammle deine ersten 20 Punkte – dann zieht der erste Schmetterling auf deiner Wiese ein.
+          Sammle deine ersten 20 Punkte – dann flattert der erste Schmetterling über deine Wiese.
         </div>
-
-        <div id="arrivalToast" class="arrival-toast" role="status" aria-live="polite">
-          Ein neuer Schmetterling ist auf deiner Wiese eingezogen.
-        </div>
-
-        <div class="meadow-caption">
-          <span>🦋</span>
-          <p>Sammle Punkte in den Spielen und lass deine Wiese erblühen!</p>
-        </div>
-
-        <a class="meadow-button" href="../../index.html">🌄 Zur Spielübersicht</a>
       </section>
-    </section>
+    </header>
 
     <section class="dashboard">
       <article class="panel journey-panel">
-        <div class="panel-heading"><span>🦋</span><h2>Deine Schmetterlingsreise</h2></div>
+        <div class="panel-heading">
+          <span>🦋</span>
+          <h2>Deine Schmetterlingsreise</h2>
+        </div>
+
         <div id="milestones" class="milestones"></div>
-        <p class="panel-note">Mit jedem erreichten Abschnitt wird deine Wiese dichter, bunter und lebendiger.</p>
+
+        <p class="panel-note">
+          Je mehr Punkte du sammelst, desto mehr Schmetterlinge begrüßen dich auf deiner Wiese.
+        </p>
       </article>
 
       <article class="panel games-panel">
-        <div class="panel-heading"><span>🏆</span><h2>Punkte aus deinen Spielen</h2></div>
+        <div class="panel-heading">
+          <span>🏆</span>
+          <h2>Punkte aus deinen Spielen</h2>
+        </div>
+
         <div id="gameList" class="game-list"></div>
-        <div class="total-row"><strong>Gesamt</strong><strong><span id="totalPointsBottom">0</span> Punkte</strong></div>
+
+        <div class="total-row">
+          <strong>Gesamt</strong>
+          <strong><span id="totalPointsBottom">0</span> Punkte</strong>
+        </div>
       </article>
     </section>
 
     <aside class="info-box">
       <div>🌱</div>
-      <p>Du erhältst die volle Punktzahl für jedes Spiel nur beim ersten erfolgreichen Abschluss. Wiederholungen helfen beim Lernen, bringen aber keine zusätzlichen Punkte.</p>
+      <p>
+        Du erhältst die volle Punktzahl für jedes Spiel nur beim ersten erfolgreichen Abschluss.
+        Wiederholungen helfen dir beim Lernen, bringen aber keine zusätzlichen Punkte.
+      </p>
     </aside>
 
     <footer class="footer-actions">
-      <a class="primary-link" href="../../index.html">← Zurück zur Spielübersicht</a>
+      <a class="primary-link" href="../../index.html">← Zurück zur Spielwiese</a>
       <button id="resetProgress" class="reset-button" type="button">Fortschritt zurücksetzen</button>
     </footer>
   </main>

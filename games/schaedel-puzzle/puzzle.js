@@ -1,3 +1,4 @@
+window.__skullPuzzleBooted=true;
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { TransformControls } from 'three/addons/controls/TransformControls.js';
@@ -22,26 +23,31 @@ const pieces=[]; let selected=null, started=false, completed=0, hintGhost=null;
 const REMOTE='https://raw.githubusercontent.com/Kevin-Mattheus-Moerman/BodyParts3D/main/assets/BodyParts3D_data/stl/';
 const localUrl=b=>`./models/${b.fma}.stl`; const remoteUrl=b=>`${REMOTE}${b.fma}.stl`;
 
-function loadGeometry(b){return new Promise((resolve,reject)=>{loader.load(localUrl(b),resolve,undefined,()=>loader.load(remoteUrl(b),resolve,undefined,reject));});}
+function loadStl(url,timeoutMs=25000){return new Promise((resolve,reject)=>{let done=false;const timer=setTimeout(()=>{if(done)return;done=true;reject(new Error('Zeitüberschreitung: '+url));},timeoutMs);loader.load(url,g=>{if(done)return;done=true;clearTimeout(timer);resolve(g);},undefined,e=>{if(done)return;done=true;clearTimeout(timer);reject(e||new Error('Ladefehler: '+url));});});}
+async function loadGeometry(b){try{return await loadStl(localUrl(b),12000);}catch(localErr){console.warn('Lokales Modell fehlt, nutze Quellen-Fallback:',b.fma,localErr);return await loadStl(remoteUrl(b),30000);}}
 function material(color,opacity=1){return new THREE.MeshStandardMaterial({color,roughness:.72,metalness:0,transparent:opacity<1,opacity,side:THREE.DoubleSide});}
 
 async function init(){
-  const raw=[];
-  for(let i=0;i<BONES.length;i++){
-    const b=BONES[i]; try{const g=await loadGeometry(b); g.computeVertexNormals(); raw.push({b,g});}
-    catch(err){loading.innerHTML=`<div class="error"><strong>3D-Modell konnte nicht geladen werden.</strong><br>${b.de} (${b.fma}). Bitte prüfe die Internetverbindung oder führe die mitgelieferte GitHub-Pages-Action aus.</div>`; console.error(err); return;}
-    loadText.textContent=`${i+1} / ${BONES.length}`; loadBar.style.width=`${(i+1)/BONES.length*100}%`;
+  let loadedCount=0;
+  loadText.textContent=`0 / ${BONES.length} · Modelle werden vorbereitet`;
+  try{
+    const raw=await Promise.all(BONES.map(async b=>{
+      const g=await loadGeometry(b); g.computeVertexNormals();
+      loadedCount++; loadText.textContent=`${loadedCount} / ${BONES.length}`; loadBar.style.width=`${loadedCount/BONES.length*100}%`;
+      return {b,g};
+    }));
+    const total=new THREE.Box3(); raw.forEach(x=>total.union(new THREE.Box3().setFromBufferAttribute(x.g.attributes.position))); const skullCenter=total.getCenter(new THREE.Vector3());
+    raw.forEach(({b,g},i)=>{
+      const box=new THREE.Box3().setFromBufferAttribute(g.attributes.position), c=box.getCenter(new THREE.Vector3()); g.translate(-c.x,-c.y,-c.z);
+      const mesh=new THREE.Mesh(g,material(b.color)); mesh.castShadow=true; mesh.receiveShadow=true; mesh.userData.index=i;
+      mesh.position.copy(c.sub(skullCenter)); mesh.userData.targetPosition=mesh.position.clone(); mesh.userData.targetQuaternion=new THREE.Quaternion(); mesh.userData.placed=true; mesh.userData.bone=b; root.add(mesh); pieces.push(mesh);
+    });
+    const box=new THREE.Box3().setFromObject(root), size=box.getSize(new THREE.Vector3()); const scale=120/Math.max(size.x,size.y,size.z); root.scale.setScalar(scale);
+    buildList(); loading.hidden=true; resize(); selectPiece(pieces[0]); animate();
+  }catch(err){
+    loading.innerHTML=`<div class="error"><strong>Die Schädelknochen konnten nicht vollständig geladen werden.</strong><br>${loadedCount} von ${BONES.length} Modellen wurden erreicht.<br><br>Bitte prüfe, ob der Ordner <code>games/schaedel-puzzle/models</code> mit veröffentlicht wurde, und lade die Seite danach neu.</div>`; console.error(err);
   }
-  const total=new THREE.Box3(); raw.forEach(x=>total.union(new THREE.Box3().setFromBufferAttribute(x.g.attributes.position))); const skullCenter=total.getCenter(new THREE.Vector3());
-  raw.forEach(({b,g},i)=>{
-    const box=new THREE.Box3().setFromBufferAttribute(g.attributes.position), c=box.getCenter(new THREE.Vector3()); g.translate(-c.x,-c.y,-c.z);
-    const mesh=new THREE.Mesh(g,material(b.color)); mesh.castShadow=true; mesh.receiveShadow=true; mesh.userData.index=i;
-    mesh.position.copy(c.sub(skullCenter)); mesh.userData.targetPosition=mesh.position.clone(); mesh.userData.targetQuaternion=new THREE.Quaternion(); mesh.userData.placed=true; mesh.userData.bone=b; root.add(mesh); pieces.push(mesh);
-  });
-  const box=new THREE.Box3().setFromObject(root), size=box.getSize(new THREE.Vector3()); const scale=120/Math.max(size.x,size.y,size.z); root.scale.setScalar(scale);
-  buildList(); loading.hidden=true; resize(); selectPiece(pieces[0]); animate();
 }
-
 function buildList(){boneList.innerHTML=''; pieces.forEach((p,i)=>{const b=p.userData.bone, el=document.createElement('div'); el.className='bone-item'; el.dataset.i=i; el.innerHTML=`<span class="swatch" style="background:${b.color}"></span><span>${b.de}</span><span class="check">✓</span>`; el.onclick=()=>selectPiece(p); boneList.appendChild(el);}); updateProgress();}
 function selectPiece(p){selected=p; transform.detach(); if(!p) return; const b=p.userData.bone; boneName.textContent=b.de; boneLatin.textContent=b.la; if(started&&!p.userData.placed) transform.attach(p); clearHint();}
 function setMode(mode){transform.setMode(mode); moveBtn.classList.toggle('active',mode==='translate'); rotateBtn.classList.toggle('active',mode==='rotate');}
@@ -54,7 +60,7 @@ function scatter(){
 function resetAssembled(){started=false; completed=BONES.length; clearHint(); pieces.forEach(p=>{p.position.copy(p.userData.targetPosition); p.quaternion.copy(p.userData.targetQuaternion); p.userData.placed=true;}); transform.detach(); startBtn.disabled=false; startBtn.textContent='Puzzle starten'; updateProgress(); fitView(1.05);}
 function checkSnap(force=false){if(!selected||selected.userData.placed||!started)return; const d=selected.position.distanceTo(selected.userData.targetPosition); const qAngle=selected.quaternion.angleTo(selected.userData.targetQuaternion); const posTol=force?18/root.scale.x:10/root.scale.x, rotTol=force?Math.PI:0.65; if(d<posTol&&qAngle<rotTol){place(selected);} else showToast(force?'Noch nicht nah genug an der Zielposition.':'Fast – Position und Ausrichtung noch etwas korrigieren.');}
 function place(p){p.position.copy(p.userData.targetPosition); p.quaternion.copy(p.userData.targetQuaternion); p.userData.placed=true; transform.detach(); completed=pieces.filter(x=>x.userData.placed).length; updateProgress(); showToast(`✓ ${p.userData.bone.de} sitzt richtig.`); const next=pieces.find(x=>!x.userData.placed); if(next) selectPiece(next); else finish();}
-function finish(){startBtn.disabled=false; startBtn.textContent='Noch einmal spielen'; started=false; if(window.ZITPoints){const r=ZITPoints.award('schaedel-puzzle',220,'3D-Schädelpuzzle'); showToast(r.awarded?'Geschafft! +220 Punkte für deine Schmetterlingswiese 🦋':'Geschafft! Der Schädel ist vollständig.');}else showToast('Geschafft! Der Schädel ist vollständig.');}
+function finish(){startBtn.disabled=false; startBtn.textContent='Noch einmal spielen'; started=false; if(window.ZITPoints){const r=ZITPoints.award('schaedel-puzzle',20,'3D-Schädelpuzzle'); showToast(r.awarded?'Geschafft! +20 Punkte für deine Schmetterlingswiese 🦋':'Geschafft! Der Schädel ist vollständig.');}else showToast('Geschafft! Der Schädel ist vollständig.');}
 function updateProgress(){completed=pieces.filter(p=>p.userData.placed).length; progressText.textContent=`${completed} / ${BONES.length}`; progressBar.style.width=`${completed/BONES.length*100}%`; [...boneList.children].forEach((el,i)=>{const done=pieces[i]?.userData.placed; el.classList.toggle('done',done); el.querySelector('.check').textContent=done?'✓':'';});}
 function updateSelectionUI(){if(selected){boneName.textContent=selected.userData.bone.de; boneLatin.textContent=selected.userData.bone.la;}}
 function showHint(){if(!selected||selected.userData.placed||!started)return; clearHint(); const ghost=new THREE.Mesh(selected.geometry,material(selected.userData.bone.color,.2)); ghost.position.copy(selected.userData.targetPosition); ghost.quaternion.copy(selected.userData.targetQuaternion); root.add(ghost); hintGhost=ghost; showToast('Die transparente Form zeigt die Zielposition.'); setTimeout(clearHint,3500);}

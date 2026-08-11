@@ -1,0 +1,17 @@
+ZIT CAMPUS – 3D-SCHÄDELPUZZLE
+================================
+
+Enthaltene Anpassungen:
+- Kachel auf der Startseite der Spielwiese
+- Rückkehr-Button im gleichen orangefarbenen Design wie die anderen Spiele
+- 22 anatomische Knochen/FMA-Zuordnungen und farbcodierte Darstellung
+- Verschieben, Drehen, Tipp, Prüfen und Snap
+- 20 Punkte für die Schmetterlingswiese beim ersten vollständigen Lösen
+- Eintrag des Schädelpuzzles in der Schmetterlingswiese
+- verständliche Fehlermeldung bei fehlenden 3D-Dateien
+
+WICHTIG ZU DEN 3D-DATEIEN:
+Der Ordner games/schaedel-puzzle/models ist für 22 lokale STL-Dateien vorgesehen.
+Die GitHub-Action .github/workflows/pages-with-skull-models.yml lädt diese beim Pages-Deployment aus der offenen BodyParts3D-Quelle.
+
+Quelle/Lizenz siehe games/schaedel-puzzle/ATTRIBUTION.md.
