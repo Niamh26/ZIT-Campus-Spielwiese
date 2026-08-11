@@ -1,0 +1,15 @@
+SCHAEDELPUZZLE FIX V4
+
+Diese ZIP ist ein PATCH für dein bestehendes Repository.
+Sie ersetzt nur die 3D-Startdateien. Deine 22 STL-Knochen und three.core.js bleiben unverändert erhalten.
+
+1. Inhalt von ZIT-Campus-Spielwiese über deinen bestehenden gleichnamigen Ordner kopieren.
+2. Vorhandene Dateien ersetzen bestätigen.
+3. KEIN Installer erneut nötig, wenn three.core.js bereits vorhanden ist.
+4. GitHub Desktop: Änderungen committen und Push origin.
+5. Nach erfolgreichem Pages-Deployment im Browser Strg+F5 drücken.
+
+Technische Änderung:
+- Import-Map entfernt.
+- puzzle.js und Three.js-Addons verwenden direkte relative lokale Pfade.
+- Cache-Buster v4 am puzzle.js-Script.

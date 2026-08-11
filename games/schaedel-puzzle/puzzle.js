@@ -1,8 +1,8 @@
 window.__skullPuzzleBooted=true;
-import * as THREE from 'three';
-import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-import { TransformControls } from 'three/addons/controls/TransformControls.js';
-import { STLLoader } from 'three/addons/loaders/STLLoader.js';
+import * as THREE from './vendor/three/three.module.js';
+import { OrbitControls } from './vendor/three/addons/controls/OrbitControls.js';
+import { TransformControls } from './vendor/three/addons/controls/TransformControls.js';
+import { STLLoader } from './vendor/three/addons/loaders/STLLoader.js';
 import { BONES } from './bones.js';
 
 const stage=document.getElementById('stage'), canvas=document.getElementById('canvas');
