@@ -16,6 +16,14 @@ scene.add(new THREE.HemisphereLight(0xffffff,0x587064,2.4)); const key=new THREE
 const root=new THREE.Group(); scene.add(root);
 const guideGroup=new THREE.Group(); root.add(guideGroup); guideGroup.visible=false;
 const gridHelper=new THREE.Group(); root.add(gridHelper); gridHelper.visible=false;
+const targetMarker=new THREE.Group();
+const ringMat=new THREE.LineBasicMaterial({color:0x36594b,transparent:true,opacity:.55,depthTest:false});
+[38,52,66].forEach(r=>{
+  const pts=[]; for(let i=0;i<=64;i++){const a=i/64*Math.PI*2;pts.push(new THREE.Vector3(Math.cos(a)*r,Math.sin(a)*r,-42));}
+  targetMarker.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts),ringMat));
+});
+targetMarker.visible=false; root.add(targetMarker);
+
 const orbit=new OrbitControls(camera,canvas); orbit.enableDamping=true; orbit.target.set(0,0,5); orbit.minDistance=85; orbit.maxDistance=420;
 
 const raycaster=new THREE.Raycaster(), pointer=new THREE.Vector2(); const loader=new STLLoader();
@@ -42,13 +50,13 @@ async function init(){
       const box=new THREE.Box3().setFromBufferAttribute(g.attributes.position), c=box.getCenter(new THREE.Vector3()); g.translate(-c.x,-c.y,-c.z);
       const mesh=new THREE.Mesh(g,material(b.color)); mesh.castShadow=true; mesh.receiveShadow=true; mesh.userData.index=i;
       mesh.position.copy(c.sub(skullCenter)); mesh.userData.targetPosition=mesh.position.clone(); mesh.userData.targetQuaternion=new THREE.Quaternion(); mesh.userData.placed=true; mesh.userData.bone=b; root.add(mesh); pieces.push(mesh);
-      const guideMat=new THREE.MeshPhongMaterial({
-        color:0xd8e7df,
+      const guideMat=new THREE.MeshBasicMaterial({
+        color:0xe7eee9,
         transparent:true,
-        opacity:.28,
+        opacity:.48,
         depthWrite:false,
-        side:THREE.DoubleSide,
-        shininess:10
+        depthTest:false,
+        side:THREE.DoubleSide
       });
       const guide=new THREE.Mesh(g,guideMat);
       guide.position.copy(mesh.userData.targetPosition);
@@ -58,7 +66,7 @@ async function init(){
       guideGroup.add(guide);
 
       const edgeGeo=new THREE.EdgesGeometry(g,18);
-      const edgeMat=new THREE.LineBasicMaterial({color:0x5d7d70,transparent:true,opacity:.62,depthWrite:false});
+      const edgeMat=new THREE.LineBasicMaterial({color:0x36594b,transparent:true,opacity:.92,depthWrite:false,depthTest:false});
       const edge=new THREE.LineSegments(edgeGeo,edgeMat);
       edge.position.copy(mesh.userData.targetPosition);
       edge.quaternion.copy(mesh.userData.targetQuaternion);
@@ -84,22 +92,22 @@ function selectPiece(p){
     const placed=g.userData.piece.userData.placed;
     g.visible = started && !placed;
     g.material.color.set(active?b.color:0xd8e7df);
-    g.material.opacity=active?.58:.28;
+    g.material.opacity=active?.78:.48;
     if(g.userData.edge){
       g.userData.edge.visible = started && !placed;
       g.userData.edge.material.color.set(active?b.color:0x5d7d70);
-      g.userData.edge.material.opacity=active?.95:.62;
+      g.userData.edge.material.opacity=active?1:.92;
     }
   });
 }
 function setMode(nextMode){mode=nextMode; moveBtn.classList.toggle('active',mode==='translate'); rotateBtn.classList.toggle('active',mode==='rotate'); showToast(mode==='translate'?'Verschieben: Knochen direkt greifen und ziehen.':'Drehen: Knochen direkt greifen und ziehen.');}
 function scatter(){
-  started=true; completed=0; clearHint(); guideGroup.visible=true; gridHelper.visible=true;
+  started=true; completed=0; clearHint(); guideGroup.visible=true; targetMarker.visible=true;
   const radius=105/root.scale.x;
   pieces.forEach((p,i)=>{p.userData.placed=false; const a=i/BONES.length*Math.PI*2, ring=(i%3)*18/root.scale.x; p.position.copy(p.userData.targetPosition).add(new THREE.Vector3(Math.cos(a)*(radius+ring),Math.sin(a)*(radius+ring),((i%5)-2)*23/root.scale.x)); p.rotation.set((i%4)*.35,(i%6)*.42,(i%3)*.27); p.material.opacity=1;});
-  startBtn.textContent='Puzzle läuft'; startBtn.disabled=true; selectPiece(pieces[0]); updateProgress(); fitView(1.35); showToast('22 Knochen verteilt – viel Freude beim Puzzeln!');
+  startBtn.textContent='Puzzle läuft'; startBtn.disabled=true; selectPiece(pieces[0]); updateProgress(); fitView(1.35); showToast('Die helle Schädel-Silhouette in der Mitte ist dein Ziel.');
 }
-function resetAssembled(){started=false; completed=BONES.length; clearHint(); guideGroup.visible=false; gridHelper.visible=false; pieces.forEach(p=>{p.position.copy(p.userData.targetPosition); p.quaternion.copy(p.userData.targetQuaternion); p.userData.placed=true;}); startBtn.disabled=false; startBtn.textContent='Puzzle starten'; updateProgress(); fitView(1.05);}
+function resetAssembled(){started=false; completed=BONES.length; clearHint(); guideGroup.visible=false; targetMarker.visible=false; pieces.forEach(p=>{p.position.copy(p.userData.targetPosition); p.quaternion.copy(p.userData.targetQuaternion); p.userData.placed=true;}); startBtn.disabled=false; startBtn.textContent='Puzzle starten'; updateProgress(); fitView(1.05);}
 function checkSnap(force=false){
   if(!selected||selected.userData.placed||!started)return;
   const d=selected.position.distanceTo(selected.userData.targetPosition);
@@ -135,7 +143,7 @@ function place(p,alreadyLocked=false){
   const next=pieces.find(x=>!x.userData.placed);
   if(next) selectPiece(next); else finish();
 }
-function finish(){startBtn.disabled=false; startBtn.textContent='Noch einmal spielen'; started=false; guideGroup.visible=false; gridHelper.visible=false; if(window.ZITPoints){const r=ZITPoints.award('schaedel-puzzle',20,'3D-Schädelpuzzle'); showToast(r.awarded?'Geschafft! +20 Punkte für deine Schmetterlingswiese 🦋':'Geschafft! Der Schädel ist vollständig.');}else showToast('Geschafft! Der Schädel ist vollständig.');}
+function finish(){startBtn.disabled=false; startBtn.textContent='Noch einmal spielen'; started=false; guideGroup.visible=false; targetMarker.visible=false; if(window.ZITPoints){const r=ZITPoints.award('schaedel-puzzle',20,'3D-Schädelpuzzle'); showToast(r.awarded?'Geschafft! +20 Punkte für deine Schmetterlingswiese 🦋':'Geschafft! Der Schädel ist vollständig.');}else showToast('Geschafft! Der Schädel ist vollständig.');}
 function updateProgress(){completed=pieces.filter(p=>p.userData.placed).length; progressText.textContent=`${completed} / ${BONES.length}`; progressBar.style.width=`${completed/BONES.length*100}%`; [...boneList.children].forEach((el,i)=>{const done=pieces[i]?.userData.placed; el.classList.toggle('done',done); el.querySelector('.check').textContent=done?'✓':'';});}
 function updateSelectionUI(){if(selected){boneName.textContent=selected.userData.bone.de; boneLatin.textContent=selected.userData.bone.la;}}
 function showHint(){if(!selected||selected.userData.placed||!started)return; clearHint(); const ghost=new THREE.Mesh(selected.geometry,material(selected.userData.bone.color,.2)); ghost.position.copy(selected.userData.targetPosition); ghost.quaternion.copy(selected.userData.targetQuaternion); root.add(ghost); hintGhost=ghost; showToast('Die transparente Form zeigt die Zielposition.'); setTimeout(clearHint,3500);}
@@ -175,7 +183,7 @@ function pointerMove(e){
       const g=guides[selected.userData.index];
       if(g){
         const near=d<24/root.scale.x;
-        g.material.opacity=near?.78:.58;
+        g.material.opacity=near?.92:.78;
         if(g.userData.edge) g.userData.edge.material.opacity=near?1:.95;
       }
     }
