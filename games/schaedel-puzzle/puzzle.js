@@ -15,9 +15,7 @@ const renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:true}); rend
 scene.add(new THREE.HemisphereLight(0xffffff,0x587064,2.4)); const key=new THREE.DirectionalLight(0xffffff,3); key.position.set(-100,-120,160); scene.add(key); const fill=new THREE.DirectionalLight(0xffffff,1.6); fill.position.set(120,80,80); scene.add(fill);
 const root=new THREE.Group(); scene.add(root);
 const guideGroup=new THREE.Group(); root.add(guideGroup); guideGroup.visible=false;
-const gridHelper=new THREE.GridHelper(190,19,0x7f9e91,0xb8c9c0);
-gridHelper.material.transparent=true; gridHelper.material.opacity=.18; gridHelper.material.depthWrite=false;
-gridHelper.rotation.x=Math.PI/2; gridHelper.position.z=-58; root.add(gridHelper); gridHelper.visible=false;
+const gridHelper=new THREE.Group(); root.add(gridHelper); gridHelper.visible=false;
 const orbit=new OrbitControls(camera,canvas); orbit.enableDamping=true; orbit.target.set(0,0,5); orbit.minDistance=85; orbit.maxDistance=420;
 
 const raycaster=new THREE.Raycaster(), pointer=new THREE.Vector2(); const loader=new STLLoader();
@@ -44,8 +42,32 @@ async function init(){
       const box=new THREE.Box3().setFromBufferAttribute(g.attributes.position), c=box.getCenter(new THREE.Vector3()); g.translate(-c.x,-c.y,-c.z);
       const mesh=new THREE.Mesh(g,material(b.color)); mesh.castShadow=true; mesh.receiveShadow=true; mesh.userData.index=i;
       mesh.position.copy(c.sub(skullCenter)); mesh.userData.targetPosition=mesh.position.clone(); mesh.userData.targetQuaternion=new THREE.Quaternion(); mesh.userData.placed=true; mesh.userData.bone=b; root.add(mesh); pieces.push(mesh);
-      const guideMat=new THREE.MeshBasicMaterial({color:0x8fa99e,transparent:true,opacity:.11,wireframe:true,depthWrite:false,side:THREE.DoubleSide});
-      const guide=new THREE.Mesh(g,guideMat); guide.position.copy(mesh.userData.targetPosition); guide.quaternion.copy(mesh.userData.targetQuaternion); guide.renderOrder=-1; guide.userData.piece=mesh; guideGroup.add(guide); guides.push(guide);
+      const guideMat=new THREE.MeshPhongMaterial({
+        color:0xd8e7df,
+        transparent:true,
+        opacity:.28,
+        depthWrite:false,
+        side:THREE.DoubleSide,
+        shininess:10
+      });
+      const guide=new THREE.Mesh(g,guideMat);
+      guide.position.copy(mesh.userData.targetPosition);
+      guide.quaternion.copy(mesh.userData.targetQuaternion);
+      guide.renderOrder=-2;
+      guide.userData.piece=mesh;
+      guideGroup.add(guide);
+
+      const edgeGeo=new THREE.EdgesGeometry(g,18);
+      const edgeMat=new THREE.LineBasicMaterial({color:0x5d7d70,transparent:true,opacity:.62,depthWrite:false});
+      const edge=new THREE.LineSegments(edgeGeo,edgeMat);
+      edge.position.copy(mesh.userData.targetPosition);
+      edge.quaternion.copy(mesh.userData.targetQuaternion);
+      edge.renderOrder=-1;
+      edge.userData.piece=mesh;
+      guide.userData.edge=edge;
+      guideGroup.add(edge);
+
+      guides.push(guide);
     });
     const box=new THREE.Box3().setFromObject(root), size=box.getSize(new THREE.Vector3()); const scale=120/Math.max(size.x,size.y,size.z); root.scale.setScalar(scale);
     buildList(); loading.hidden=true; resize(); selectPiece(pieces[0]); animate();
@@ -59,9 +81,15 @@ function selectPiece(p){
   const b=p.userData.bone; boneName.textContent=b.de; boneLatin.textContent=b.la; clearHint();
   guides.forEach(g=>{
     const active=g.userData.piece===p && started && !p.userData.placed;
-    g.material.color.set(active?b.color:0x8fa99e);
-    g.material.opacity=active?.34:.10;
-    g.material.wireframe=!active;
+    const placed=g.userData.piece.userData.placed;
+    g.visible = started && !placed;
+    g.material.color.set(active?b.color:0xd8e7df);
+    g.material.opacity=active?.58:.28;
+    if(g.userData.edge){
+      g.userData.edge.visible = started && !placed;
+      g.userData.edge.material.color.set(active?b.color:0x5d7d70);
+      g.userData.edge.material.opacity=active?.95:.62;
+    }
   });
 }
 function setMode(nextMode){mode=nextMode; moveBtn.classList.toggle('active',mode==='translate'); rotateBtn.classList.toggle('active',mode==='rotate'); showToast(mode==='translate'?'Verschieben: Knochen direkt greifen und ziehen.':'Drehen: Knochen direkt greifen und ziehen.');}
@@ -88,7 +116,6 @@ function magneticPlace(p){
   const endPos=p.userData.targetPosition.clone(), endQ=p.userData.targetQuaternion.clone();
   const t0=performance.now(), duration=180;
   p.userData.placed=true;
-  const guide=guides[p.userData.index]; if(guide) guide.material.opacity=.04;
   function step(now){
     const t=Math.min(1,(now-t0)/duration), e=1-Math.pow(1-t,3);
     p.position.lerpVectors(startPos,endPos,e); p.quaternion.slerpQuaternions(startQ,endQ,e);
@@ -96,7 +123,18 @@ function magneticPlace(p){
   }
   requestAnimationFrame(step);
 }
-function place(p,alreadyLocked=false){p.position.copy(p.userData.targetPosition); p.quaternion.copy(p.userData.targetQuaternion); p.userData.placed=true; completed=pieces.filter(x=>x.userData.placed).length; updateProgress(); showToast(`🧲 ✓ ${p.userData.bone.de} ist eingerastet.`); const next=pieces.find(x=>!x.userData.placed); if(next) selectPiece(next); else finish();}
+function place(p,alreadyLocked=false){
+  p.position.copy(p.userData.targetPosition);
+  p.quaternion.copy(p.userData.targetQuaternion);
+  p.userData.placed=true;
+  const g=guides[p.userData.index];
+  if(g){g.visible=false; if(g.userData.edge) g.userData.edge.visible=false;}
+  completed=pieces.filter(x=>x.userData.placed).length;
+  updateProgress();
+  showToast(`🧲 ✓ ${p.userData.bone.de} ist eingerastet.`);
+  const next=pieces.find(x=>!x.userData.placed);
+  if(next) selectPiece(next); else finish();
+}
 function finish(){startBtn.disabled=false; startBtn.textContent='Noch einmal spielen'; started=false; guideGroup.visible=false; gridHelper.visible=false; if(window.ZITPoints){const r=ZITPoints.award('schaedel-puzzle',20,'3D-Schädelpuzzle'); showToast(r.awarded?'Geschafft! +20 Punkte für deine Schmetterlingswiese 🦋':'Geschafft! Der Schädel ist vollständig.');}else showToast('Geschafft! Der Schädel ist vollständig.');}
 function updateProgress(){completed=pieces.filter(p=>p.userData.placed).length; progressText.textContent=`${completed} / ${BONES.length}`; progressBar.style.width=`${completed/BONES.length*100}%`; [...boneList.children].forEach((el,i)=>{const done=pieces[i]?.userData.placed; el.classList.toggle('done',done); el.querySelector('.check').textContent=done?'✓':'';});}
 function updateSelectionUI(){if(selected){boneName.textContent=selected.userData.bone.de; boneLatin.textContent=selected.userData.bone.la;}}
@@ -135,7 +173,11 @@ function pointerMove(e){
       selected.position.copy(localHit.add(dragOffset));
       const d=selected.position.distanceTo(selected.userData.targetPosition);
       const g=guides[selected.userData.index];
-      if(g){const near=d<24/root.scale.x; g.material.opacity=near?.55:.34; g.material.wireframe=!near;}
+      if(g){
+        const near=d<24/root.scale.x;
+        g.material.opacity=near?.78:.58;
+        if(g.userData.edge) g.userData.edge.material.opacity=near?1:.95;
+      }
     }
   }else{
     const right=new THREE.Vector3().setFromMatrixColumn(camera.matrixWorld,0).normalize();

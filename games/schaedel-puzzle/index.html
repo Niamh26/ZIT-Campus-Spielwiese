@@ -33,7 +33,7 @@
     <section class="panel"><div class="eyebrow">AUSGEWÄHLT</div><div class="selected" id="boneName">Knochen anklicken</div><div class="latin" id="boneLatin">–</div></section>
     <section class="panel"><div class="progressline"><strong>Fortschritt</strong><span id="progressText">0 / 22</span></div><div class="track"><i id="progressBar"></i></div></section>
     <section class="panel"><div class="eyebrow">SCHMETTERLINGSWIESE · 20 PUNKTE</div><p class="help" style="margin:7px 0 12px">Beim ersten vollständig gelösten Schädel werden einmalig 20 Punkte gutgeschrieben.</p><div class="btnrow"><button class="btn primary wide" id="startBtn">Puzzle starten</button><button class="btn active" id="moveBtn">↔ Verschieben</button><button class="btn" id="rotateBtn">⟳ Drehen</button><button class="btn" id="hintBtn">💡 Tipp</button><button class="btn" id="snapBtn">✓ Prüfen</button><button class="btn wide" id="resetBtn">Neu aufbauen</button></div></section>
-    <section class="panel help"><strong>Bedienung</strong><p><strong>Das transparente Zielraster zeigt den vollständigen Schädel.</strong> Greife einen Knochen direkt und schiebe ihn in seine farbige Aussparung. In der Nähe wird die Aussparung kräftiger; beim Loslassen rastet der Knochen magnetisch ein und richtet sich korrekt aus. „Drehen“ dreht nur den gewählten Knochen. Ziehen auf freiem Hintergrund dreht die Ansicht; Mausrad zoomt.</p><div class="keys"><span class="key">W</span> bewegen <span class="key">E</span> drehen <span class="key">H</span> Tipp</div></section>
+    <section class="panel help"><strong>Bedienung</strong><p><strong>Der halbtransparente Geisterschädel in der Mitte ist deine Vorlage.</strong> Jeder Knochenplatz hat eine klare Kontur. Der Platz des ausgewählten Knochens wird farbig hervorgehoben; in der magnetischen Fangzone leuchtet er stärker. Beim Loslassen rastet der Knochen automatisch korrekt ein. „Drehen“ dreht nur den gewählten Knochen. Ziehen auf freiem Hintergrund dreht die Ansicht; Mausrad zoomt.</p><div class="keys"><span class="key">W</span> bewegen <span class="key">E</span> drehen <span class="key">H</span> Tipp</div></section>
     <section class="panel"><div class="eyebrow">22 KNOCHEN</div><div class="bone-list" id="boneList"></div></section>
   </aside>
 </main>
@@ -46,5 +46,5 @@
     if(box) box.innerHTML='<div class="error"><strong>Das 3D-Modul konnte noch nicht gestartet werden.</strong><br>Bitte die Seite einmal neu laden. Falls diese Meldung bleibt, prüfe games/schaedel-puzzle/vendor/three/three.core.js sowie die 22 Modelldateien. Führe SCHAEDELPUZZLE-INSTALLIEREN.bat erneut aus.</div>';
   },15000);
 </script>
-<script type="module" src="./puzzle.js?v=6"></script>
+<script type="module" src="./puzzle.js?v=7"></script>
 </body></html>
