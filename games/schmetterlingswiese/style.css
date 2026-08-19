@@ -212,3 +212,73 @@ h1 {
 @media (prefers-reduced-motion: reduce) { .cloud,.grass-layer,.wildflower,.seedhead,.butterfly,.butterfly .wing { animation:none !important; } }
 @media (max-width:900px) { .score-card{margin-left:14px}.dashboard{grid-template-columns:1fr}.milestones{grid-template-columns:repeat(3,1fr);row-gap:24px}.milestone::after{display:none} }
 @media (max-width:620px) { .app{width:min(100% - 14px,1240px);padding-top:16px}.score-card{margin:16px 0 18px}.meadow{min-height:500px}.sun{right:24px;width:70px;height:70px}.milestones{grid-template-columns:repeat(2,1fr)}.footer-actions{flex-direction:column;align-items:stretch}.primary-link,.reset-button{width:100%}.wildflower:nth-of-type(even),.seedhead.sh2{opacity:.72} }
+
+
+/* ==========================================================
+   WIESENBILD – neue botanische Variante
+   Das Bild liegt unter assets/schmetterlingswiese.jpg.
+   Die Punkte-/Schmetterlingslogik bleibt darüber aktiv.
+   ========================================================== */
+
+.meadow {
+  min-height: 650px;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.02), rgba(20,54,28,.05)),
+    url("assets/schmetterlingswiese.jpg") center center / cover no-repeat;
+  box-shadow: 0 24px 65px rgba(42, 67, 43, .18);
+}
+
+/* Die gezeichnete Landschaft aus der alten CSS-Version wird
+   durch das neue Wiesenbild ersetzt. */
+.meadow > .sky-glow,
+.meadow > .cloud,
+.meadow > .sun,
+.meadow > .hill,
+.meadow > .grass-layer,
+.meadow > .wildflowers {
+  display: none;
+}
+
+/* Das Bild enthält bereits eine üppige botanische Wiese.
+   Dynamische Schmetterlinge bleiben als eigener Layer sichtbar. */
+.butterfly-layer {
+  z-index: 7;
+}
+
+/* Die echte, dynamische Hinweiskarte deckt die Illustration
+   an dieser Stelle sauber ab und bleibt per JS steuerbar. */
+.empty-message {
+  bottom: 115px;
+  width: min(560px, calc(100% - 36px));
+  padding: 20px 26px;
+  border: 1px solid rgba(255,255,255,.88);
+  border-radius: 22px;
+  background: rgba(252, 250, 241, .96);
+  color: #294833;
+  box-shadow: 0 14px 34px rgba(34,58,38,.16);
+  backdrop-filter: blur(5px);
+}
+
+/* Punktekarte ruhiger und passend zur botanischen Illustration */
+.score-card {
+  background: rgba(252, 252, 247, .97);
+  border-color: rgba(255,255,255,.92);
+  box-shadow: 0 18px 45px rgba(39,62,40,.18);
+}
+
+/* Die dynamischen CSS-Schmetterlinge etwas größer und
+   zurückhaltender, damit sie sich in die Illustration einfügen. */
+.butterfly {
+  --size: 72px;
+  filter: drop-shadow(0 6px 5px rgba(25,44,28,.18));
+}
+
+@media (max-width: 620px) {
+  .meadow {
+    min-height: 540px;
+    background-position: 56% center;
+  }
+  .empty-message {
+    bottom: 80px;
+  }
+}
