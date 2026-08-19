@@ -1,82 +1,106 @@
 (function () {
   "use strict";
 
-  const STORAGE_KEY = "zitCampusProgressV1";
+  const STORAGE_KEY = "zit-campus-points-v2";
+  const LEGACY_KEYS = ["zit-campus-points", "zitPoints", "zit-points"];
 
-  const DEFAULT_PROGRESS = {
-    version: 1,
-    totalPoints: 0,
-    games: {}
-  };
+  function baseState() {
+    return { version: 2, totalPoints: 0, games: {}, updatedAt: null };
+  }
+
+  function normalize(raw) {
+    const state = raw && typeof raw === "object" ? raw : {};
+    const games = state.games && typeof state.games === "object" ? state.games : {};
+    const cleanGames = {};
+
+    Object.entries(games).forEach(([id, game]) => {
+      if (!game || typeof game !== "object") return;
+      const points = Math.max(0, Number(game.points) || 0);
+      const awarded = Boolean(game.awarded || game.completed || points > 0);
+      if (awarded) cleanGames[id] = { ...game, points, awarded: true };
+    });
+
+    const calculated = Object.values(cleanGames).reduce((sum, game) => sum + game.points, 0);
+    return {
+      ...baseState(),
+      ...state,
+      games: cleanGames,
+      totalPoints: Math.max(calculated, Math.max(0, Number(state.totalPoints) || 0))
+    };
+  }
+
+  function readRaw(key) {
+    try {
+      const value = localStorage.getItem(key);
+      return value ? JSON.parse(value) : null;
+    } catch (_) {
+      return null;
+    }
+  }
 
   function load() {
-    try {
-      const raw = localStorage.getItem(STORAGE_KEY);
-      if (!raw) return structuredClone(DEFAULT_PROGRESS);
-
-      const parsed = JSON.parse(raw);
-      return {
-        version: 1,
-        totalPoints: Number(parsed.totalPoints) || 0,
-        games: parsed.games && typeof parsed.games === "object" ? parsed.games : {}
-      };
-    } catch (error) {
-      console.warn("ZIT-Punktestand konnte nicht geladen werden:", error);
-      return structuredClone(DEFAULT_PROGRESS);
+    let state = readRaw(STORAGE_KEY);
+    if (!state) {
+      for (const key of LEGACY_KEYS) {
+        state = readRaw(key);
+        if (state) break;
+      }
     }
+    const normalized = normalize(state || baseState());
+    persist(normalized, false);
+    return normalized;
   }
 
-  function save(progress) {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(progress));
-    window.dispatchEvent(new CustomEvent("zit-points-changed", { detail: progress }));
+  function persist(state, emit = true) {
+    const normalized = normalize({ ...state, updatedAt: new Date().toISOString() });
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(normalized));
+    if (emit) window.dispatchEvent(new CustomEvent("zit-points-changed", { detail: normalized }));
+    return normalized;
   }
 
-  function award(gameId, points, title) {
-    if (!gameId || !Number.isFinite(points) || points <= 0) {
-      return { awarded: false, reason: "invalid-data", progress: load() };
+  function save(state) {
+    return persist(state, true);
+  }
+
+  function award(gameId, points, meta = {}) {
+    if (!gameId) throw new Error("gameId fehlt");
+    const value = Math.max(0, Number(points) || 0);
+    const state = load();
+
+    if (state.games[gameId]?.awarded) {
+      return { awarded: false, alreadyAwarded: true, progress: state };
     }
 
-    const progress = load();
-
-    if (progress.games[gameId]?.awarded) {
-      return { awarded: false, reason: "already-awarded", progress };
-    }
-
-    const roundedPoints = Math.round(points);
-
-    progress.games[gameId] = {
+    state.games[gameId] = {
+      ...meta,
+      points: value,
       awarded: true,
-      points: roundedPoints,
-      title: title || gameId,
       awardedAt: new Date().toISOString()
     };
+    state.totalPoints = Object.values(state.games).reduce((sum, game) => sum + (Number(game.points) || 0), 0);
 
-    progress.totalPoints = Object.values(progress.games)
-      .filter((game) => game.awarded)
-      .reduce((sum, game) => sum + (Number(game.points) || 0), 0);
-
-    save(progress);
-
-    return { awarded: true, reason: "success", progress };
-  }
-
-  function isAwarded(gameId) {
-    return Boolean(load().games[gameId]?.awarded);
+    return { awarded: true, alreadyAwarded: false, progress: save(state) };
   }
 
   function reset() {
+    const fresh = baseState();
     localStorage.removeItem(STORAGE_KEY);
-    const progress = structuredClone(DEFAULT_PROGRESS);
-    window.dispatchEvent(new CustomEvent("zit-points-changed", { detail: progress }));
-    return progress;
+    LEGACY_KEYS.forEach((key) => localStorage.removeItem(key));
+    window.dispatchEvent(new CustomEvent("zit-points-changed", { detail: fresh }));
+    return fresh;
+  }
+
+  function hasAwarded(gameId) {
+    return Boolean(load().games[gameId]?.awarded);
   }
 
   window.ZITPoints = {
-    storageKey: STORAGE_KEY,
     load,
     save,
     award,
-    isAwarded,
-    reset
+    awardGame: award,
+    hasAwarded,
+    reset,
+    storageKey: STORAGE_KEY
   };
 })();
