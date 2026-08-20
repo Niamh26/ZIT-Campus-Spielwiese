@@ -1,0 +1,17 @@
+TRAUMA-KREUZWORTRÄTSEL – PRÜFBERICHT
+
+Raster: 19 Zeilen × 25 Spalten
+Begriffe geprüft: 20 von 20
+Echte Kreuzungsfelder: 19
+
+Alle Prüfungen bestanden:
+- Wortlänge stimmt für alle 20 Begriffe.
+- Kein Wort läuft über den Rasterrand.
+- Keine Kreuzung enthält widersprüchliche Buchstaben.
+- Keine zwei Wörter überlagern sich parallel.
+- Jeder Begriff besitzt mindestens eine echte Kreuzung.
+- Jede Lösung lässt sich exakt aus dem fertigen Raster rekonstruieren.
+
+Hinweis:
+Die Inhalte/Lösungen wurden nicht verändert. Nr. 13 bleibt FOCUSING,
+passend zum vorhandenen Hinweis im Ausgangsmaterial.

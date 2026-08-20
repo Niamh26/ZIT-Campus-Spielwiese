@@ -1,19 +1,14 @@
-TRAUMA-KREUZWORTRÄTSEL – KOMPAKTES RASTER
+TRAUMA-KREUZWORTRÄTSEL – FINALE GEPRÜFTE VERSION
 
-Änderung:
-- Die 20 Begriffe und Hinweise bleiben unverändert.
-- Das Rätsel wurde von 30 x 40 auf 22 x 22 Felder kompakter angeordnet.
-- Die senkrechten Begriffe kreuzen jetzt die waagerechten Begriffe.
-- Die langen dunkelgrünen Leer-/Balkenbereiche werden dadurch stark reduziert.
-
-EINBAU IN GITHUB:
-1. Öffne:
+1. Öffne in deinem lokalen Repository:
    games/trauma-kreuzwortraetsel/
 
-2. Ersetze dort die bisherige index.html durch die neue index.html aus diesem Paket.
+2. Ersetze dort die bisherige index.html durch die index.html aus diesem Paket.
 
 3. GitHub Desktop:
    Commit to main
    Push origin
 
 4. Danach die Live-Seite mit Strg + F5 neu laden.
+
+Die Datei PRUEFBERICHT.txt dokumentiert die automatische Prüfung des Rasters.
