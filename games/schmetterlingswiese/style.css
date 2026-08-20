@@ -282,3 +282,37 @@ h1 {
     bottom: 80px;
   }
 }
+
+
+/* ==========================================================
+   NATÜRLICHE SCHMETTERLINGSARTEN
+   20 Weißling · 40 Zitronenfalter · 60 Bläuling
+   80 Admiral · 100 Tagpfauenauge
+   ========================================================== */
+.butterfly {
+  width: var(--size);
+  height: var(--size);
+  filter: drop-shadow(0 7px 6px rgba(28,45,30,.20));
+}
+
+.butterfly-image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  transform-origin: center;
+  animation: naturalButterflyPulse 1.25s ease-in-out infinite alternate;
+}
+
+.butterfly:nth-child(even) .butterfly-image {
+  transform: scaleX(-1);
+}
+
+@keyframes naturalButterflyPulse {
+  from { scale: .96; rotate: -1.7deg; }
+  to   { scale: 1.04; rotate: 1.7deg; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .butterfly-image { animation: none !important; }
+}

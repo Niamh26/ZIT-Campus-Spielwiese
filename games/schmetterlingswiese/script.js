@@ -17,12 +17,11 @@ const MILESTONES = [
 ];
 
 const BUTTERFLY_STYLES = [
-  { species: "white", left: "15%", top: "25%", size: "60px", duration: "18s", delay: "-4s" },
-  { species: "blue", left: "40%", top: "17%", size: "55px", duration: "21s", delay: "-9s" },
-  { species: "brimstone", left: "66%", top: "14%", size: "66px", duration: "19s", delay: "-2s" },
-  { species: "admiral", left: "77%", top: "31%", size: "70px", duration: "23s", delay: "-12s" },
-  { species: "peacock", left: "55%", top: "39%", size: "68px", duration: "20s", delay: "-7s" },
-  { species: "fritillary", left: "27%", top: "40%", size: "62px", duration: "22s", delay: "-14s" }
+  { species: "weissling",       name: "Weißling",        file: "assets/weissling.png",       left: "15%", top: "25%", size: "86px", duration: "18s", delay: "-4s" },
+  { species: "zitronenfalter",  name: "Zitronenfalter", file: "assets/zitronenfalter.png",  left: "40%", top: "17%", size: "70px", duration: "21s", delay: "-9s" },
+  { species: "blaeuling",       name: "Bläuling",       file: "assets/blaeuling.png",       left: "66%", top: "14%", size: "78px", duration: "19s", delay: "-2s" },
+  { species: "admiral",         name: "Admiral",        file: "assets/admiral.png",         left: "77%", top: "31%", size: "84px", duration: "23s", delay: "-12s" },
+  { species: "tagpfauenauge",   name: "Tagpfauenauge", file: "assets/tagpfauenauge.png",   left: "55%", top: "39%", size: "82px", duration: "20s", delay: "-7s" }
 ];
 
 const SNAPSHOT_KEY = "zit-campus-meadow-progress-v2";
@@ -140,12 +139,7 @@ function loadProgressSafely() {
 }
 
 function getButterflyCount(points) {
-  if (points < 20) return 0;
-  if (points < 40) return 1;
-  if (points < 60) return 2;
-  if (points < 80) return 3;
-  if (points < 100) return 4;
-  return 6;
+  return Math.min(BUTTERFLY_STYLES.length, Math.floor(Math.max(0, points) / 20));
 }
 
 function getNextThreshold(points) {
@@ -195,12 +189,8 @@ function renderButterflies(points) {
     butterfly.style.setProperty("--duration", style.duration);
     butterfly.style.setProperty("--delay", style.delay);
     butterfly.setAttribute("role", "img");
-    butterfly.setAttribute("aria-label", `Schmetterling ${index + 1}`);
-    butterfly.innerHTML = `
-      <span class="wing left-wing"></span>
-      <span class="body"></span>
-      <span class="wing right-wing"></span>
-    `;
+    butterfly.setAttribute("aria-label", `${style.name} – Schmetterling ${index + 1}`);
+    butterfly.innerHTML = `<img class="butterfly-image" src="${style.file}" alt="" aria-hidden="true">`;
     butterflyLayerEl.appendChild(butterfly);
   });
 }
