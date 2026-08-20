@@ -1,23 +1,19 @@
-SCHMETTERLINGSWIESE – 5 NATÜRLICHE SCHMETTERLINGSARTEN
+TRAUMA-KREUZWORTRÄTSEL – KOMPAKTES RASTER
 
-Bei jeder neuen 20-Punkte-Stufe kommt ein weiterer Schmetterling hinzu.
-Die bereits erreichten Schmetterlinge bleiben sichtbar und flattern weiter.
+Änderung:
+- Die 20 Begriffe und Hinweise bleiben unverändert.
+- Das Rätsel wurde von 30 x 40 auf 22 x 22 Felder kompakter angeordnet.
+- Die senkrechten Begriffe kreuzen jetzt die waagerechten Begriffe.
+- Die langen dunkelgrünen Leer-/Balkenbereiche werden dadurch stark reduziert.
 
-20 Punkte  = Weißling
-40 Punkte  = Zitronenfalter
-60 Punkte  = Bläuling
-80 Punkte  = Admiral
-100 Punkte = Tagpfauenauge
+EINBAU IN GITHUB:
+1. Öffne:
+   games/trauma-kreuzwortraetsel/
 
-EINBAU IN GITHUB
-1. Dieses ZIP in den Hauptordner ZIT-Campus-Spielwiese entpacken.
-2. Vorhandene Dateien ersetzen.
-3. GitHub Desktop: Commit to main.
-4. Push origin.
-5. Live-Seite anschließend mit Strg + F5 neu laden.
+2. Ersetze dort die bisherige index.html durch die neue index.html aus diesem Paket.
 
-Die bestehende Wiese und die Punktespeicherung bleiben erhalten.
+3. GitHub Desktop:
+   Commit to main
+   Push origin
 
-ÄNDERUNG DIESER VERSION:
-Das mittlere Hinweisfeld „Sammle deine ersten 20 Punkte …“ wurde vollständig entfernt.
-Die obere Punkte-/Fortschrittsanzeige und alle Schmetterlingsstufen bleiben erhalten.
+4. Danach die Live-Seite mit Strg + F5 neu laden.
