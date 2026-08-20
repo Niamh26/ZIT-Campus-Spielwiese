@@ -1,19 +1,10 @@
-TRAUMA-KREUZWORTRÄTSEL – ABSCHLUSSLOGIK FIX
+Nur diese Datei ersetzen:
+games/trauma-kreuzwortraetsel/index.html
 
-Geprüft und korrigiert:
-- Das Raster selbst kann 20/20 korrekt erreichen.
-- Beim Klick auf „Prüfen“ wird jetzt angezeigt, welche Nummer(n)
-  noch nicht als vollständig gelöst erkannt werden.
-- Die Fortschrittsanzeige wird zusätzlich bei Eingabe, Keyup und Blur aktualisiert.
-- Bei echten 20/20 wird die ZIT-Punkteverwaltung aufgerufen.
-- Das Kreuzworträtsel vergibt einmalig 20 Punkte.
-- Die Lösung-anzeigen-Funktion vergibt ausdrücklich KEINE Punkte.
+Danach:
+1. Commit to main
+2. Push origin
+3. Live-Seite mit Strg + F5 neu laden
 
-Einbau:
-1. games/trauma-kreuzwortraetsel/index.html ersetzen
-2. Commit to main
-3. Push origin
-4. Live-Seite mit Strg + F5 neu laden
-
-Wichtig:
-../../shared/zit-points.js muss wie bei der Schmetterlingswiese vorhanden sein.
+Keine weitere Lösungsdatei notwendig.
+Die Datei ../../shared/zit-points.js bleibt dort, wo sie bereits liegt.

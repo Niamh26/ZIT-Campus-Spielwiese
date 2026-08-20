@@ -1,17 +1,23 @@
-TRAUMA-KREUZWORTRÄTSEL – PRÜFBERICHT
+FINALE PRÜFUNG – TRAUMA-KREUZWORTRÄTSEL
 
-Raster: 19 Zeilen × 25 Spalten
-Begriffe geprüft: 20 von 20
-Echte Kreuzungsfelder: 19
+Ergebnis: BESTANDEN
 
-Alle Prüfungen bestanden:
-- Wortlänge stimmt für alle 20 Begriffe.
-- Kein Wort läuft über den Rasterrand.
-- Keine Kreuzung enthält widersprüchliche Buchstaben.
-- Keine zwei Wörter überlagern sich parallel.
-- Jeder Begriff besitzt mindestens eine echte Kreuzung.
-- Jede Lösung lässt sich exakt aus dem fertigen Raster rekonstruieren.
+Raster:
+- 22 Zeilen × 24 Spalten
+- 20 Begriffe vorhanden
+- 20/20 Begriffe lassen sich aus den Feldern exakt rekonstruieren
+- alle Kreuzungsbuchstaben stimmen
+- keine parallelen Wortüberlagerungen
+- jede Lösung besitzt mindestens eine echte Kreuzung
 
-Hinweis:
-Die Inhalte/Lösungen wurden nicht verändert. Nr. 13 bleibt FOCUSING,
-passend zum vorhandenen Hinweis im Ausgangsmaterial.
+Richtungen wie ursprünglich vorgesehen:
+- Waagerecht: Nr. 2 bis 10
+- Senkrecht: Nr. 1 und Nr. 11 bis 20
+- NEUROZEPTION (Nr. 5) ist wieder waagerecht
+
+Abschluss:
+- 20/20 wird korrekt erkannt
+- Punktefunktion verwendet ZITPoints.awardGame(...)
+- einmalig +20 Punkte
+- Lösungsbutton funktioniert
+- eingeblendete Lösung vergibt keine Punkte

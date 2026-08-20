@@ -41,13 +41,7 @@ button.secondary{background:#eef3eb;color:var(--dark)}
 @media(max-width:850px){.layout{grid-template-columns:1fr}.clues{display:grid;grid-template-columns:1fr 1fr;gap:18px}.clues section+section{margin-top:0}}
 @media(max-width:560px){.app{width:min(100% - 14px,1180px)}.toolbar{align-items:flex-start;flex-direction:column}.cell{width:28px;height:28px}.clues{grid-template-columns:1fr}.clues section+section{margin-top:20px}}
 
-.solution-dialog{
-  border:0;
-  border-radius:18px;
-  padding:0;
-  width:min(440px,calc(100% - 32px));
-  box-shadow:0 24px 70px rgba(20,45,28,.28);
-}
+.solution-dialog{border:0;border-radius:18px;padding:0;width:min(440px,calc(100% - 32px));box-shadow:0 24px 70px rgba(20,45,28,.28)}
 .solution-dialog::backdrop{background:rgba(18,38,25,.48)}
 .solution-dialog-inner{padding:24px}
 .solution-dialog h2{margin:0 0 10px;color:#234b22;font-size:1.3rem}
@@ -128,7 +122,7 @@ button.secondary{background:#eef3eb;color:var(--dark)}
 <dialog id="solutionDialog" class="solution-dialog">
   <div class="solution-dialog-inner">
     <h2>Lösung anzeigen?</h2>
-    <p>Damit werden alle Begriffe im Kreuzworträtsel ausgefüllt. Möchtest du die Lösung wirklich sehen?</p>
+    <p>Damit werden alle 20 Begriffe ausgefüllt. Für eine eingeblendete Lösung werden keine Punkte vergeben.</p>
     <div class="solution-dialog-actions">
       <button id="cancelSolution" class="secondary" type="button">Abbrechen</button>
       <button id="confirmSolution" type="button">Ja, Lösung anzeigen</button>
@@ -139,8 +133,8 @@ button.secondary{background:#eef3eb;color:var(--dark)}
 
 <script src="../../shared/zit-points.js"></script>
 <script>
-const ENTRIES = [{"answer": "TOLERANZFENSTER", "clue": "Bandbreite, innerhalb derer das Nervensystem mit Stress umgehen kann.", "row": 2, "col": 1, "direction": "down", "number": 1}, {"answer": "INTEROZEPTION", "clue": "Innenwahrnehmung von Signalen aus dem Körper.", "row": 11, "col": 6, "direction": "across", "number": 2}, {"answer": "HYPOTHALAMUS", "clue": "Hirnstruktur, die im beschriebenen Ablauf die notwendigen Hormone liefert.", "row": 7, "col": 3, "direction": "across", "number": 3}, {"answer": "DISSOZIATION", "clue": "Abspaltung einzelner Persönlichkeitsanteile im Verlauf traumatischer Erfahrung.", "row": 15, "col": 3, "direction": "across", "number": 4}, {"answer": "NEUROZEPTION", "clue": "Unbewusste Einschätzung von Sicherheit oder Gefahr.", "row": 5, "col": 13, "direction": "down", "number": 5}, {"answer": "SYMPATHIKUS", "clue": "Teil des autonomen Nervensystems für Mobilisierung, Kampf oder Flucht.", "row": 4, "col": 14, "direction": "across", "number": 6}, {"answer": "HOMOEOSTASE", "clue": "Physiologisches und psychisches Gleichgewicht des Organismus.", "row": 3, "col": 0, "direction": "across", "number": 7}, {"answer": "PREDICTION", "clue": "Erwartungshaltung, die das Gehirn bei einem Sinnesreiz aufbaut.", "row": 1, "col": 12, "direction": "across", "number": 8}, {"answer": "EMBODIMENT", "clue": "Verbindung von Erleben, Emotion und Körper.", "row": 8, "col": 14, "direction": "across", "number": 9}, {"answer": "NEOKORTEX", "clue": "Jüngerer Gehirnbereich für bewusste kognitive Verarbeitung.", "row": 6, "col": 14, "direction": "across", "number": 10}, {"answer": "FELTSENSE", "clue": "Körperlich spürbares Ganzes einer Situation, noch nicht vollständig versprachlicht.", "row": 0, "col": 14, "direction": "down", "number": 11}, {"answer": "RESILIENZ", "clue": "Psychische Widerstandsfähigkeit und Anpassungsfähigkeit.", "row": 10, "col": 9, "direction": "down", "number": 12}, {"answer": "FOCUSING", "clue": "Prozess zwischen Erleben und Versprachlichung oder Symbolisierung.", "row": 6, "col": 6, "direction": "down", "number": 13}, {"answer": "AMYGDALA", "clue": "Hirnstruktur für die emotionale Einschätzung.", "row": 5, "col": 4, "direction": "down", "number": 14}, {"answer": "TRACKING", "clue": "Körperorientiertes Beobachten innerer Reaktionen.", "row": 8, "col": 23, "direction": "down", "number": 15}, {"answer": "PENDELN", "clue": "Grundtechnik des Wechsels zwischen verschiedenen Empfindungs- oder Erregungszuständen.", "row": 2, "col": 10, "direction": "down", "number": 16}, {"answer": "INSULA", "clue": "Hirnregion für innere Wahrnehmung und bewusstes Gefühlerleben.", "row": 10, "col": 18, "direction": "down", "number": 17}, {"answer": "TRAUMA", "clue": "Entsteht laut Skript, wenn Bewältigungsmechanismen des Körpers überfordert werden.", "row": 3, "col": 12, "direction": "down", "number": 18}, {"answer": "VAGUS", "clue": "Nerv, dessen Fasern überwiegend Informationen aus dem Körper zum Gehirn liefern.", "row": 1, "col": 23, "direction": "down", "number": 19}, {"answer": "PAG", "clue": "Abkürzung für das periaquäduktale Grau.", "row": 11, "col": 14, "direction": "down", "number": 20}];
-const ROWS = 19, COLS = 25;
+const ENTRIES = [{"answer": "TOLERANZFENSTER", "clue": "Bandbreite, innerhalb derer das Nervensystem mit Stress umgehen kann.", "row": 7, "col": 16, "direction": "down", "number": 1}, {"answer": "INTEROZEPTION", "clue": "Innenwahrnehmung von Signalen aus dem Körper.", "row": 17, "col": 0, "direction": "across", "number": 2}, {"answer": "HYPOTHALAMUS", "clue": "Hirnstruktur, die im beschriebenen Ablauf die notwendigen Hormone liefert.", "row": 3, "col": 11, "direction": "across", "number": 3}, {"answer": "DISSOZIATION", "clue": "Abspaltung einzelner Persönlichkeitsanteile im Verlauf traumatischer Erfahrung.", "row": 8, "col": 12, "direction": "across", "number": 4}, {"answer": "NEUROZEPTION", "clue": "Unbewusste Einschätzung von Sicherheit oder Gefahr.", "row": 21, "col": 1, "direction": "across", "number": 5}, {"answer": "SYMPATHIKUS", "clue": "Teil des autonomen Nervensystems für Mobilisierung, Kampf oder Flucht.", "row": 10, "col": 3, "direction": "across", "number": 6}, {"answer": "HOMOEOSTASE", "clue": "Physiologisches und psychisches Gleichgewicht des Organismus.", "row": 1, "col": 13, "direction": "across", "number": 7}, {"answer": "PREDICTION", "clue": "Erwartungshaltung, die das Gehirn bei einem Sinnesreiz aufbaut.", "row": 16, "col": 14, "direction": "across", "number": 8}, {"answer": "EMBODIMENT", "clue": "Verbindung von Erleben, Emotion und Körper.", "row": 12, "col": 1, "direction": "across", "number": 9}, {"answer": "NEOKORTEX", "clue": "Jüngerer Gehirnbereich für bewusste kognitive Verarbeitung.", "row": 8, "col": 1, "direction": "across", "number": 10}, {"answer": "FELTSENSE", "clue": "Körperlich spürbares Ganzes einer Situation, noch nicht vollständig versprachlicht.", "row": 11, "col": 1, "direction": "down", "number": 11}, {"answer": "RESILIENZ", "clue": "Psychische Widerstandsfähigkeit und Anpassungsfähigkeit.", "row": 1, "col": 1, "direction": "down", "number": 12}, {"answer": "FOCUSING", "clue": "Prozess zwischen Erleben und Versprachlichung oder Symbolisierung.", "row": 7, "col": 22, "direction": "down", "number": 13}, {"answer": "AMYGDALA", "clue": "Hirnstruktur für die emotionale Einschätzung.", "row": 3, "col": 19, "direction": "down", "number": 14}, {"answer": "TRACKING", "clue": "Körperorientiertes Beobachten innerer Reaktionen.", "row": 12, "col": 10, "direction": "down", "number": 15}, {"answer": "PENDELN", "clue": "Grundtechnik des Wechsels zwischen verschiedenen Empfindungs- oder Erregungszuständen.", "row": 15, "col": 12, "direction": "down", "number": 16}, {"answer": "INSULA", "clue": "Hirnregion für innere Wahrnehmung und bewusstes Gefühlerleben.", "row": 8, "col": 13, "direction": "down", "number": 17}, {"answer": "TRAUMA", "clue": "Entsteht laut Skript, wenn Bewältigungsmechanismen des Körpers überfordert werden.", "row": 8, "col": 7, "direction": "down", "number": 18}, {"answer": "VAGUS", "clue": "Nerv, dessen Fasern überwiegend Informationen aus dem Körper zum Gehirn liefern.", "row": 0, "col": 21, "direction": "down", "number": 19}, {"answer": "PAG", "clue": "Abkürzung für das periaquäduktale Grau.", "row": 3, "col": 13, "direction": "down", "number": 20}];
+const ROWS = 22, COLS = 24;
 const gridEl = document.getElementById('grid');
 const acrossEl = document.getElementById('across');
 const downEl = document.getElementById('down');
@@ -181,12 +175,10 @@ for(let r=0;r<ROWS;r++){
       input.maxLength=1; input.autocomplete='off';
       input.addEventListener('input',()=>{
         input.value=input.value.toUpperCase().replace(/[^A-Z]/g,'');
-        wrap.classList.remove('correct','incorrect');
+        wrap.classList.remove('correct','incorrect','solution-revealed');
         updateProgress();
       });
       input.addEventListener('focus',()=>highlight(info.entries));
-      input.addEventListener('blur',()=>updateProgress());
-      input.addEventListener('keyup',()=>updateProgress());
       wrap.appendChild(input);
       cellMap.set(key(r,c),input);
     }
@@ -211,6 +203,8 @@ function highlight(ids){
   document.querySelectorAll('.clues li').forEach(li=>li.classList.toggle('active',ids.includes(Number(li.dataset.id))));
 }
 
+let solutionWasShown = false;
+
 function normalizeAnswer(value){
   return (value || '')
     .toUpperCase()
@@ -232,61 +226,150 @@ function valueOf(e){
   return normalizeAnswer(s);
 }
 
-function getSolvedEntries(){
+function solvedEntries(){
   return ENTRIES.filter(e => valueOf(e) === normalizeAnswer(e.answer));
 }
 
-function getOpenEntries(){
+function openEntries(){
   return ENTRIES.filter(e => valueOf(e) !== normalizeAnswer(e.answer));
 }
 
 function updateProgress(){
-  const solvedEntries = getSolvedEntries();
-  const solved = solvedEntries.length;
-  progressEl.textContent = `${solved} von ${ENTRIES.length} Begriffen gelöst`;
-
-  if(solved === ENTRIES.length){
-    messageEl.textContent = 'Geschafft! Alle 20 Begriffe stimmen. 🎉 Ein neuer Schmetterling wurde für deine Wiese freigeschaltet.';
-  }
+  const solved=solvedEntries().length;
+  progressEl.textContent=`${solved} von ${ENTRIES.length} Begriffen gelöst`;
   return solved;
 }
 
 document.getElementById('check').addEventListener('click',()=>{
   let wrong=0;
+
   for(const [k,input] of cellMap){
     const wrap=input.parentElement;
     wrap.classList.remove('correct','incorrect');
     if(!input.value) continue;
-    if(normalizeAnswer(input.value)===cellInfo.get(k).letter) wrap.classList.add('correct');
-    else {wrap.classList.add('incorrect');wrong++;}
+
+    if(normalizeAnswer(input.value)===cellInfo.get(k).letter){
+      wrap.classList.add('correct');
+    }else{
+      wrap.classList.add('incorrect');
+      wrong++;
+    }
   }
 
-  const solved = updateProgress();
-  const open = getOpenEntries();
+  const solved=updateProgress();
 
-  if(solved === ENTRIES.length){
-    // Nur bei einer selbst gelösten Runde Punkte vergeben.
-    if(window.ZITPoints && typeof window.ZITPoints.completeGame === 'function'){
-      const result = window.ZITPoints.completeGame('trauma-kreuzwortraetsel', 20);
+  if(solved===ENTRIES.length){
+    if(solutionWasShown){
+      messageEl.textContent='Alle 20 Begriffe sind korrekt. Die Lösung wurde zuvor eingeblendet – dafür werden keine Punkte vergeben.';
+      return;
+    }
+
+    if(window.ZITPoints && typeof window.ZITPoints.awardGame==='function'){
+      const result=window.ZITPoints.awardGame(
+        'trauma-kreuzwortraetsel',
+        20,
+        {title:'Trauma-Kreuzworträtsel'}
+      );
+
       if(result && result.awarded){
-        messageEl.textContent = 'Geschafft! Alle 20 Begriffe stimmen. 🎉 +20 Punkte – ein neuer Schmetterling wurde für deine Wiese freigeschaltet.';
-      } else {
-        messageEl.textContent = 'Geschafft! Alle 20 Begriffe stimmen. 🎉 Dieses Spiel wurde bereits gewertet.';
+        messageEl.textContent='Geschafft! 20 von 20 Begriffen richtig. 🎉 +20 Punkte – ein neuer Schmetterling flattert auf deine Wiese!';
+      }else{
+        messageEl.textContent='Geschafft! 20 von 20 Begriffen richtig. 🎉 Dieses Spiel wurde bereits gewertet.';
       }
-    } else {
-      messageEl.textContent = 'Geschafft! Alle 20 Begriffe stimmen. 🎉';
+    }else{
+      messageEl.textContent='Geschafft! 20 von 20 Begriffen richtig. 🎉';
     }
     return;
   }
 
   if(wrong){
-    messageEl.textContent = `${wrong} Buchstabe${wrong===1?' ist':'n sind'} noch nicht richtig.`;
-  } else if(open.length){
-    const labels = open.map(e => `Nr. ${e.number}`).join(', ');
-    messageEl.textContent = `Noch nicht als vollständig gelöst erkannt: ${labels}.`;
-  } else {
-    messageEl.textContent = 'Alle bisher eingetragenen Buchstaben sind richtig.';
+    messageEl.textContent=`${wrong} Buchstabe${wrong===1?' ist':'n sind'} noch nicht richtig.`;
+  }else{
+    const open=openEntries();
+    messageEl.textContent=`Noch offen: ${open.map(e=>'Nr. '+e.number).join(', ')}.`;
   }
+});
+
+document.getElementById('hint').addEventListener('click',()=>{
+  const open=openEntries();
+  if(!open.length){
+    messageEl.textContent='Alles ist bereits gelöst.';
+    return;
+  }
+
+  const e=open[Math.floor(Math.random()*open.length)];
+  const missing=[];
+
+  for(let i=0;i<e.answer.length;i++){
+    const r=e.row+(e.direction==='down'?i:0);
+    const c=e.col+(e.direction==='across'?i:0);
+    const input=cellMap.get(key(r,c));
+    if(normalizeAnswer(input.value)!==e.answer[i]){
+      missing.push({input,letter:e.answer[i]});
+    }
+  }
+
+  const h=missing[Math.floor(Math.random()*missing.length)];
+  h.input.value=h.letter;
+  h.input.parentElement.classList.add('correct');
+  messageEl.textContent=`Tipp für Nummer ${e.number}: Ein Buchstabe wurde ergänzt.`;
+  updateProgress();
+});
+
+const solutionDialog=document.getElementById('solutionDialog');
+
+document.getElementById('solution').addEventListener('click',()=>{
+  if(solutionDialog && typeof solutionDialog.showModal==='function'){
+    solutionDialog.showModal();
+  }else if(confirm('Möchtest du wirklich die vollständige Lösung sehen?')){
+    revealSolution();
+  }
+});
+
+document.getElementById('cancelSolution').addEventListener('click',()=>{
+  solutionDialog.close();
+});
+
+document.getElementById('confirmSolution').addEventListener('click',()=>{
+  solutionDialog.close();
+  revealSolution();
+});
+
+function revealSolution(){
+  solutionWasShown=true;
+
+  for(const e of ENTRIES){
+    for(let i=0;i<e.answer.length;i++){
+      const r=e.row+(e.direction==='down'?i:0);
+      const c=e.col+(e.direction==='across'?i:0);
+      const input=cellMap.get(key(r,c));
+      if(input){
+        input.value=e.answer[i];
+        input.parentElement.classList.add('solution-revealed');
+      }
+    }
+  }
+
+  updateProgress();
+  messageEl.textContent='Lösung eingeblendet. Dafür werden keine Punkte vergeben.';
+}
+
+document.getElementById('reset').addEventListener('click',()=>{
+  if(!confirm('Möchtest du alle Einträge löschen?')) return;
+
+  solutionWasShown=false;
+
+  for(const input of cellMap.values()){
+    input.value='';
+    input.parentElement.classList.remove('correct','incorrect','solution-revealed');
+  }
+
+  messageEl.textContent='';
+  updateProgress();
+});
+
+updateProgress();
+  messageEl.textContent=wrong?`${wrong} Buchstabe${wrong===1?' ist':'n sind'} noch nicht richtig.`:'Alle bisher eingetragenen Buchstaben sind richtig.';
 });
 
 document.getElementById('hint').addEventListener('click',()=>{
@@ -305,42 +388,6 @@ document.getElementById('hint').addEventListener('click',()=>{
   messageEl.textContent=`Tipp für Nummer ${e.number}: Ein Buchstabe wurde ergänzt.`;
   updateProgress();
 });
-
-
-const solutionDialog = document.getElementById('solutionDialog');
-
-document.getElementById('solution').addEventListener('click',()=>{
-  if(solutionDialog && typeof solutionDialog.showModal === 'function'){
-    solutionDialog.showModal();
-  }else if(confirm('Möchtest du wirklich die vollständige Lösung sehen?')){
-    revealSolution();
-  }
-});
-
-document.getElementById('cancelSolution')?.addEventListener('click',()=>{
-  solutionDialog?.close();
-});
-
-document.getElementById('confirmSolution')?.addEventListener('click',()=>{
-  solutionDialog?.close();
-  revealSolution();
-});
-
-function revealSolution(){
-  for(const e of ENTRIES){
-    for(let i=0;i<e.answer.length;i++){
-      const r=e.row+(e.direction==='down'?i:0);
-      const c=e.col+(e.direction==='across'?i:0);
-      const input=cellMap.get(key(r,c));
-      if(input){
-        input.value=e.answer[i];
-        input.parentElement.classList.add('solution-revealed');
-      }
-    }
-  }
-  updateProgress();
-  messageEl.textContent='Lösung eingeblendet. Dafür werden keine Punkte vergeben.';
-}
 
 document.getElementById('reset').addEventListener('click',()=>{
   if(!confirm('Möchtest du alle Einträge löschen?')) return;
