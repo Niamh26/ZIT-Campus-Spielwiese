@@ -125,6 +125,18 @@ button.secondary{background:#eef3eb;color:var(--dark)}
 <aside class="notice"><strong>Lernhinweis:</strong> Die Hinweise orientieren sich am hochgeladenen Ausbildungsskript. Umlaute werden als AE, OE und UE geschrieben.</aside>
 </main>
 
+<dialog id="solutionDialog" class="solution-dialog">
+  <div class="solution-dialog-inner">
+    <h2>Lösung anzeigen?</h2>
+    <p>Damit werden alle Begriffe im Kreuzworträtsel ausgefüllt. Möchtest du die Lösung wirklich sehen?</p>
+    <div class="solution-dialog-actions">
+      <button id="cancelSolution" class="secondary" type="button">Abbrechen</button>
+      <button id="confirmSolution" type="button">Ja, Lösung anzeigen</button>
+    </div>
+  </div>
+</dialog>
+
+
 <script>
 const ENTRIES = [{"answer": "TOLERANZFENSTER", "clue": "Bandbreite, innerhalb derer das Nervensystem mit Stress umgehen kann.", "row": 2, "col": 1, "direction": "down", "number": 1}, {"answer": "INTEROZEPTION", "clue": "Innenwahrnehmung von Signalen aus dem Körper.", "row": 11, "col": 6, "direction": "across", "number": 2}, {"answer": "HYPOTHALAMUS", "clue": "Hirnstruktur, die im beschriebenen Ablauf die notwendigen Hormone liefert.", "row": 7, "col": 3, "direction": "across", "number": 3}, {"answer": "DISSOZIATION", "clue": "Abspaltung einzelner Persönlichkeitsanteile im Verlauf traumatischer Erfahrung.", "row": 15, "col": 3, "direction": "across", "number": 4}, {"answer": "NEUROZEPTION", "clue": "Unbewusste Einschätzung von Sicherheit oder Gefahr.", "row": 17, "col": 9, "direction": "across", "number": 5}, {"answer": "SYMPATHIKUS", "clue": "Teil des autonomen Nervensystems für Mobilisierung, Kampf oder Flucht.", "row": 4, "col": 14, "direction": "across", "number": 6}, {"answer": "HOMOEOSTASE", "clue": "Physiologisches und psychisches Gleichgewicht des Organismus.", "row": 3, "col": 0, "direction": "across", "number": 7}, {"answer": "PREDICTION", "clue": "Erwartungshaltung, die das Gehirn bei einem Sinnesreiz aufbaut.", "row": 1, "col": 12, "direction": "across", "number": 8}, {"answer": "EMBODIMENT", "clue": "Verbindung von Erleben, Emotion und Körper.", "row": 8, "col": 14, "direction": "across", "number": 9}, {"answer": "NEOKORTEX", "clue": "Jüngerer Gehirnbereich für bewusste kognitive Verarbeitung.", "row": 6, "col": 14, "direction": "across", "number": 10}, {"answer": "FELTSENSE", "clue": "Körperlich spürbares Ganzes einer Situation, noch nicht vollständig versprachlicht.", "row": 0, "col": 14, "direction": "down", "number": 11}, {"answer": "RESILIENZ", "clue": "Psychische Widerstandsfähigkeit und Anpassungsfähigkeit.", "row": 10, "col": 9, "direction": "down", "number": 12}, {"answer": "FOCUSING", "clue": "Prozess zwischen Erleben und Versprachlichung oder Symbolisierung.", "row": 6, "col": 6, "direction": "down", "number": 13}, {"answer": "AMYGDALA", "clue": "Hirnstruktur für die emotionale Einschätzung.", "row": 5, "col": 4, "direction": "down", "number": 14}, {"answer": "TRACKING", "clue": "Körperorientiertes Beobachten innerer Reaktionen.", "row": 8, "col": 23, "direction": "down", "number": 15}, {"answer": "PENDELN", "clue": "Grundtechnik des Wechsels zwischen verschiedenen Empfindungs- oder Erregungszuständen.", "row": 2, "col": 10, "direction": "down", "number": 16}, {"answer": "INSULA", "clue": "Hirnregion für innere Wahrnehmung und bewusstes Gefühlerleben.", "row": 10, "col": 18, "direction": "down", "number": 17}, {"answer": "TRAUMA", "clue": "Entsteht laut Skript, wenn Bewältigungsmechanismen des Körpers überfordert werden.", "row": 3, "col": 12, "direction": "down", "number": 18}, {"answer": "VAGUS", "clue": "Nerv, dessen Fasern überwiegend Informationen aus dem Körper zum Gehirn liefern.", "row": 1, "col": 23, "direction": "down", "number": 19}, {"answer": "PAG", "clue": "Abkürzung für das periaquäduktale Grau.", "row": 11, "col": 14, "direction": "down", "number": 20}];
 const ROWS = 19, COLS = 25;
@@ -246,19 +258,19 @@ document.getElementById('hint').addEventListener('click',()=>{
 const solutionDialog = document.getElementById('solutionDialog');
 
 document.getElementById('solution').addEventListener('click',()=>{
-  if(typeof solutionDialog.showModal === 'function'){
+  if(solutionDialog && typeof solutionDialog.showModal === 'function'){
     solutionDialog.showModal();
   }else if(confirm('Möchtest du wirklich die vollständige Lösung sehen?')){
     revealSolution();
   }
 });
 
-document.getElementById('cancelSolution').addEventListener('click',()=>{
-  solutionDialog.close();
+document.getElementById('cancelSolution')?.addEventListener('click',()=>{
+  solutionDialog?.close();
 });
 
-document.getElementById('confirmSolution').addEventListener('click',()=>{
-  solutionDialog.close();
+document.getElementById('confirmSolution')?.addEventListener('click',()=>{
+  solutionDialog?.close();
   revealSolution();
 });
 

@@ -1,14 +1,13 @@
-TRAUMA-KREUZWORTRÄTSEL – MIT LÖSUNGSBUTTON
+KORRIGIERTE VERSION MIT LÖSUNGSBUTTON
 
-Neu:
-- Button „Lösung anzeigen“ direkt im Spiel.
-- Vor dem Anzeigen erscheint eine Sicherheitsabfrage.
-- Erst nach „Ja, Lösung anzeigen“ werden alle Begriffe eingetragen.
-- „Neu starten“ leert das Rätsel wieder.
-- Das geprüfte kompakte Raster bleibt erhalten.
+Du brauchst KEINE zusätzliche loesung.html.
 
 Einbau:
-1. games/trauma-kreuzwortraetsel/index.html ersetzen.
-2. Commit to main.
-3. Push origin.
-4. Live-Seite mit Strg + F5 neu laden.
+1. Öffne games/trauma-kreuzwortraetsel/
+2. Ersetze dort nur die vorhandene index.html
+3. Commit to main
+4. Push origin
+5. Live-Seite mit Strg + F5 neu laden
+
+Der Button „Lösung anzeigen“ öffnet jetzt eine Bestätigungsabfrage.
+Nach Bestätigung werden alle Begriffe direkt im Rätsel ausgefüllt.
