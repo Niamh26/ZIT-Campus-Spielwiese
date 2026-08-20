@@ -1,23 +1,24 @@
-FINALE PRÜFUNG – TRAUMA-KREUZWORTRÄTSEL
+TRAUMA-KREUZWORTRÄTSEL – FINALE KORREKTUR
 
-Ergebnis: BESTANDEN
+Basis:
+Die optisch bereits funktionierende Version wurde unverändert als Rasterbasis verwendet.
 
-Raster:
-- 22 Zeilen × 24 Spalten
-- 20 Begriffe vorhanden
-- 20/20 Begriffe lassen sich aus den Feldern exakt rekonstruieren
-- alle Kreuzungsbuchstaben stimmen
-- keine parallelen Wortüberlagerungen
-- jede Lösung besitzt mindestens eine echte Kreuzung
+Nicht verändert:
+- Rasterpositionen
+- Position von Nr. 13 FOCUSING: Zeile 6 / Spalte 6 / senkrecht
+- Hinweise und Lösungen
+- Lösungsbutton
 
-Richtungen wie ursprünglich vorgesehen:
-- Waagerecht: Nr. 2 bis 10
-- Senkrecht: Nr. 1 und Nr. 11 bis 20
-- NEUROZEPTION (Nr. 5) ist wieder waagerecht
+Korrigiert:
+- 20/20-Zählung
+- Erfolgsmeldung
+- einmalige Vergabe von 20 Punkten über ZITPoints.awardGame(...)
+- keine Punkte bei eingeblendeter Lösung
+- Zurück-Link führt fest auf:
+  https://niamh26.github.io/ZIT-Campus-Spielwiese/
 
-Abschluss:
-- 20/20 wird korrekt erkannt
-- Punktefunktion verwendet ZITPoints.awardGame(...)
-- einmalig +20 Punkte
-- Lösungsbutton funktioniert
-- eingeblendete Lösung vergibt keine Punkte
+Tests:
+- 20/20 Begriffe mathematisch rekonstruiert: BESTANDEN
+- Kreuzungsbuchstaben: BESTANDEN
+- JavaScript-Syntaxprüfung mit Node: BESTANDEN
+- Anzahl Begriffe: 20

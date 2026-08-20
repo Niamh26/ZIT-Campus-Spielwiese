@@ -1,11 +1,11 @@
-TRAUMA-KREUZWORTRÄTSEL – FUNKTIONSFIX
+Bitte nur ersetzen:
 
-Es muss nur games/trauma-kreuzwortraetsel/index.html ersetzt werden.
-Danach Commit → Push origin → Strg+F5.
+games/trauma-kreuzwortraetsel/index.html
 
-Behoben:
-- doppelter JavaScript-Block entfernt
-- Raster und Hinweise werden wieder aufgebaut
-- 20/20-Abschlusslogik bleibt erhalten
-- Lösungsbutton bleibt erhalten
-- ZITPoints.awardGame(...) bleibt angebunden
+Danach:
+1. Commit to main
+2. Push origin
+3. Seite mit Strg + F5 neu laden
+
+Keine weitere Datei für die Lösung nötig.
+shared/zit-points.js bleibt unverändert im vorhandenen shared-Ordner.
