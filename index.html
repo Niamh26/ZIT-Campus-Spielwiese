@@ -40,6 +40,21 @@ button.secondary{background:#eef3eb;color:var(--dark)}
 .notice{margin-top:18px;padding:17px 20px;color:var(--muted);line-height:1.5}
 @media(max-width:850px){.layout{grid-template-columns:1fr}.clues{display:grid;grid-template-columns:1fr 1fr;gap:18px}.clues section+section{margin-top:0}}
 @media(max-width:560px){.app{width:min(100% - 14px,1180px)}.toolbar{align-items:flex-start;flex-direction:column}.cell{width:28px;height:28px}.clues{grid-template-columns:1fr}.clues section+section{margin-top:20px}}
+
+.solution-dialog{
+  border:0;
+  border-radius:18px;
+  padding:0;
+  width:min(440px,calc(100% - 32px));
+  box-shadow:0 24px 70px rgba(20,45,28,.28);
+}
+.solution-dialog::backdrop{background:rgba(18,38,25,.48)}
+.solution-dialog-inner{padding:24px}
+.solution-dialog h2{margin:0 0 10px;color:#234b22;font-size:1.3rem}
+.solution-dialog p{margin:0 0 20px;color:#53645d;line-height:1.5}
+.solution-dialog-actions{display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap}
+.solution-revealed{background:#edf7e8!important}
+
 </style>
 
 <style>
@@ -91,6 +106,7 @@ button.secondary{background:#eef3eb;color:var(--dark)}
 <div class="actions">
 <button id="check">Prüfen</button>
 <button id="hint">Tipp</button>
+<button id="solution" class="secondary">Lösung anzeigen</button>
 <button id="reset" class="secondary">Neu starten</button>
 </div>
 </section>
@@ -225,6 +241,42 @@ document.getElementById('hint').addEventListener('click',()=>{
   messageEl.textContent=`Tipp für Nummer ${e.number}: Ein Buchstabe wurde ergänzt.`;
   updateProgress();
 });
+
+
+const solutionDialog = document.getElementById('solutionDialog');
+
+document.getElementById('solution').addEventListener('click',()=>{
+  if(typeof solutionDialog.showModal === 'function'){
+    solutionDialog.showModal();
+  }else if(confirm('Möchtest du wirklich die vollständige Lösung sehen?')){
+    revealSolution();
+  }
+});
+
+document.getElementById('cancelSolution').addEventListener('click',()=>{
+  solutionDialog.close();
+});
+
+document.getElementById('confirmSolution').addEventListener('click',()=>{
+  solutionDialog.close();
+  revealSolution();
+});
+
+function revealSolution(){
+  for(const e of ENTRIES){
+    for(let i=0;i<e.answer.length;i++){
+      const r=e.row+(e.direction==='down'?i:0);
+      const c=e.col+(e.direction==='across'?i:0);
+      const input=cellMap.get(key(r,c));
+      if(input){
+        input.value=e.answer[i];
+        input.parentElement.classList.add('solution-revealed');
+      }
+    }
+  }
+  updateProgress();
+  messageEl.textContent='Lösung eingeblendet.';
+}
 
 document.getElementById('reset').addEventListener('click',()=>{
   if(!confirm('Möchtest du alle Einträge löschen?')) return;

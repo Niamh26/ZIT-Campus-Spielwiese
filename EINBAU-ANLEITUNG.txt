@@ -1,14 +1,14 @@
-TRAUMA-KREUZWORTRÄTSEL – FINALE GEPRÜFTE VERSION
+TRAUMA-KREUZWORTRÄTSEL – MIT LÖSUNGSBUTTON
 
-1. Öffne in deinem lokalen Repository:
-   games/trauma-kreuzwortraetsel/
+Neu:
+- Button „Lösung anzeigen“ direkt im Spiel.
+- Vor dem Anzeigen erscheint eine Sicherheitsabfrage.
+- Erst nach „Ja, Lösung anzeigen“ werden alle Begriffe eingetragen.
+- „Neu starten“ leert das Rätsel wieder.
+- Das geprüfte kompakte Raster bleibt erhalten.
 
-2. Ersetze dort die bisherige index.html durch die index.html aus diesem Paket.
-
-3. GitHub Desktop:
-   Commit to main
-   Push origin
-
-4. Danach die Live-Seite mit Strg + F5 neu laden.
-
-Die Datei PRUEFBERICHT.txt dokumentiert die automatische Prüfung des Rasters.
+Einbau:
+1. games/trauma-kreuzwortraetsel/index.html ersetzen.
+2. Commit to main.
+3. Push origin.
+4. Live-Seite mit Strg + F5 neu laden.
