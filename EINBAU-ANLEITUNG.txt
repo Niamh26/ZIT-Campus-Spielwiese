@@ -1,13 +1,17 @@
-KORRIGIERTE VERSION MIT LÖSUNGSBUTTON
+TRAUMA-KREUZWORTRÄTSEL – FIX FÜR DEN FEHLENDEN 20. BEGRIFF
 
-Du brauchst KEINE zusätzliche loesung.html.
+Korrigiert:
+- Begriff 5 „NEUROZEPTION“ liegt jetzt sichtbar im zentralen Raster.
+- Alle 20 Begriffe wurden erneut automatisch auf Wortlänge,
+  Rastergrenzen und Kreuzungsbuchstaben geprüft.
+- Nach vollständig richtiger eigener Lösung und Klick auf „Prüfen“
+  erscheint jetzt ausdrücklich:
+  „Geschafft! Alle 20 Begriffe stimmen. Ein neuer Schmetterling wurde
+  für deine Wiese freigeschaltet.“
+- „Lösung anzeigen“ bleibt weiterhin vorhanden.
 
 Einbau:
-1. Öffne games/trauma-kreuzwortraetsel/
-2. Ersetze dort nur die vorhandene index.html
-3. Commit to main
-4. Push origin
-5. Live-Seite mit Strg + F5 neu laden
-
-Der Button „Lösung anzeigen“ öffnet jetzt eine Bestätigungsabfrage.
-Nach Bestätigung werden alle Begriffe direkt im Rätsel ausgefüllt.
+1. games/trauma-kreuzwortraetsel/index.html ersetzen
+2. Commit to main
+3. Push origin
+4. Live-Seite mit Strg + F5 neu laden
