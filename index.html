@@ -137,6 +137,7 @@ button.secondary{background:#eef3eb;color:var(--dark)}
 </dialog>
 
 
+<script src="../../shared/zit-points.js"></script>
 <script>
 const ENTRIES = [{"answer": "TOLERANZFENSTER", "clue": "Bandbreite, innerhalb derer das Nervensystem mit Stress umgehen kann.", "row": 2, "col": 1, "direction": "down", "number": 1}, {"answer": "INTEROZEPTION", "clue": "Innenwahrnehmung von Signalen aus dem Körper.", "row": 11, "col": 6, "direction": "across", "number": 2}, {"answer": "HYPOTHALAMUS", "clue": "Hirnstruktur, die im beschriebenen Ablauf die notwendigen Hormone liefert.", "row": 7, "col": 3, "direction": "across", "number": 3}, {"answer": "DISSOZIATION", "clue": "Abspaltung einzelner Persönlichkeitsanteile im Verlauf traumatischer Erfahrung.", "row": 15, "col": 3, "direction": "across", "number": 4}, {"answer": "NEUROZEPTION", "clue": "Unbewusste Einschätzung von Sicherheit oder Gefahr.", "row": 5, "col": 13, "direction": "down", "number": 5}, {"answer": "SYMPATHIKUS", "clue": "Teil des autonomen Nervensystems für Mobilisierung, Kampf oder Flucht.", "row": 4, "col": 14, "direction": "across", "number": 6}, {"answer": "HOMOEOSTASE", "clue": "Physiologisches und psychisches Gleichgewicht des Organismus.", "row": 3, "col": 0, "direction": "across", "number": 7}, {"answer": "PREDICTION", "clue": "Erwartungshaltung, die das Gehirn bei einem Sinnesreiz aufbaut.", "row": 1, "col": 12, "direction": "across", "number": 8}, {"answer": "EMBODIMENT", "clue": "Verbindung von Erleben, Emotion und Körper.", "row": 8, "col": 14, "direction": "across", "number": 9}, {"answer": "NEOKORTEX", "clue": "Jüngerer Gehirnbereich für bewusste kognitive Verarbeitung.", "row": 6, "col": 14, "direction": "across", "number": 10}, {"answer": "FELTSENSE", "clue": "Körperlich spürbares Ganzes einer Situation, noch nicht vollständig versprachlicht.", "row": 0, "col": 14, "direction": "down", "number": 11}, {"answer": "RESILIENZ", "clue": "Psychische Widerstandsfähigkeit und Anpassungsfähigkeit.", "row": 10, "col": 9, "direction": "down", "number": 12}, {"answer": "FOCUSING", "clue": "Prozess zwischen Erleben und Versprachlichung oder Symbolisierung.", "row": 6, "col": 6, "direction": "down", "number": 13}, {"answer": "AMYGDALA", "clue": "Hirnstruktur für die emotionale Einschätzung.", "row": 5, "col": 4, "direction": "down", "number": 14}, {"answer": "TRACKING", "clue": "Körperorientiertes Beobachten innerer Reaktionen.", "row": 8, "col": 23, "direction": "down", "number": 15}, {"answer": "PENDELN", "clue": "Grundtechnik des Wechsels zwischen verschiedenen Empfindungs- oder Erregungszuständen.", "row": 2, "col": 10, "direction": "down", "number": 16}, {"answer": "INSULA", "clue": "Hirnregion für innere Wahrnehmung und bewusstes Gefühlerleben.", "row": 10, "col": 18, "direction": "down", "number": 17}, {"answer": "TRAUMA", "clue": "Entsteht laut Skript, wenn Bewältigungsmechanismen des Körpers überfordert werden.", "row": 3, "col": 12, "direction": "down", "number": 18}, {"answer": "VAGUS", "clue": "Nerv, dessen Fasern überwiegend Informationen aus dem Körper zum Gehirn liefern.", "row": 1, "col": 23, "direction": "down", "number": 19}, {"answer": "PAG", "clue": "Abkürzung für das periaquäduktale Grau.", "row": 11, "col": 14, "direction": "down", "number": 20}];
 const ROWS = 19, COLS = 25;
@@ -184,6 +185,8 @@ for(let r=0;r<ROWS;r++){
         updateProgress();
       });
       input.addEventListener('focus',()=>highlight(info.entries));
+      input.addEventListener('blur',()=>updateProgress());
+      input.addEventListener('keyup',()=>updateProgress());
       wrap.appendChild(input);
       cellMap.set(key(r,c),input);
     }
@@ -208,20 +211,44 @@ function highlight(ids){
   document.querySelectorAll('.clues li').forEach(li=>li.classList.toggle('active',ids.includes(Number(li.dataset.id))));
 }
 
+function normalizeAnswer(value){
+  return (value || '')
+    .toUpperCase()
+    .replace(/Ä/g,'AE')
+    .replace(/Ö/g,'OE')
+    .replace(/Ü/g,'UE')
+    .replace(/ß/g,'SS')
+    .replace(/[^A-Z]/g,'');
+}
+
 function valueOf(e){
   let s='';
   for(let i=0;i<e.answer.length;i++){
     const r=e.row+(e.direction==='down'?i:0);
     const c=e.col+(e.direction==='across'?i:0);
-    s+=cellMap.get(key(r,c)).value||'';
+    const input=cellMap.get(key(r,c));
+    s += input ? input.value : '';
   }
-  return s;
+  return normalizeAnswer(s);
+}
+
+function getSolvedEntries(){
+  return ENTRIES.filter(e => valueOf(e) === normalizeAnswer(e.answer));
+}
+
+function getOpenEntries(){
+  return ENTRIES.filter(e => valueOf(e) !== normalizeAnswer(e.answer));
 }
 
 function updateProgress(){
-  const solved=ENTRIES.filter(e=>valueOf(e)===e.answer).length;
-  progressEl.textContent=`${solved} von ${ENTRIES.length} Begriffen gelöst`;
-  if(solved===ENTRIES.length) messageEl.textContent='Geschafft! Du hast alle Begriffe gelöst. 🌿';
+  const solvedEntries = getSolvedEntries();
+  const solved = solvedEntries.length;
+  progressEl.textContent = `${solved} von ${ENTRIES.length} Begriffen gelöst`;
+
+  if(solved === ENTRIES.length){
+    messageEl.textContent = 'Geschafft! Alle 20 Begriffe stimmen. 🎉 Ein neuer Schmetterling wurde für deine Wiese freigeschaltet.';
+  }
+  return solved;
 }
 
 document.getElementById('check').addEventListener('click',()=>{
@@ -230,11 +257,36 @@ document.getElementById('check').addEventListener('click',()=>{
     const wrap=input.parentElement;
     wrap.classList.remove('correct','incorrect');
     if(!input.value) continue;
-    if(input.value===cellInfo.get(k).letter) wrap.classList.add('correct');
+    if(normalizeAnswer(input.value)===cellInfo.get(k).letter) wrap.classList.add('correct');
     else {wrap.classList.add('incorrect');wrong++;}
   }
-  updateProgress();
-  messageEl.textContent=wrong?`${wrong} Buchstabe${wrong===1?' ist':'n sind'} noch nicht richtig.`:'Alle bisher eingetragenen Buchstaben sind richtig.';
+
+  const solved = updateProgress();
+  const open = getOpenEntries();
+
+  if(solved === ENTRIES.length){
+    // Nur bei einer selbst gelösten Runde Punkte vergeben.
+    if(window.ZITPoints && typeof window.ZITPoints.completeGame === 'function'){
+      const result = window.ZITPoints.completeGame('trauma-kreuzwortraetsel', 20);
+      if(result && result.awarded){
+        messageEl.textContent = 'Geschafft! Alle 20 Begriffe stimmen. 🎉 +20 Punkte – ein neuer Schmetterling wurde für deine Wiese freigeschaltet.';
+      } else {
+        messageEl.textContent = 'Geschafft! Alle 20 Begriffe stimmen. 🎉 Dieses Spiel wurde bereits gewertet.';
+      }
+    } else {
+      messageEl.textContent = 'Geschafft! Alle 20 Begriffe stimmen. 🎉';
+    }
+    return;
+  }
+
+  if(wrong){
+    messageEl.textContent = `${wrong} Buchstabe${wrong===1?' ist':'n sind'} noch nicht richtig.`;
+  } else if(open.length){
+    const labels = open.map(e => `Nr. ${e.number}`).join(', ');
+    messageEl.textContent = `Noch nicht als vollständig gelöst erkannt: ${labels}.`;
+  } else {
+    messageEl.textContent = 'Alle bisher eingetragenen Buchstaben sind richtig.';
+  }
 });
 
 document.getElementById('hint').addEventListener('click',()=>{
@@ -287,7 +339,7 @@ function revealSolution(){
     }
   }
   updateProgress();
-  messageEl.textContent='Lösung eingeblendet – zum Punktesammeln bitte das Rätsel selbst lösen und anschließend „Prüfen“ wählen.';
+  messageEl.textContent='Lösung eingeblendet. Dafür werden keine Punkte vergeben.';
 }
 
 document.getElementById('reset').addEventListener('click',()=>{

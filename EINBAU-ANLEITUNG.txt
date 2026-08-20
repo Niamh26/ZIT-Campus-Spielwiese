@@ -1,17 +1,19 @@
-TRAUMA-KREUZWORTRÄTSEL – FIX FÜR DEN FEHLENDEN 20. BEGRIFF
+TRAUMA-KREUZWORTRÄTSEL – ABSCHLUSSLOGIK FIX
 
-Korrigiert:
-- Begriff 5 „NEUROZEPTION“ liegt jetzt sichtbar im zentralen Raster.
-- Alle 20 Begriffe wurden erneut automatisch auf Wortlänge,
-  Rastergrenzen und Kreuzungsbuchstaben geprüft.
-- Nach vollständig richtiger eigener Lösung und Klick auf „Prüfen“
-  erscheint jetzt ausdrücklich:
-  „Geschafft! Alle 20 Begriffe stimmen. Ein neuer Schmetterling wurde
-  für deine Wiese freigeschaltet.“
-- „Lösung anzeigen“ bleibt weiterhin vorhanden.
+Geprüft und korrigiert:
+- Das Raster selbst kann 20/20 korrekt erreichen.
+- Beim Klick auf „Prüfen“ wird jetzt angezeigt, welche Nummer(n)
+  noch nicht als vollständig gelöst erkannt werden.
+- Die Fortschrittsanzeige wird zusätzlich bei Eingabe, Keyup und Blur aktualisiert.
+- Bei echten 20/20 wird die ZIT-Punkteverwaltung aufgerufen.
+- Das Kreuzworträtsel vergibt einmalig 20 Punkte.
+- Die Lösung-anzeigen-Funktion vergibt ausdrücklich KEINE Punkte.
 
 Einbau:
 1. games/trauma-kreuzwortraetsel/index.html ersetzen
 2. Commit to main
 3. Push origin
 4. Live-Seite mit Strg + F5 neu laden
+
+Wichtig:
+../../shared/zit-points.js muss wie bei der Schmetterlingswiese vorhanden sein.
