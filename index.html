@@ -369,33 +369,6 @@ document.getElementById('reset').addEventListener('click',()=>{
 });
 
 updateProgress();
-  messageEl.textContent=wrong?`${wrong} Buchstabe${wrong===1?' ist':'n sind'} noch nicht richtig.`:'Alle bisher eingetragenen Buchstaben sind richtig.';
-});
-
-document.getElementById('hint').addEventListener('click',()=>{
-  const open=ENTRIES.filter(e=>valueOf(e)!==e.answer);
-  if(!open.length){messageEl.textContent='Alles ist bereits gelöst.';return;}
-  const e=open[Math.floor(Math.random()*open.length)];
-  const missing=[];
-  for(let i=0;i<e.answer.length;i++){
-    const r=e.row+(e.direction==='down'?i:0);
-    const c=e.col+(e.direction==='across'?i:0);
-    const input=cellMap.get(key(r,c));
-    if(input.value!==e.answer[i]) missing.push({input,letter:e.answer[i]});
-  }
-  const h=missing[Math.floor(Math.random()*missing.length)];
-  h.input.value=h.letter; h.input.parentElement.classList.add('correct');
-  messageEl.textContent=`Tipp für Nummer ${e.number}: Ein Buchstabe wurde ergänzt.`;
-  updateProgress();
-});
-
-document.getElementById('reset').addEventListener('click',()=>{
-  if(!confirm('Möchtest du alle Einträge löschen?')) return;
-  for(const input of cellMap.values()){input.value='';input.parentElement.classList.remove('correct','incorrect');}
-  messageEl.textContent=''; updateProgress();
-});
-
-updateProgress();
 </script>
 </body>
 </html>
