@@ -17,3 +17,7 @@ EINBAU IN GITHUB
 5. Live-Seite anschließend mit Strg + F5 neu laden.
 
 Die bestehende Wiese und die Punktespeicherung bleiben erhalten.
+
+ÄNDERUNG DIESER VERSION:
+Das mittlere Hinweisfeld „Sammle deine ersten 20 Punkte …“ wurde vollständig entfernt.
+Die obere Punkte-/Fortschrittsanzeige und alle Schmetterlingsstufen bleiben erhalten.

@@ -34,7 +34,6 @@ const progressBarEl = document.getElementById("progressBar");
 const butterflyLayerEl = document.getElementById("butterflyLayer");
 const milestonesEl = document.getElementById("milestones");
 const gameListEl = document.getElementById("gameList");
-const emptyMessageEl = document.getElementById("emptyMessage");
 const resetProgressButton = document.getElementById("resetProgress");
 
 function emptyProgress() {
@@ -178,8 +177,6 @@ function renderScore(progress) {
 function renderButterflies(points) {
   const count = getButterflyCount(points);
   butterflyLayerEl.innerHTML = "";
-  emptyMessageEl.hidden = count > 0;
-
   BUTTERFLY_STYLES.slice(0, count).forEach((style, index) => {
     const butterfly = document.createElement("div");
     butterfly.className = `butterfly ${style.species}`;
