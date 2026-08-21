@@ -1,20 +1,34 @@
-TRAUMA-KREUZWORTRÄTSEL – ERFOLGSFENSTER + ZURÜCK-LINK
+KÖRPERREISEN – ERSTE TESTVERSION
 
-Geändert:
-- Bei erfolgreichem Prüfen erscheint ein deutliches Feld mittig über dem Rätsel.
-- Bei erster Wertung: +20 Punkte und Hinweis auf den neuen Schmetterling.
-- Bei bereits gewertetem Spiel: Erfolgsfenster ohne erneute Punkte.
-- „Zur Spielwiese“ führt jetzt auf ../../START-HIER.html.
+KEIN ZWEITES REPOSITORY NÖTIG.
 
-Unverändert:
-- Raster
-- Begriffe
-- Zählung
-- Lösungsbutton
-- Punkte-Logik
+Empfohlene Struktur im bestehenden Repository:
 
-Einbau:
-games/trauma-kreuzwortraetsel/index.html ersetzen
-→ Commit
-→ Push origin
-→ Strg + F5
+ZIT-Campus-Spielwiese/
+├── index.html
+├── shared/
+│   └── zit-points.js
+├── games/
+│   └── ...
+└── koerperreisen/
+    ├── index.html
+    └── craniosacrales-system/
+        └── index.html
+
+EINBAU
+1. Öffne deinen lokalen Repository-Hauptordner ZIT-Campus-Spielwiese. Dort müssen .git, games, shared und index.html direkt sichtbar sein.
+2. Kopiere den Ordner "koerperreisen" aus diesem ZIP DIREKT in diesen Hauptordner.
+3. Danach sollte lokal existieren:
+   ZIT-Campus-Spielwiese/koerperreisen/index.html
+   ZIT-Campus-Spielwiese/koerperreisen/craniosacrales-system/index.html
+4. GitHub Desktop öffnen. Es sollten ausschließlich neue Dateien unter koerperreisen/ erscheinen. Die bestehende Spielwiese wird NICHT ersetzt.
+5. Commit z.B. "Körperreisen Craniosacral erste Version" und Push origin.
+6. Nach dem Deploy:
+   Übersicht: https://niamh26.github.io/ZIT-Campus-Spielwiese/koerperreisen/
+   Spiel: https://niamh26.github.io/ZIT-Campus-Spielwiese/koerperreisen/craniosacrales-system/
+
+WICHTIG
+- Die bestehende Root-index.html wird NICHT verändert.
+- Körperreisen erscheint deshalb zunächst noch nicht automatisch als Kachel auf der bisherigen Startseite.
+- Sobald die Testversion gefällt, können wir als separaten kleinen Schritt EINEN Link/Kachel "Körperreisen" auf der bestehenden Übersicht ergänzen.
+- Die Punkte-Datei wird aus ../../shared/zit-points.js geladen.
