@@ -55,6 +55,63 @@ button.secondary{background:#eef3eb;color:var(--dark)}
 .solution-dialog-actions{display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap}
 .solution-revealed{background:#edf7e8!important}
 
+
+.game-success{
+  margin-top:14px;
+  padding:16px 20px;
+  border-radius:16px;
+  background:#eef7e9;
+  border:2px solid #4f7d3a;
+  color:#21451f;
+  font-weight:800;
+  font-size:1.05rem;
+  line-height:1.45;
+}
+
+
+.completion-dialog{
+  border:0;
+  border-radius:24px;
+  padding:0;
+  width:min(520px,calc(100% - 32px));
+  box-shadow:0 28px 90px rgba(24,52,30,.34);
+  overflow:hidden;
+}
+.completion-dialog::backdrop{
+  background:rgba(20,39,25,.52);
+  backdrop-filter:blur(3px);
+}
+.completion-card{
+  padding:30px 30px 26px;
+  text-align:center;
+  background:linear-gradient(180deg,#fff,#f6fbf2);
+}
+.completion-butterfly{
+  width:76px;
+  height:76px;
+  margin:0 auto 10px;
+  display:grid;
+  place-items:center;
+  border-radius:50%;
+  background:#eef7e8;
+  font-size:2.65rem;
+}
+.completion-card h2{
+  margin:0 0 10px;
+  color:#214c20;
+  font-size:clamp(1.45rem,3vw,1.9rem);
+}
+.completion-card p{
+  margin:0 auto 22px;
+  max-width:420px;
+  color:#52625a;
+  line-height:1.55;
+  font-size:1.02rem;
+}
+.completion-card button{
+  min-width:150px;
+}
+
 </style>
 
 <style>
@@ -89,7 +146,7 @@ button.secondary{background:#eef3eb;color:var(--dark)}
 
 </head>
 <body>
-<a class="zit-return-home" href="https://niamh26.github.io/ZIT-Campus-Spielwiese/" aria-label="Zurück zur ZIT Campus Spielwiese">← Zur Spielwiese</a>
+<a class="zit-return-home" href="../../START-HIER.html" aria-label="Zurück zur ZIT Campus Spielwiese">← Zur Spielwiese</a>
 <header class="zit-game-header">
   <div class="zit-game-header-inner">
     <div class="zit-game-brand">
@@ -102,7 +159,7 @@ button.secondary{background:#eef3eb;color:var(--dark)}
 <main class="app zit-content-wrap">
 
 <section class="toolbar">
-<strong id="progress">0 von 20 Begriffen gelöst</strong>
+<strong id="progress">0 von 20 Begriffen ausgefüllt</strong>
 <div class="actions">
 <button id="check">Prüfen</button>
 <button id="hint">Tipp</button>
@@ -236,18 +293,31 @@ function solvedEntries(){
   return ENTRIES.filter(e => valueOf(e) === normalize(e.answer));
 }
 
+function filledEntries(){
+  return ENTRIES.filter(e => {
+    for(let i=0;i<e.answer.length;i++){
+      const r=e.row+(e.direction==='down'?i:0);
+      const c=e.col+(e.direction==='across'?i:0);
+      const input=cellMap.get(key(r,c));
+      if(!input || !normalize(input.value)) return false;
+    }
+    return true;
+  });
+}
+
 function openEntries(){
   return ENTRIES.filter(e => valueOf(e) !== normalize(e.answer));
 }
 
 function updateProgress(){
-  const solved = solvedEntries().length;
-  progressEl.textContent = `${solved} von ${ENTRIES.length} Begriffen gelöst`;
-  return solved;
+  const filled = filledEntries().length;
+  progressEl.textContent = `${filled} von ${ENTRIES.length} Begriffen ausgefüllt`;
+  return filled;
 }
 
 document.getElementById('check').addEventListener('click',()=>{
-  let wrong=0;
+  messageEl.classList.remove('game-success');
+  let wrongLetters=0;
 
   for(const [k,input] of cellMap){
     const wrap=input.parentElement;
@@ -259,44 +329,82 @@ document.getElementById('check').addEventListener('click',()=>{
       wrap.classList.add('correct');
     } else {
       wrap.classList.add('incorrect');
-      wrong++;
+      wrongLetters++;
     }
   }
 
-  const solved = updateProgress();
+  updateProgress();
 
-  if(solved === ENTRIES.length){
+  const correct = solvedEntries();
+  const incorrect = ENTRIES.filter(e => {
+    const filled = (() => {
+      for(let i=0;i<e.answer.length;i++){
+        const r=e.row+(e.direction==='down'?i:0);
+        const c=e.col+(e.direction==='across'?i:0);
+        const input=cellMap.get(key(r,c));
+        if(!input || !normalize(input.value)) return false;
+      }
+      return true;
+    })();
+    return filled && valueOf(e)!==normalize(e.answer);
+  });
+
+  const unfinished = ENTRIES.filter(e => {
+    for(let i=0;i<e.answer.length;i++){
+      const r=e.row+(e.direction==='down'?i:0);
+      const c=e.col+(e.direction==='across'?i:0);
+      const input=cellMap.get(key(r,c));
+      if(!input || !normalize(input.value)) return true;
+    }
+    return false;
+  });
+
+  if(correct.length === ENTRIES.length){
     if(solutionWasShown){
       messageEl.textContent='Alle 20 Begriffe sind korrekt. Die Lösung wurde eingeblendet – dafür werden keine Punkte vergeben.';
       return;
     }
 
-    if(window.ZITPoints && typeof window.ZITPoints.awardGame === 'function'){
-      const result = window.ZITPoints.awardGame(
+    if(window.ZITPoints && typeof window.ZITPoints.award === 'function'){
+      const result = window.ZITPoints.award(
         'trauma-kreuzwortraetsel',
         20,
         { title: 'Trauma-Kreuzworträtsel' }
       );
 
+      messageEl.classList.add('game-success');
       if(result && result.awarded){
-        messageEl.textContent='Geschafft! 20 von 20 Begriffen richtig. 🎉 +20 Punkte – ein neuer Schmetterling flattert auf deine Wiese!';
+        const text = '20 von 20 Begriffen richtig. Du erhältst +20 Punkte – ein neuer Schmetterling flattert jetzt auf deine Wiese!';
+        messageEl.textContent = `🎉 ${text}`;
+        showCompletion('Geschafft! 🎉', text);
       } else {
-        messageEl.textContent='Geschafft! 20 von 20 Begriffen richtig. 🎉 Dieses Spiel wurde bereits gewertet.';
+        const total = result && result.progress ? result.progress.totalPoints : null;
+        const text = total !== null
+          ? `20 von 20 Begriffen richtig. Dieses Spiel wurde bereits gewertet. Dein Punktestand: ${total} Punkte.`
+          : '20 von 20 Begriffen richtig. Dieses Spiel wurde bereits gewertet.';
+        messageEl.textContent = `🎉 ${text}`;
+        showCompletion('Geschafft! 🎉', text);
       }
     } else {
-      messageEl.textContent='Geschafft! 20 von 20 Begriffen richtig. 🎉';
+      messageEl.classList.add('game-success');
+      const text = '20 von 20 Begriffen richtig. Die Punkteverwaltung konnte auf dieser Seite nicht geladen werden.';
+      messageEl.textContent = `🎉 ${text}`;
+      showCompletion('Geschafft! 🎉', text);
     }
     return;
   }
 
-  if(wrong){
-    messageEl.textContent=`${wrong} Buchstabe${wrong===1?' ist':'n sind'} noch nicht richtig.`;
-  } else {
-    const open = openEntries();
-    messageEl.textContent = open.length
-      ? `Noch offen: ${open.map(e=>'Nr. '+e.number).join(', ')}.`
-      : 'Alle bisher eingetragenen Buchstaben sind richtig.';
+  const parts=[];
+  if(unfinished.length){
+    parts.push(`noch nicht vollständig: ${unfinished.map(e=>'Nr. '+e.number).join(', ')}`);
   }
+  if(incorrect.length){
+    parts.push(`nicht richtig: ${incorrect.map(e=>'Nr. '+e.number).join(', ')}`);
+  }
+
+  messageEl.textContent = parts.length
+    ? `Noch nicht geschafft – ${parts.join(' · ')}.`
+    : `${correct.length} von ${ENTRIES.length} Begriffen sind richtig.`;
 });
 
 document.getElementById('hint').addEventListener('click',()=>{
@@ -329,6 +437,25 @@ document.getElementById('hint').addEventListener('click',()=>{
 });
 
 const solutionDialog = document.getElementById('solutionDialog');
+
+const completionDialog = document.getElementById('completionDialog');
+const completionTitle = document.getElementById('completionTitle');
+const completionText = document.getElementById('completionText');
+
+function showCompletion(title, text){
+  completionTitle.textContent = title;
+  completionText.textContent = text;
+  if(completionDialog && typeof completionDialog.showModal === 'function'){
+    completionDialog.showModal();
+  } else {
+    alert(`${title}\n\n${text}`);
+  }
+}
+
+document.getElementById('closeCompletion')?.addEventListener('click',()=>{
+  completionDialog?.close();
+});
+
 
 document.getElementById('solution').addEventListener('click',()=>{
   if(solutionDialog && typeof solutionDialog.showModal === 'function'){
@@ -377,11 +504,22 @@ document.getElementById('reset').addEventListener('click',()=>{
     input.parentElement.classList.remove('correct','incorrect','solution-revealed');
   }
 
+  messageEl.classList.remove('game-success');
   messageEl.textContent='';
   updateProgress();
 });
 
 updateProgress();
 </script>
+
+<dialog id="completionDialog" class="completion-dialog">
+  <div class="completion-card">
+    <div class="completion-butterfly" aria-hidden="true">🦋</div>
+    <h2 id="completionTitle">Geschafft!</h2>
+    <p id="completionText"></p>
+    <button id="closeCompletion" type="button">Weiter</button>
+  </div>
+</dialog>
+
 </body>
 </html>

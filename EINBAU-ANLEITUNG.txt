@@ -1,11 +1,20 @@
-Bitte nur ersetzen:
+TRAUMA-KREUZWORTRÄTSEL – ERFOLGSFENSTER + ZURÜCK-LINK
 
-games/trauma-kreuzwortraetsel/index.html
+Geändert:
+- Bei erfolgreichem Prüfen erscheint ein deutliches Feld mittig über dem Rätsel.
+- Bei erster Wertung: +20 Punkte und Hinweis auf den neuen Schmetterling.
+- Bei bereits gewertetem Spiel: Erfolgsfenster ohne erneute Punkte.
+- „Zur Spielwiese“ führt jetzt auf ../../START-HIER.html.
 
-Danach:
-1. Commit to main
-2. Push origin
-3. Seite mit Strg + F5 neu laden
+Unverändert:
+- Raster
+- Begriffe
+- Zählung
+- Lösungsbutton
+- Punkte-Logik
 
-Keine weitere Datei für die Lösung nötig.
-shared/zit-points.js bleibt unverändert im vorhandenen shared-Ordner.
+Einbau:
+games/trauma-kreuzwortraetsel/index.html ersetzen
+→ Commit
+→ Push origin
+→ Strg + F5
