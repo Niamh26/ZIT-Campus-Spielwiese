@@ -1,0 +1,24 @@
+TRAUMA-KREUZWORTRÄTSEL – FINALE KORREKTUR
+
+Basis:
+Die optisch bereits funktionierende Version wurde unverändert als Rasterbasis verwendet.
+
+Nicht verändert:
+- Rasterpositionen
+- Position von Nr. 13 FOCUSING: Zeile 6 / Spalte 6 / senkrecht
+- Hinweise und Lösungen
+- Lösungsbutton
+
+Korrigiert:
+- 20/20-Zählung
+- Erfolgsmeldung
+- einmalige Vergabe von 20 Punkten über ZITPoints.awardGame(...)
+- keine Punkte bei eingeblendeter Lösung
+- Zurück-Link führt fest auf:
+  https://niamh26.github.io/ZIT-Campus-Spielwiese/
+
+Tests:
+- 20/20 Begriffe mathematisch rekonstruiert: BESTANDEN
+- Kreuzungsbuchstaben: BESTANDEN
+- JavaScript-Syntaxprüfung mit Node: BESTANDEN
+- Anzahl Begriffe: 20

@@ -1,0 +1,13 @@
+Diese Version ist auf die von dir hochgeladene zit-points.js abgestimmt.
+
+Bitte:
+1. Diese index.html nach games/trauma-kreuzwortraetsel/index.html
+2. Deine hochgeladene zit-points.js muss im Repository als
+   shared/zit-points.js liegen.
+3. Commit + Push
+4. Strg + F5
+
+Hinweis zum Test:
+Wenn das Kreuzworträtsel in diesem Browser bereits früher Punkte erhalten hat,
+vergibt zit-points.js absichtlich kein zweites Mal Punkte. Dann zeigt das Spiel
+„Dieses Spiel wurde bereits gewertet“ plus aktuellen Punktestand.

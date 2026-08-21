@@ -1,0 +1,34 @@
+BEREINIGUNG – ZIT CAMPUS SPIELWIESE
+
+Was bereinigt wurde:
+- Nur EINE Repository-Struktur bleibt übrig.
+- Die korrekte Spielwiesen-Übersicht ist wieder die Root-Datei index.html.
+- Die aktuellste Kreuzworträtsel-Version wurde an den richtigen Ort verschoben:
+  games/trauma-kreuzwortraetsel/index.html
+- Der Kreuzworträtsel-Link „Zur Spielwiese“ zeigt wieder auf ../../index.html.
+- Die falsch abgelegte shared/index.html wurde entfernt.
+- .git ist NICHT Bestandteil dieses ZIPs und wird dadurch nicht überschrieben.
+- Alle vorhandenen Spielordner wurden beibehalten.
+
+Wichtig:
+Dieses Paket ist zum ÜBERKOPIEREN auf dein bestehendes Repository gedacht.
+Bitte vorher eine Sicherungskopie des aktuellen Ordners machen.
+
+Empfohlener Ablauf:
+1. Sicherungskopie des aktuellen ZIT-Campus-Spielwiese-Ordners erstellen.
+2. Den Inhalt des Ordners ZIT-Campus-Spielwiese aus diesem ZIP
+   über den bestehenden Repo-Ordner kopieren.
+3. „Dateien ersetzen“ bestätigen.
+4. In GitHub Desktop kontrollieren, welche Dateien geändert/gelöscht werden.
+5. Commit + Push origin.
+6. GitHub Pages mit Strg + F5 neu laden.
+
+Nicht verändert:
+- Schmetterlingswiese
+- Anatomie-Memory
+- Craniosacral-Quiz
+- Schädelpuzzle
+- Traumakreislauf
+- Faszien-Labyrinth
+- 10-Step-Domino
+- shared/zit-points.js

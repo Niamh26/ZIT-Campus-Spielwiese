@@ -1,0 +1,20 @@
+ZIT 3D-Schädelpuzzle – Reparaturhinweis
+
+Diese Version behebt den Startfehler der vorherigen Installation.
+Ursache: Three.js r180 benötigt neben three.module.js zusätzlich three.core.js.
+
+So gehst du vor:
+1. Diese Dateien über dein bestehendes Repository kopieren.
+2. SCHAEDELPUZZLE-INSTALLIEREN.bat erneut doppelklicken.
+3. Warten, bis FERTIG gemeldet wird.
+4. In games\schaedel-puzzle\vendor\three müssen danach mindestens liegen:
+   - three.module.js
+   - three.core.js
+   - addons\controls\OrbitControls.js
+   - addons\controls\TransformControls.js
+   - addons\loaders\STLLoader.js
+5. In games\schaedel-puzzle\models müssen 22 .stl-Dateien liegen.
+6. Änderungen in GitHub Desktop committen und Push origin.
+
+Die Kachel „3D-Schädelpuzzle“ ist in index.html enthalten.
+Die Schmetterlingswiese vergibt beim ersten vollständigen Lösen 20 Punkte.

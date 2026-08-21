@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Interaktives 3D-Schädelpuzzle mit 22 Schädelknochen.">
+  <title>3D-Schädelpuzzle · ZIT Campus</title>
+  <style>
+    :root{--ink:#17342d;--muted:#64756f;--paper:#f7faf7;--card:#fff;--green:#276a56;--green2:#3d876e;--line:#dbe6df;--shadow:0 16px 42px rgba(30,67,56,.13)}
+    *{box-sizing:border-box} html,body{margin:0;height:100%;font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--ink);background:var(--paper)}
+    body{display:grid;grid-template-rows:auto 1fr;overflow:hidden}
+    .zit-return-home{position:absolute;top:16px;left:20px;z-index:1000;display:inline-flex;align-items:center;justify-content:center;min-height:56px;padding:0 24px;border:2px solid #fff;border-radius:999px;background:#f28c00;color:#fff;text-decoration:none;font-weight:800;box-shadow:0 9px 24px rgba(64,91,51,.22),0 7px 18px rgba(242,140,0,.24);transition:transform .18s ease,box-shadow .18s ease,background .18s ease}
+    .zit-return-home:hover{background:#dc7e00;transform:translateY(-2px);box-shadow:0 12px 28px rgba(64,91,51,.25),0 10px 22px rgba(242,140,0,.3)}
+    .zit-game-header{width:100%;background:rgba(255,255,255,.95);border-bottom:1px solid #d7e5cf;backdrop-filter:blur(8px);z-index:5}
+    .zit-game-header-inner{max-width:1250px;margin:0 auto;padding:82px 20px 18px;display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap}
+    .zit-game-mark{display:inline-flex;align-items:center;gap:8px;margin-bottom:5px;color:#2f7f16;font-weight:900;font-size:.92rem}
+    .title{font-size:clamp(1.55rem,3.2vw,2.65rem);line-height:1.08;letter-spacing:-.02em;font-weight:900;margin:0;color:#223526}.sub{margin-top:6px;font-size:clamp(.98rem,1.6vw,1.12rem);color:#6a7566}
+    .layout{min-height:0;display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:14px;padding:14px}.stage{position:relative;min-height:0;border-radius:22px;overflow:hidden;background:radial-gradient(circle at 50% 42%,#fff 0,#eef7f1 65%,#e3eee7 100%);box-shadow:var(--shadow);border:1px solid var(--line)}#canvas{width:100%;height:100%;display:block;touch-action:none}.loading{position:absolute;inset:0;display:grid;place-items:center;background:rgba(247,250,247,.9);z-index:4;text-align:center;padding:30px}.loading[hidden]{display:none}.loading strong{display:block;font-size:20px;margin-bottom:9px}.bar{width:min(340px,76vw);height:9px;background:#dfe9e3;border-radius:999px;overflow:hidden;margin:12px auto}.bar i{display:block;height:100%;width:0;background:var(--green2);transition:width .2s}.hint-toast{position:absolute;bottom:18px;left:50%;transform:translateX(-50%);background:rgba(23,52,45,.92);color:white;padding:9px 14px;border-radius:999px;font-size:13px;opacity:0;pointer-events:none;transition:.2s}.hint-toast.show{opacity:1}
+    aside{min-height:0;overflow:auto;display:flex;flex-direction:column;gap:12px}.panel{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px;box-shadow:0 9px 26px rgba(30,67,56,.07)}.eyebrow{font-size:11px;letter-spacing:.1em;font-weight:900;color:var(--green2)}.selected{margin:5px 0 1px;font-size:19px;font-weight:900}.latin{font-size:13px;color:var(--muted);font-style:italic}.progressline{display:flex;justify-content:space-between;align-items:center;margin:9px 0}.track{height:9px;background:#e7efea;border-radius:999px;overflow:hidden}.track i{display:block;height:100%;width:0;background:var(--green2);transition:.25s}.btnrow{display:grid;grid-template-columns:1fr 1fr;gap:8px}.btn{appearance:none;border:1px solid #c9d9d0;background:white;color:var(--ink);border-radius:11px;padding:10px 9px;font-weight:800;cursor:pointer}.btn:hover{border-color:var(--green2)}.btn.primary{background:var(--green);color:white;border-color:var(--green)}.btn.active{background:#e4f2eb;border-color:#82ad9b}.btn.wide{grid-column:1/-1}.help{font-size:13px;line-height:1.5;color:#52655f}.keys{display:flex;gap:5px;flex-wrap:wrap}.key{background:#eef4f0;border:1px solid #d5e2db;border-radius:6px;padding:2px 6px;font-size:11px;font-weight:800}.bone-list{display:grid;gap:5px;margin-top:8px}.bone-item{display:grid;grid-template-columns:13px 1fr auto;gap:8px;align-items:center;padding:6px;border-radius:8px;font-size:12px;cursor:pointer}.bone-item:hover{background:#f0f6f2}.swatch{width:11px;height:11px;border-radius:50%}.done{opacity:.5}.check{font-weight:900;color:var(--green)}.error{color:#9e3939;max-width:520px;line-height:1.5}
+    @media(max-width:850px){body{overflow:auto}.layout{grid-template-columns:1fr;grid-template-rows:62vh auto}.stage{min-height:480px}aside{overflow:visible}.sub{display:block}.zit-return-home{top:12px;left:12px;min-height:50px;padding:0 18px}.zit-game-header-inner{padding:78px 14px 16px}}
+  </style>
+</head>
+<body>
+<a class="zit-return-home" href="../../index.html" aria-label="Zurück zur ZIT Campus Spielwiese">← Zur Spielwiese</a>
+<header class="zit-game-header"><div class="zit-game-header-inner"><div><div class="zit-game-mark">🌿 ZIT Campus</div><h1 class="title">🦴 3D-Schädelpuzzle</h1><div class="sub">22 Schädelknochen räumlich greifen, drehen und anatomisch richtig einsetzen.</div></div></div></header>
+<main class="layout">
+  <section class="stage" id="stage">
+    <canvas id="canvas"></canvas>
+    <div class="loading" id="loading"><div><strong>Schädelknochen werden geladen …</strong><div id="loadText">0 / 22</div><div class="bar"><i id="loadBar"></i></div><div class="help">Die anatomischen Modelle stammen aus BodyParts3D.</div></div></div>
+    <div class="hint-toast" id="toast"></div>
+  </section>
+  <aside>
+    <section class="panel"><div class="eyebrow">AUSGEWÄHLT</div><div class="selected" id="boneName">Knochen anklicken</div><div class="latin" id="boneLatin">–</div></section>
+    <section class="panel"><div class="progressline"><strong>Fortschritt</strong><span id="progressText">0 / 22</span></div><div class="track"><i id="progressBar"></i></div></section>
+    <section class="panel"><div class="eyebrow">SCHMETTERLINGSWIESE · 20 PUNKTE</div><p class="help" style="margin:7px 0 12px">Beim ersten vollständig gelösten Schädel werden einmalig 20 Punkte gutgeschrieben.</p><div class="btnrow"><button class="btn primary wide" id="startBtn">Puzzle starten</button><button class="btn active" id="moveBtn">↔ Verschieben</button><button class="btn" id="rotateBtn">⟳ Drehen</button><button class="btn" id="hintBtn">💡 Tipp</button><button class="btn" id="snapBtn">✓ Prüfen</button><button class="btn wide" id="resetBtn">Neu aufbauen</button></div></section>
+    <section class="panel help"><strong>Bedienung</strong><p><strong>Der halbtransparente Geisterschädel in der Mitte ist deine Vorlage.</strong> Jeder Knochenplatz hat eine klare Kontur. Der Platz des ausgewählten Knochens wird farbig hervorgehoben; in der magnetischen Fangzone leuchtet er stärker. Beim Loslassen rastet der Knochen automatisch korrekt ein. „Drehen“ dreht nur den gewählten Knochen. Ziehen auf freiem Hintergrund dreht die Ansicht; Mausrad zoomt.</p><div class="keys"><span class="key">W</span> bewegen <span class="key">E</span> drehen <span class="key">H</span> Tipp</div></section>
+    <section class="panel"><div class="eyebrow">22 KNOCHEN</div><div class="bone-list" id="boneList"></div></section>
+  </aside>
+</main>
+<script src="../../shared/zit-points.js"></script>
+<script>
+  window.__skullPuzzleBooted=false;
+  setTimeout(function(){
+    if(window.__skullPuzzleBooted) return;
+    var box=document.getElementById('loading');
+    if(box) box.innerHTML='<div class="error"><strong>Das 3D-Modul konnte noch nicht gestartet werden.</strong><br>Bitte die Seite einmal neu laden. Falls diese Meldung bleibt, prüfe games/schaedel-puzzle/vendor/three/three.core.js sowie die 22 Modelldateien. Führe SCHAEDELPUZZLE-INSTALLIEREN.bat erneut aus.</div>';
+  },15000);
+</script>
+<script type="module" src="./puzzle.js?v=8"></script>
+</body></html>

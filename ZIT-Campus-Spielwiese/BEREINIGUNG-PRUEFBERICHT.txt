@@ -1,0 +1,22 @@
+PRÜFBERICHT
+
+OK  index.html
+OK  START-HIER.html
+OK  admin.html
+OK  shared/zit-points.js
+OK  games/schmetterlingswiese/index.html
+OK  games/trauma-kreuzwortraetsel/index.html
+OK  games/anatomie-memory/index.html
+OK  games/craniosacral-quiz/index.html
+OK  games/schaedel-puzzle/index.html
+OK  games/traumakreislauf/index.html
+OK  games/faszien-labyrinth/index.html
+OK  games/10-step-domino/index.html
+
+Crossword JavaScript-Syntax: OK
+Crossword Punkteanbindung: OK
+Crossword Erfolgsfenster: OK
+Crossword Zurück-Link: ../../index.html
+Root index Titel: ZIT Campus Spielwiese
+shared/index.html: entfernt
+.git: nicht im ZIP enthalten
