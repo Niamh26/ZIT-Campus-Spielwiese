@@ -1,0 +1,36 @@
+SPIELWIESE – ROOT-REPARATUR
+
+Dieses ZIP enthält ABSICHTLICH keinen übergeordneten Ordner.
+
+SO EINBAUEN:
+1. Öffne deinen bestehenden lokalen Repository-Ordner:
+   ZIT-Campus-Spielwiese
+
+2. In diesem Ordner müssen direkt sichtbar sein:
+   .git
+   games
+   shared
+   index.html
+   START-HIER.html
+
+3. Entpacke den INHALT dieses ZIPs genau HIER hinein.
+   NICHT in einen neuen Unterordner.
+
+4. Bestätige "Dateien ersetzen".
+
+Danach müssen diese zwei Dateien geändert sein:
+- ZIT-Campus-Spielwiese/index.html
+- ZIT-Campus-Spielwiese/games/trauma-kreuzwortraetsel/index.html
+
+Die Root-index.html ist jetzt die Übersicht aller Spiele.
+Der Kreuzworträtsel-Button "Zur Spielwiese" führt fest zu:
+https://niamh26.github.io/ZIT-Campus-Spielwiese/index.html
+
+5. GitHub Desktop öffnen.
+6. Kontrollieren, dass index.html ganz oben im Repository als geändert angezeigt wird.
+7. Commit + Push origin.
+8. GitHub Pages danach mit Strg + F5 neu laden.
+
+WICHTIG:
+Wenn GitHub Desktop NICHT die Root-Datei index.html als geändert anzeigt,
+wurde das ZIP an der falschen Stelle entpackt.
