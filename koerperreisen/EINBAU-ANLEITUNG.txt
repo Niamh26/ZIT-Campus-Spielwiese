@@ -1,0 +1,19 @@
+KÖRPERREISEN – CRANIOSACRALES SYSTEM – BILDBASIS V2
+
+Diese Version verwendet das ausgewählte anatomische Spielbrett als feste optische Basis.
+Der Spielweg liegt als interaktive Ebene über dem Bild.
+
+EINBAU IN GITHUB
+1. ZIP entpacken.
+2. Im bestehenden Repository ZIT-Campus-Spielwiese den Ordner
+   koerperreisen/craniosacrales-system/ ersetzen.
+3. WICHTIG: Der Unterordner assets muss mit hochgeladen werden.
+4. In GitHub Desktop committen und Push origin.
+5. Nach dem Pages-Deploy öffnen:
+   https://niamh26.github.io/ZIT-Campus-Spielwiese/koerperreisen/craniosacrales-system/
+
+Enthalten:
+- index.html
+- assets/spielbrett.png
+
+Die vorhandene Spielwiese und andere Spiele werden nicht überschrieben.

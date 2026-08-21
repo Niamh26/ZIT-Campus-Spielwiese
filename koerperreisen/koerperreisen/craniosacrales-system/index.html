@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Körperreisen – Craniosacrales System</title>
+<style>
+*{box-sizing:border-box} body{margin:0;background:#f4f0e4;font-family:Arial,sans-serif;color:#253c29}
+.wrap{max-width:1536px;margin:auto;position:relative}
+.board{position:relative;width:100%;aspect-ratio:3/2;background:url('assets/spielbrett.png') center/100% 100% no-repeat;overflow:hidden}
+.hotspot{position:absolute;width:3.3%;aspect-ratio:1;border-radius:50%;transform:translate(-50%,-50%);border:2px solid transparent;background:transparent;cursor:pointer;z-index:5}
+.hotspot.current{outline:4px solid rgba(52,91,52,.38);background:rgba(255,255,255,.18)}
+.pawn{position:absolute;width:2.4%;aspect-ratio:.65;transform:translate(-50%,-95%);z-index:8;transition:left .35s,top .35s}
+.pawn:before{content:"";position:absolute;left:26%;top:0;width:48%;aspect-ratio:1;background:#315b32;border-radius:50%;box-shadow:0 1px 2px #333}
+.pawn:after{content:"";position:absolute;left:10%;top:29%;width:80%;height:68%;background:#4c7445;clip-path:polygon(35% 0,65% 0,80% 42%,100% 100%,0 100%,20% 42%);border-radius:8px}
+.roll{position:absolute;left:79.8%;top:10.8%;width:17.2%;height:16%;z-index:9;border:0;background:transparent;cursor:pointer;border-radius:18px}
+.roll:hover{outline:3px solid rgba(69,104,62,.25)} .roll:disabled{cursor:default}
+.stats{position:absolute;left:79.7%;top:67.5%;width:17.2%;height:14.7%;z-index:10;pointer-events:none;padding:5.4% 2% 0;font-family:Georgia,serif}
+.statline{display:flex;justify-content:space-between;font-size:clamp(8px,1vw,16px);margin:.45em 0}
+.modal{position:fixed;inset:0;background:rgba(28,42,29,.52);display:none;align-items:center;justify-content:center;padding:18px;z-index:50}
+.modal.show{display:flex} .card{width:min(620px,96vw);background:#fffaf0;border:1px solid #cfc6aa;border-radius:24px;padding:26px;box-shadow:0 28px 80px #1e2b1f55}
+.kind{text-transform:uppercase;letter-spacing:.08em;font-weight:800;color:#75628f;font-size:.8rem}
+.card h2{font-family:Georgia,serif;font-size:1.7rem;margin:.35em 0 .55em} .card p{line-height:1.55}
+.answers{display:grid;gap:10px;margin-top:16px} .answer,.continue{border:1px solid #d7d2bf;background:#fff;border-radius:14px;padding:13px;text-align:left;font-weight:700;cursor:pointer}
+.answer.ok{background:#edf5e8;border-color:#52764a} .answer.bad{background:#f8eae7;border-color:#b45f55}
+.continue{display:none;width:100%;margin-top:16px;text-align:center;background:#45683e;color:white;border:0} .continue.show{display:block}
+.feedback{margin-top:14px;display:none;padding:12px;background:#f3f1e8;border-radius:12px} .feedback.show{display:block}
+@media(max-width:800px){.board{min-width:900px} .viewport{overflow:auto} .wrap{width:900px}}
+</style></head>
+<body>
+<div class="viewport"><div class="wrap"><div class="board" id="board">
+<button class="roll" id="roll" aria-label="Würfeln" title="Würfeln"></button>
+<div class="stats">
+ <div class="statline"><span>Punkte</span><b id="points">0</b></div>
+ <div class="statline"><span>Karten richtig</span><b id="correct">0</b></div>
+ <div class="statline"><span>Station</span><b id="station">Start</b></div>
+</div>
+<div class="pawn" id="pawn"></div>
+</div></div></div>
+
+<div class="modal" id="modal"><div class="card">
+<div class="kind" id="kind"></div><h2 id="title"></h2><p id="text"></p>
+<div class="answers" id="answers"></div><div class="feedback" id="feedback"></div>
+<button class="continue" id="continue">Weiterreisen</button>
+</div></div>
+
+<script src="../../shared/zit-points.js"></script>
+<script>
+const COORDS=[[42.7, 84.0], [39.4, 80.2], [59.0, 82.7], [36.0, 75.1], [34.2, 68.3], [35.8, 61.7], [39.8, 54.0], [37.0, 48.1], [37.5, 42.0], [35.8, 35.2], [38.8, 27.8], [45.0, 20.5], [62.0, 22.7], [57.3, 28.8], [62.5, 36.3], [60.7, 46.2], [63.0, 56.0], [59.8, 64.0], [62.3, 72.1], [59.2, 78.0], [57.0, 70.2], [58.8, 52.0], [61.8, 16.5], [63.0, 10.7], [57.0, 9.0], [45.7, 9.2], [44.5, 4.5]], TYPES=["n", "n", "q", "n", "body", "n", "discover", "n", "q", "n", "n", "q", "n", "n", "body", "n", "q", "n", "discover", "n", "n", "q", "n", "q", "n", "n", "goal"];
+const QUESTIONS=[["Welche Struktur verbindet den cranialen Bereich funktionell mit dem Kreuzbein?", ["Dura mater spinalis", "Achillessehne", "Pleura"], 0], ["Um welche ungefähre Achse bewegt sich das Sacrum im PRM?", ["S2", "C1", "L5"], 0], ["Welche Struktur gehört zum primär respiratorischen Mechanismus?", ["Liquorfluktuation", "Magensäureproduktion", "Fingersehnenbewegung"], 0], ["Wo wird Liquor in den Ventrikeln sezerniert?", ["Plexus choroidei", "Falx cerebri", "Atlas"], 0], ["Was geschieht mit dem Zwerchfell bei der Inspiration?", ["Es senkt sich", "Es steigt an", "Es bleibt unbeweglich"], 0], ["Welche Knochen bilden das Atlantooccipitalgelenk?", ["Atlas und Hinterhauptsbein", "Axis und Keilbein", "Atlas und Unterkiefer"], 0], ["Was bedeutet Interozeption?", ["Wahrnehmung innerer Körperzustände", "Sehen von Bewegung", "Räumliche Orientierung"], 0], ["Welche Abschnitte besitzen physiologisch eine Lordose?", ["HWS und LWS", "BWS und Sacrum", "Nur BWS"], 0], ["Welche Rezeptoren reagieren besonders auf tangentiale Dehnung?", ["Ruffini-Rezeptoren", "Photorezeptoren", "Haarzellen"], 0], ["Wie viele freie Wirbel nennt das Skript?", ["24", "18", "33"], 0], ["Welche Region ist eine zentrale knöcherne Stelle des Schädels?", ["Synchondrosis sphenobasilaris", "Os hyoideum", "Mandibula"], 0], ["Was können Restriktionen transversaler Diaphragmen beeinflussen?", ["Longitudinale Faszienbeweglichkeit", "Nur die Haut", "Nur die Beine"], 0]];
+const discoveries=[
+"Die Dura mater bildet eine funktionelle Verbindung vom Schädel in Richtung Kreuzbein.",
+"Faszien bilden Verbindungsstrecken durch den gesamten Körper und unterstützen das Zusammenspiel von Struktur und Funktion."
+];
+const bodycards=[
+"Nimm für drei Atemzüge den Kontakt deines Beckens zur Unterlage wahr. Du musst nichts verändern.",
+"Spüre kurz den Übergang von Brustkorb zu Bauchraum und beobachte nur die Atembewegung."
+];
+let pos=0,points=0,correct=0,q=0,d=0,b=0,busy=false;
+const board=document.getElementById('board'), pawn=document.getElementById('pawn'), roll=document.getElementById('roll');
+const modal=document.getElementById('modal'), answers=document.getElementById('answers'), feedback=document.getElementById('feedback'), cont=document.getElementById('continue');
+COORDS.forEach((c,i)=>{let e=document.createElement('button');e.className='hotspot';e.style.left=c[0]+'%';e.style.top=c[1]+'%';e.title='Station '+(i+1);e.onclick=()=>{};board.appendChild(e);});
+function move(){document.querySelectorAll('.hotspot').forEach((e,i)=>e.classList.toggle('current',i===pos));pawn.style.left=COORDS[pos][0]+'%';pawn.style.top=COORDS[pos][1]+'%';document.getElementById('station').textContent=pos===0?'Start':(pos+1);}
+function openCard(kind,title,text){document.getElementById('kind').textContent=kind;document.getElementById('title').textContent=title;document.getElementById('text').textContent=text;answers.innerHTML='';feedback.className='feedback';cont.className='continue show';modal.className='modal show';busy=true;}
+function question(){let x=QUESTIONS[q++%QUESTIONS.length];openCard('Fragekarte','Station '+(pos+1),x[0]);cont.className='continue';x[1].forEach((a,i)=>{let bt=document.createElement('button');bt.className='answer';bt.textContent=a;bt.onclick=()=>{[...answers.children].forEach(z=>z.disabled=true);if(i===x[2]){bt.classList.add('ok');points+=2;correct++;feedback.textContent='Richtig – du erhältst 2 Punkte.'}else{bt.classList.add('bad');answers.children[x[2]].classList.add('ok');feedback.textContent='Noch nicht. Die richtige Antwort ist markiert.'}document.getElementById('points').textContent=points;document.getElementById('correct').textContent=correct;feedback.classList.add('show');cont.classList.add('show');};answers.appendChild(bt);});}
+function resolve(){if(pos===COORDS.length-1){openCard('Ziel','Körperreise vollendet','Du bist vom Kreuzbein bis zum Schädel gereist. Dein Weg durch das craniosacrale System ist geschafft.');if(window.ZITPoints?.award) window.ZITPoints.award('koerperreise-craniosacral-v2',20,{title:'Körperreise Craniosacrales System'});return;}if(TYPES[pos]==='q')question();else if(TYPES[pos]==='discover')openCard('Entdeckerkarte','Entdeckung',discoveries[d++%discoveries.length]);else if(TYPES[pos]==='body')openCard('Körperwahrnehmung','Kurz wahrnehmen',bodycards[b++%bodycards.length]);else{busy=false;roll.disabled=false;}}
+roll.onclick=()=>{if(busy)return;roll.disabled=true;let n=1+Math.floor(Math.random()*6),target=Math.min(COORDS.length-1,pos+n);let t=setInterval(()=>{if(pos<target){pos++;move();}else{clearInterval(t);setTimeout(resolve,250);}},180);};
+cont.onclick=()=>{modal.className='modal';busy=false;if(pos<COORDS.length-1)roll.disabled=false;};
+move();
+</script>
+</body></html>
