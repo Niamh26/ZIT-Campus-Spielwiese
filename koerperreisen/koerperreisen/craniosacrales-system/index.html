@@ -16,6 +16,17 @@
 .roll:hover{outline:3px solid rgba(69,104,62,.25)} .roll:disabled{cursor:default}
 .stats{position:absolute;left:79.7%;top:67.5%;width:17.2%;height:14.7%;z-index:10;pointer-events:none;padding:5.4% 2% 0;font-family:Georgia,serif}
 .statline{display:flex;justify-content:space-between;font-size:clamp(8px,1vw,16px);margin:.45em 0}
+
+.repo-nav{
+  max-width:1536px;margin:0 auto;padding:14px 18px 10px;
+  display:flex;gap:10px;flex-wrap:wrap;
+}
+.repo-nav a{
+  text-decoration:none;border-radius:999px;padding:10px 16px;
+  font-weight:800;border:1px solid #cfc6aa;background:#fffaf0;color:#315b32;
+}
+.repo-nav a.primary{background:#45683e;color:#fff;border-color:#45683e}
+
 .modal{position:fixed;inset:0;background:rgba(28,42,29,.52);display:none;align-items:center;justify-content:center;padding:18px;z-index:50}
 .modal.show{display:flex} .card{width:min(620px,96vw);background:#fffaf0;border:1px solid #cfc6aa;border-radius:24px;padding:26px;box-shadow:0 28px 80px #1e2b1f55}
 .kind{text-transform:uppercase;letter-spacing:.08em;font-weight:800;color:#75628f;font-size:.8rem}
@@ -27,6 +38,10 @@
 @media(max-width:800px){.board{min-width:900px} .viewport{overflow:auto} .wrap{width:900px}}
 </style></head>
 <body>
+<nav class="repo-nav">
+  <a class="primary" href="../index.html">← Körperreisen</a>
+  <a href="https://niamh26.github.io/ZIT-Campus-Spielwiese/">Zur Spielwiese</a>
+</nav>
 <div class="viewport"><div class="wrap"><div class="board" id="board">
 <button class="roll" id="roll" aria-label="Würfeln" title="Würfeln"></button>
 <div class="stats">
@@ -43,7 +58,7 @@
 <button class="continue" id="continue">Weiterreisen</button>
 </div></div>
 
-<script src="../../shared/zit-points.js"></script>
+<script src="../shared/zit-points.js"></script>
 <script>
 const COORDS=[[42.7, 84.0], [39.4, 80.2], [59.0, 82.7], [36.0, 75.1], [34.2, 68.3], [35.8, 61.7], [39.8, 54.0], [37.0, 48.1], [37.5, 42.0], [35.8, 35.2], [38.8, 27.8], [45.0, 20.5], [62.0, 22.7], [57.3, 28.8], [62.5, 36.3], [60.7, 46.2], [63.0, 56.0], [59.8, 64.0], [62.3, 72.1], [59.2, 78.0], [57.0, 70.2], [58.8, 52.0], [61.8, 16.5], [63.0, 10.7], [57.0, 9.0], [45.7, 9.2], [44.5, 4.5]], TYPES=["n", "n", "q", "n", "body", "n", "discover", "n", "q", "n", "n", "q", "n", "n", "body", "n", "q", "n", "discover", "n", "n", "q", "n", "q", "n", "n", "goal"];
 const QUESTIONS=[["Welche Struktur verbindet den cranialen Bereich funktionell mit dem Kreuzbein?", ["Dura mater spinalis", "Achillessehne", "Pleura"], 0], ["Um welche ungefähre Achse bewegt sich das Sacrum im PRM?", ["S2", "C1", "L5"], 0], ["Welche Struktur gehört zum primär respiratorischen Mechanismus?", ["Liquorfluktuation", "Magensäureproduktion", "Fingersehnenbewegung"], 0], ["Wo wird Liquor in den Ventrikeln sezerniert?", ["Plexus choroidei", "Falx cerebri", "Atlas"], 0], ["Was geschieht mit dem Zwerchfell bei der Inspiration?", ["Es senkt sich", "Es steigt an", "Es bleibt unbeweglich"], 0], ["Welche Knochen bilden das Atlantooccipitalgelenk?", ["Atlas und Hinterhauptsbein", "Axis und Keilbein", "Atlas und Unterkiefer"], 0], ["Was bedeutet Interozeption?", ["Wahrnehmung innerer Körperzustände", "Sehen von Bewegung", "Räumliche Orientierung"], 0], ["Welche Abschnitte besitzen physiologisch eine Lordose?", ["HWS und LWS", "BWS und Sacrum", "Nur BWS"], 0], ["Welche Rezeptoren reagieren besonders auf tangentiale Dehnung?", ["Ruffini-Rezeptoren", "Photorezeptoren", "Haarzellen"], 0], ["Wie viele freie Wirbel nennt das Skript?", ["24", "18", "33"], 0], ["Welche Region ist eine zentrale knöcherne Stelle des Schädels?", ["Synchondrosis sphenobasilaris", "Os hyoideum", "Mandibula"], 0], ["Was können Restriktionen transversaler Diaphragmen beeinflussen?", ["Longitudinale Faszienbeweglichkeit", "Nur die Haut", "Nur die Beine"], 0]];

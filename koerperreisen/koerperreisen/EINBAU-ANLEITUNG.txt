@@ -1,0 +1,34 @@
+NEUES REPOSITORY: ZIT-Campus-Koerperreisen
+
+1. Auf GitHub ein neues PUBLIC Repository anlegen:
+   ZIT-Campus-Koerperreisen
+
+2. Repository lokal mit GitHub Desktop klonen.
+
+3. ALLE Dateien aus diesem ZIP direkt in den neuen Repository-Hauptordner kopieren.
+   Ganz oben müssen danach sichtbar sein:
+   index.html
+   README.md
+   SKOOL-LINK.txt
+   shared/
+   craniosacrales-system/
+
+4. In GitHub Desktop:
+   Commit to main
+   Push origin
+
+5. GitHub.com:
+   Settings → Pages
+   Source: Deploy from a branch
+   Branch: main
+   Ordner: /(root)
+   Save
+
+6. Nach dem Deploy testen:
+   https://niamh26.github.io/ZIT-Campus-Koerperreisen/
+
+7. In Skool/ZIT Campus auf der Seite „Körperreisen“ diesen Link hinterlegen:
+   https://niamh26.github.io/ZIT-Campus-Koerperreisen/
+
+WICHTIG:
+Das bestehende Repository ZIT-Campus-Spielwiese wird dabei NICHT verändert.
